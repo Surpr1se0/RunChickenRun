@@ -20,9 +20,20 @@ var materialTextura = new THREE.MeshBasicMaterial({map:textura});
 var meshCubo = new THREE.Mesh(geometriaCubo, materialTextura);
 meshCubo.translateZ(-6.0);
 
+
+var geometriaGalinha = new THREE.BoxGeometry(1,1,1);
+
+var materialGalinha = new THREE.MeshPhongMaterial({color: 'purple'});  //erro na cor
+
+var meshGalinha = new THREE.Mesh(geometriaGalinha, materialGalinha);
+
+meshGalinha.translateZ(-6.0);
+
+  
+
 function Start(){
 
-    cena.add(meshCubo);
+    cena.add(meshGalinha);
 
     renderer.render(cena, camaraPerspetiva);
 
