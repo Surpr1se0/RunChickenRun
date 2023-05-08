@@ -12,7 +12,7 @@ document.body.appendChild(renderer.domElement);
 
 // Setting up camera
 var aspectRatio = window.innerWidth / window.innerHeight;
-var cameraWidth = 150;
+var cameraWidth = 150; //alterar para visualizar melhor a galinha
 var cameraHeight = cameraWidth / aspectRatio;
 
 var camera = new THREE.OrthographicCamera(
@@ -39,6 +39,8 @@ meshCubo.translateZ(-6.0);
 */
 var galinhaSize = 2 //evitar mexer nisto que ainda não está a 100%
 
+
+//falta animção na galinha e movimento (salto)
 function Galinha() {
     var galinha = new THREE.Group();
   
@@ -61,7 +63,7 @@ function Galinha() {
     crista.position.y = 20;
     crista.position.x = 15;
     crista.castShadow = true;
-    crista.receiveShadow = false;
+    crista.receiveShadow = true;
     galinha.add(crista);
 
     var olhod = new THREE.Mesh(
@@ -73,7 +75,7 @@ function Galinha() {
     olhod.position.y = 12;
     olhod.position.x = 8;
     olhod.castShadow = true;
-    olhod.receiveShadow = false;
+    olhod.receiveShadow = true;
     galinha.add(olhod);
 
     var olhoe = new THREE.Mesh(
@@ -85,7 +87,7 @@ function Galinha() {
     olhoe.position.y = 12;
     olhoe.position.x = 12;
     olhoe.castShadow = true;
-    olhoe.receiveShadow = false;
+    olhoe.receiveShadow = true;
     galinha.add(olhoe);
     
     var bico = new THREE.Mesh(
@@ -97,14 +99,14 @@ function Galinha() {
     bico.position.y = 8;
     bico.position.x = 9;
     bico.castShadow = true;
-    bico.receiveShadow = false;
+    bico.receiveShadow = true;
     galinha.add(bico);
         
-    // bordas
-    /*var geo = new THREE.EdgesGeometry( galinha.geometry );
-    var mat = new THREE.LineBasicMaterial( { color: 0x000000 } );
+    // bordas na corpo da galinha
+    var geo = new THREE.EdgesGeometry( corpo.geometry );
+    var mat = new THREE.LineBasicMaterial( { color: 0x9C9C9C, flatShading: true} );
     var bordas = new THREE.LineSegments( geo, mat );
-    galinha.add( bordas );*/
+    corpo.add( bordas );
 
     return galinha;  
   }
@@ -114,7 +116,10 @@ function Start(){
 
     var galinha= new Galinha();
     cena.add(galinha);
-    
+
+    //Posição Inicial
+    galinha.translateZ(-14.0);
+
     //luz ambiente que brilha de todo o lado
     var ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     cena.add(ambientLight);
