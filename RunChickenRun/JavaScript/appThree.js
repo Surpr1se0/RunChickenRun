@@ -40,7 +40,7 @@ meshCubo.translateZ(-6.0);
 var galinhaSize = 2 //evitar mexer nisto que ainda não está a 100%
 
 
-//falta animção na galinha e movimento (salto)
+
 function Galinha() {
     var galinha = new THREE.Group();
   
@@ -130,6 +130,27 @@ function Start(){
     cena.add(directionalLight); 
 
     renderer.render(cena, camera);
+
+    //alterar em conformidade estes valores      
+    var xSpeed = 1;
+    var ySpeed = 1;
+
+    //movimento apenas por coordenadas, falta animar salto.
+    document.addEventListener("keydown", onDocumentKeyDown, false);
+    function onDocumentKeyDown(event) {
+        var keyCode = event.which;
+        if (keyCode == 87) {
+            galinha.position.y += ySpeed;
+        } else if (keyCode == 83) {
+            galinha.position.y -= ySpeed;
+        } else if (keyCode == 65) {
+            galinha.position.x -= xSpeed;
+        } else if (keyCode == 68) {
+            galinha.position.x += xSpeed;
+        } else if (keyCode == 32) {
+            galinha.position.set(0, 0, 0);
+        }
+    };
 
     requestAnimationFrame(loop);
 }
