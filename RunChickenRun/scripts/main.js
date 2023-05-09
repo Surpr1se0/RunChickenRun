@@ -323,12 +323,13 @@ function Start() {
   cena.add(road_teste);
 
   var galinha = new Galinha();
-  galinha.scale.set(0.1, 0.1, 0.1);
+  galinha.scale.set(0.05, 0.05, 0.05);
   cena.add(galinha);
-  galinha.translateZ(-14.0);
+  galinha.translateY(0.3);
+  galinha.translateZ(-5.0);
 
   var xSpeed = 1;
-  var ySpeed = 1;
+  var zSpeed = 1;
   var jump_can = 1;
 
   //movimento apenas por coordenadas, falta animar salto.
@@ -336,9 +337,9 @@ function Start() {
   function onDocumentKeyDown(event) {
     var keyCode = event.which;
     if (keyCode == 87) {
-      galinha.position.y += ySpeed;
+      galinha.position.z += zSpeed;
     } else if (keyCode == 83) {
-      galinha.position.y -= ySpeed;
+      galinha.position.z -= zSpeed;
     } else if (keyCode == 65) {
       galinha.position.x -= xSpeed;
     } else if (keyCode == 68) {
