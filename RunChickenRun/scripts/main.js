@@ -64,7 +64,6 @@ function AddPasseio(x, y, z) {
 
   cena.add(meshPasseio1);
 }
-
 // -2       // 0.2      //-1.6
 function Flower(x, y, z) {
   var flower = new THREE.Group();
@@ -103,7 +102,7 @@ function Road(
     new THREE.MeshStandardMaterial({ color: 0xccff5e })
   );
 
-  grass_inicial.position.set(x, y + 0.001, z - lane_width +0.2);
+  grass_inicial.position.set(x, y + 0.001, z - lane_width + 0.2);
   road.add(grass_inicial);
 
   // Criar passeio inicial
@@ -111,8 +110,8 @@ function Road(
     new THREE.BoxGeometry(0.1, 0.1, 7),
     new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
   );
-  
-  walk_start.position.set(x, y + 0.15, z - lane_width - 0.45 );
+
+  walk_start.position.set(x, y + 0.13, z - lane_width + 0.75);
   walk_start.rotateY(Math.PI / 2);
   road.add(walk_start);
 
@@ -157,8 +156,8 @@ function Road(
     new THREE.BoxGeometry(0.1, 0.1, 7),
     new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
   );
-  
-  walk_final.position.set(x, y + 0.15, z + num_lanes * lane_width + lane_width + 0.45);
+
+  walk_final.position.set(x, y + 0.13, z + num_lanes * lane_width - 0.7);
   walk_final.rotateY(Math.PI / 2);
   road.add(walk_final);
 
@@ -182,12 +181,12 @@ function Lake(
     new THREE.MeshStandardMaterial({ color: 0xccff5e })
   );
 
-  grass_inicial.position.set(x, y + 0.001, z - lane_width +0.2);
+  grass_inicial.position.set(x, y + 0.001, z - lane_width + 0.2);
   lake.add(grass_inicial);
 
   // Criar estrada
   for (var i = 0; i < num_lanes; i++) {
-    var texture = new THREE.TextureLoader().load('./Images/water.jpg');
+    var texture = new THREE.TextureLoader().load("./Images/water.jpg");
 
     var water = new THREE.Mesh(
       new THREE.BoxGeometry(7, 0.1, lane_width),
@@ -207,6 +206,19 @@ function Lake(
   lake.add(grass_final);
 
   return lake;
+}
+
+function Oak(x, y, z, dim){
+  var texture = new THREE.TextureLoader().load("./Images/wood.jpg");
+
+  var oak = new THREE.Mesh(
+    new THREE.BoxGeometry(dim, 0.1, 1),
+    new THREE.MeshStandardMaterial({ map: texture })
+  );
+
+  oak.position.set(x, y, z);
+
+  return oak;
 }
 
 var galinhaSize = 2; //evitar mexer nisto que ainda não está a 100%
@@ -295,17 +307,21 @@ function Galinha() {
 function Start() {
   var arvore1 = new Tree(-2, 0.2, -1.6, 0.6, 1, 0.6);
   var flower1 = new Flower(2, 0.2, -1.6);
-  var road1 = new Road(2, 1.5,  0,  0,   5,   5,  1.5);
-  var road2 = new Road(3, 1.5,  0,  0,  -1,   5,  1.5);
-  var road3 = new Road(1, 1.5,  0,  0,  -4.5,   5,   1.5);
-  var lake1 = new Lake(1, 1.5,    0,  0,  -10 ,   5,   1.5);
+  var road1 = new Road(2, 1.5, 0, 0, 5, 5, 1.5);
+  var road2 = new Road(3, 1.5, 0, 0, -1, 5, 1.5);
+  var road21 = new Road(3, 1.5, 7, 0, -1, 5, 1.5);
+  var road3 = new Road(1, 1.5, 0, 0, -4.5, 5, 1.5);
+  var lake1 = new Lake(1, 1.5,  0,  0,  -7, 5, 1.5);
+  var wood1 = new Oak(0, 0.2, -7, 2);
   var galinha = new Galinha();
 
+  cena.add(wood1);
   cena.add(galinha);
   cena.add(arvore1);
   cena.add(flower1);
   cena.add(road1);
   cena.add(road2);
+  cena.add(road21);
   cena.add(road3);
   cena.add(lake1);
 
@@ -323,7 +339,7 @@ function Start() {
       galinha.position.z -= zSpeed;
     } else if (keyCode == 65) {
       galinha.position.x -= xSpeed;
-      galinha.rotate.x =Math.PI/2;
+      galinha.rotate.x = Math.PI / 2;
     } else if (keyCode == 68) {
       galinha.position.x += xSpeed;
     } else if (keyCode == 32) {
