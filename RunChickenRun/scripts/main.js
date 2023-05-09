@@ -21,30 +21,26 @@ controls.update();
 
 document.body.appendChild(renderer.domElement);
 
+function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
+  var tree = new THREE.Group();
 
-/////////////////////////////////////////////////////////////////////////////////////
-function AddEstrada() {
-  var relvaGeometria = new THREE.BoxGeometry(7, 0.1, 4);
-  var relvaTextura = new THREE.MeshStandardMaterial({ color: 0xccff5e });
-  var relva = new THREE.Mesh(relvaGeometria, relvaTextura);
-  relva.position.set(0, 0, -3);
+  var log = new THREE.Mesh(
+    new THREE.BoxGeometry(0.3, 0.8, 0.3),
+    new THREE.MeshStandardMaterial({ color: 0x421b01 })
+  );
 
-  cena.add(relva);
+  log.position.set(tronco_x, tronco_y, tronco_z);
+  tree.add(log);
 
-  //----------------------------------------------------
+  var green = new THREE.Mesh(
+    new THREE.BoxGeometry(brush_x, brush_y, brush_z),
+    new THREE.MeshStandardMaterial({ color: 0x5b7327 })
+  );
 
-  var geometriaEstrada = new THREE.BoxGeometry(1.5, 0.1, 7);
-  var estradaTextura = new THREE.MeshStandardMaterial({ color: 0x4b5161 });
-  var estrada = new THREE.Mesh(geometriaEstrada, estradaTextura);
-  estrada.position.set(0, 0.001, -3);
-  estrada.rotateY(Math.PI / 2);
+  green.position.set(tronco_x - 0.05, tronco_y + 0.5, tronco_z - 0.05);
+  tree.add(green);
 
-  cena.add(estrada);
-
-  //------------------------------------------------
-  AddRoadStripes(5, 1.5);
-  //-----------------------------------------
-  AddPasseio(0, 0.04, -2.3);
+  return tree;
 }
 //0, 0.04, -2.3
 function AddPasseio(x, y, z) {
@@ -69,105 +65,25 @@ function AddPasseio(x, y, z) {
   cena.add(meshPasseio1);
 }
 
-function AddRoadStripes(numberOfStripes, distanceBetweenStripes) {
-  for (var i = 0; i < numberOfStripes; i++) {
-    var geometriaEstradaLinhas = new THREE.BoxGeometry(0.15, 0.1, 1);
-    var materialTextura2 = new THREE.MeshStandardMaterial({ color: 0xf7bd00 });
-    var meshCubo2 = new THREE.Mesh(geometriaEstradaLinhas, materialTextura2);
-    meshCubo2.position.set(
-      distanceBetweenStripes * i - 2 * distanceBetweenStripes,
-      0.002,
-      -3
-    );
-    meshCubo2.rotateY(Math.PI / 2);
-    cena.add(meshCubo2);
-  }
-}
-
-// -2       // 0.2      //-1.6      //-2   // 0.9  //-1.6
-function Addtrees(tronco_x, tronco_y, tronco_z, copa_x, copa_y, copa_z) {
-  var tronco = new THREE.BoxGeometry(0.3, 0.8, 0.3);
-
-  var troncoTextura = new THREE.MeshStandardMaterial({ color: 0x421b01 });
-
-  var tree = new THREE.Mesh(tronco, troncoTextura);
-  tree.position.set(tronco_x, tronco_y, tronco_z);
-
-  cena.add(tree);
-
-  var copa = new THREE.BoxGeometry(0.5, 0.7, 0.6);
-
-  var copaTextura = new THREE.MeshStandardMaterial({ color: 0x5b7327 });
-
-  var tree2 = new THREE.Mesh(copa, copaTextura);
-  tree2.position.set(copa_x, copa_y, copa_z);
-
-  cena.add(tree2);
-}
-
 // -2       // 0.2      //-1.6
-function AddFlowers(x, y, z) {
-  var caule = new THREE.BoxGeometry(0.05, 0.6, 0.05);
+function Flower(x, y, z) {
+  var flower = new THREE.Group();
 
-  var cauleTextura = new THREE.MeshStandardMaterial({ color: 0x2a4f19 });
+  var bottom = new THREE.Mesh(
+    new THREE.BoxGeometry(0.05, 0.6, 0.05),
+    new THREE.MeshStandardMaterial({ color: 0x2a4f19 })
+  );
+  bottom.position.set(x, y, z);
+  flower.add(bottom);
 
-  var caule = new THREE.Mesh(caule, cauleTextura);
-  caule.position.set(x, y, z);
+  var top = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(0.16, 0),
+    new THREE.MeshStandardMaterial({ color: 0xc957a7 })
+  );
+  top.position.set(x, y + 0.2, z);
+  flower.add(top);
 
-  cena.add(caule);
-
-  //////////////
-  var pink = new THREE.IcosahedronGeometry(0.16, 0);
-
-  var pinkTexture = new THREE.MeshStandardMaterial({ color: 0xc957a7 });
-
-  var flower = new THREE.Mesh(pink, pinkTexture);
-  flower.position.set(x, y + 0.2, z);
-
-  cena.add(flower);
-}
-
-////////////// TESTE //////////////
-function GenerateLanes(num_lanes, lane_width, x, y, z) {
-  // Adicionar relva no início
-  AddRelva(x, y, z - lane_width);
-
-  for (var i = 0; i < num_lanes; i++) {
-    var geometriaEstrada = new THREE.BoxGeometry(7, 0.1, lane_width);
-    var estradaTextura = new THREE.MeshStandardMaterial({ color: 0x4b5161 });
-    var estrada = new THREE.Mesh(geometriaEstrada, estradaTextura);
-    estrada.position.set(x, y + 0.001, z + i * lane_width);
-    cena.add(estrada);
-
-    AddRoadStripesChanged(5, 1.5, x, z + i * lane_width);
-  }
-
-  // Adicionar relva no final
-  AddRelva(x, y, z + num_lanes * lane_width);
-}
-
-function AddRelva(x, y, z) {
-  var relvaGeometria = new THREE.BoxGeometry(7, 0.02, 4);
-  var relvaTextura = new THREE.MeshStandardMaterial({ color: 0xccff5e });
-  var relva = new THREE.Mesh(relvaGeometria, relvaTextura);
-  relva.position.set(x, y + 0.001, z);
-
-  cena.add(relva);
-}
-
-function AddRoadStripesChanged(numberOfStripes, distanceBetweenStripes, x, z) {
-  for (var i = 0; i < numberOfStripes; i++) {
-    var geometriaEstradaLinhas = new THREE.BoxGeometry(0.15, 0.1, 1);
-    var materialTextura2 = new THREE.MeshStandardMaterial({ color: 0xf7bd00 });
-    var meshCubo2 = new THREE.Mesh(geometriaEstradaLinhas, materialTextura2);
-    meshCubo2.position.set(
-      x + distanceBetweenStripes * i - 2 * distanceBetweenStripes,
-      0.002,
-      z
-    );
-    meshCubo2.rotateY(Math.PI / 2);
-    cena.add(meshCubo2);
-  }
+  return flower;
 }
 
 function Road(
@@ -183,12 +99,22 @@ function Road(
 
   // Criar patch de relva inicial
   var grass_inicial = new THREE.Mesh(
-    new THREE.BoxGeometry(7, 0.02, 2),
+    new THREE.BoxGeometry(7, 0.2, 1),
     new THREE.MeshStandardMaterial({ color: 0xccff5e })
   );
 
-  grass_inicial.position.set(x, y + 0.001, z - lane_width);
+  grass_inicial.position.set(x, y + 0.001, z - lane_width +0.2);
   road.add(grass_inicial);
+
+  // Criar passeio inicial
+  var walk_start = new THREE.Mesh(
+    new THREE.BoxGeometry(0.1, 0.1, 7),
+    new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
+  );
+  
+  walk_start.position.set(x, y + 0.15, z - lane_width - 0.45 );
+  walk_start.rotateY(Math.PI / 2);
+  road.add(walk_start);
 
   // Criar estrada
   for (var i = 0; i < num_lanes; i++) {
@@ -219,18 +145,71 @@ function Road(
   }
 
   var grass_final = new THREE.Mesh(
-    new THREE.BoxGeometry(7, 0.02, 2),
+    new THREE.BoxGeometry(7, 0.2, 1),
     new THREE.MeshStandardMaterial({ color: 0xccff5e })
   );
 
-  grass_final.position.set(x, y + 0.001, z + num_lanes * lane_width);
+  grass_final.position.set(x, y + 0.001, z + num_lanes * lane_width - 0.2);
   road.add(grass_final);
+
+  // Criar passeio inicial
+  var walk_final = new THREE.Mesh(
+    new THREE.BoxGeometry(0.1, 0.1, 7),
+    new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
+  );
+  
+  walk_final.position.set(x, y + 0.15, z + num_lanes * lane_width + lane_width + 0.45);
+  walk_final.rotateY(Math.PI / 2);
+  road.add(walk_final);
 
   return road;
 }
 
-var galinhaSize = 2; //evitar mexer nisto que ainda não está a 100%
+function Lake(
+  num_lanes, //retirar
+  lane_width,
+  x,
+  y,
+  z,
+  num_stripes,
+  distance_between_stripes
+) {
+  var lake = new THREE.Group();
 
+  // Criar patch de relva inicial
+  var grass_inicial = new THREE.Mesh(
+    new THREE.BoxGeometry(7, 0.2, 1),
+    new THREE.MeshStandardMaterial({ color: 0xccff5e })
+  );
+
+  grass_inicial.position.set(x, y + 0.001, z - lane_width +0.2);
+  lake.add(grass_inicial);
+
+  // Criar estrada
+  for (var i = 0; i < num_lanes; i++) {
+    var texture = new THREE.TextureLoader().load('./Images/water.jpg');
+
+    var water = new THREE.Mesh(
+      new THREE.BoxGeometry(7, 0.1, lane_width),
+      new THREE.MeshStandardMaterial({ map: texture })
+    );
+
+    water.position.set(x, y + 0.001, z + i * lane_width);
+    lake.add(water);
+  }
+
+  var grass_final = new THREE.Mesh(
+    new THREE.BoxGeometry(7, 0.2, 1),
+    new THREE.MeshStandardMaterial({ color: 0xccff5e })
+  );
+
+  grass_final.position.set(x, y + 0.001, z + num_lanes * lane_width - 0.2);
+  lake.add(grass_final);
+
+  return lake;
+}
+
+var galinhaSize = 2; //evitar mexer nisto que ainda não está a 100%
 function Galinha() {
   var galinha = new THREE.Group();
 
@@ -313,20 +292,22 @@ function Galinha() {
   return galinha;
 }
 
-const grass = AddEstrada();
-const trees_1 = Addtrees(-2, 0.2, -1.6, -2, 0.9, -1.6);
-const trees_2 = Addtrees(3, 0.2, -4, 3, 0.9, -4);
-const flower = AddFlowers(2, 0.2, -1.6);
-
 function Start() {
-  var road_teste = new Road(2, 1.5, 0, 0, 5, 5, 1.5);
-  cena.add(road_teste);
-
+  var arvore1 = new Tree(-2, 0.2, -1.6, 0.6, 1, 0.6);
+  var flower1 = new Flower(2, 0.2, -1.6);
+  var road1 = new Road(2, 1.5,  0,  0,   5,   5,  1.5);
+  var road2 = new Road(3, 1.5,  0,  0,  -1,   5,  1.5);
+  var road3 = new Road(1, 1.5,  0,  0,  -4.5,   5,   1.5);
+  var lake1 = new Lake(1, 1.5,    0,  0,  -10 ,   5,   1.5);
   var galinha = new Galinha();
-  galinha.scale.set(0.05, 0.05, 0.05);
+
   cena.add(galinha);
-  galinha.translateY(0.3);
-  galinha.translateZ(-5.0);
+  cena.add(arvore1);
+  cena.add(flower1);
+  cena.add(road1);
+  cena.add(road2);
+  cena.add(road3);
+  cena.add(lake1);
 
   var xSpeed = 1;
   var zSpeed = 1;
@@ -351,8 +332,6 @@ function Start() {
   }
 
   cena.add(camaraPerspetiva);
-  //cena.add(cubo);
-  cena.add(grass);
   cena.add(controls);
 
   // criar os axis
