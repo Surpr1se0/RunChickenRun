@@ -209,12 +209,12 @@ function Lake(
   return lake;
 }
 
-var galinhaSize = 2; //evitar mexer nisto que ainda não está a 100%
+
 function Galinha() {
   var galinha = new THREE.Group();
 
   var corpo = new THREE.Mesh(
-    new THREE.BoxGeometry(galinhaSize * 5, galinhaSize * 5, galinhaSize * 5),
+    new THREE.BoxGeometry(10, 10, 10),
     new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true })
   );
 
@@ -224,7 +224,7 @@ function Galinha() {
   galinha.add(corpo);
 
   var crista = new THREE.Mesh(
-    new THREE.BoxGeometry(galinhaSize * 1, galinhaSize * 1, galinhaSize * 2),
+    new THREE.BoxGeometry(2, 2, 4),
     new THREE.MeshPhongMaterial({ color: 0xff6949, flatShading: true })
   );
 
@@ -236,11 +236,7 @@ function Galinha() {
   galinha.add(crista);
 
   var olhod = new THREE.Mesh(
-    new THREE.BoxGeometry(
-      galinhaSize * 0.5,
-      galinhaSize * 0.5,
-      galinhaSize * 0.5
-    ),
+    new THREE.BoxGeometry(1, 1, 1),
     new THREE.MeshPhongMaterial({ color: 0x000000, flatShading: true })
   );
 
@@ -252,11 +248,7 @@ function Galinha() {
   galinha.add(olhod);
 
   var olhoe = new THREE.Mesh(
-    new THREE.BoxGeometry(
-      galinhaSize * 0.5,
-      galinhaSize * 0.5,
-      galinhaSize * 0.5
-    ),
+    new THREE.BoxGeometry(1, 1, 1),
     new THREE.MeshPhongMaterial({ color: 0x000000, flatShading: true })
   );
 
@@ -268,11 +260,7 @@ function Galinha() {
   galinha.add(olhoe);
 
   var bico = new THREE.Mesh(
-    new THREE.BoxGeometry(
-      galinhaSize * 0.5,
-      galinhaSize * 0.5,
-      galinhaSize * 1
-    ),
+    new THREE.BoxGeometry(1, 1, 2),
     new THREE.MeshPhongMaterial({ color: 0xff7800, flatShading: true })
   );
 
