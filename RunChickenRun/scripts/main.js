@@ -301,9 +301,6 @@ function Start() {
   var lake1 = new Lake(1, 1.5,    0,  0,  -10 ,   5,   1.5);
   var galinha = new Galinha();
 
-  galinha.scale.set(0.1, 0.1, 0.1);
-  galinha.translateZ(-14.0);
-
   cena.add(galinha);
   cena.add(arvore1);
   cena.add(flower1);
@@ -313,7 +310,7 @@ function Start() {
   cena.add(lake1);
 
   var xSpeed = 1;
-  var ySpeed = 1;
+  var zSpeed = 1;
   var jump_can = 1;
 
   //movimento apenas por coordenadas, falta animar salto.
@@ -321,11 +318,12 @@ function Start() {
   function onDocumentKeyDown(event) {
     var keyCode = event.which;
     if (keyCode == 87) {
-      galinha.position.y += ySpeed;
+      galinha.position.z += zSpeed;
     } else if (keyCode == 83) {
-      galinha.position.y -= ySpeed;
+      galinha.position.z -= zSpeed;
     } else if (keyCode == 65) {
       galinha.position.x -= xSpeed;
+      galinha.rotate.x =Math.PI/2;
     } else if (keyCode == 68) {
       galinha.position.x += xSpeed;
     } else if (keyCode == 32) {
