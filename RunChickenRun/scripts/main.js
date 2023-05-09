@@ -333,10 +333,14 @@ function Carro() {
 }
 
 function Start() {
-  var arvore1 = new Tree(-2, 0.2, -2.5, 0.6, 1, 0.6);
+  var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
   var flower1 = new Flower(2, 0.2, -2.5);
   var road1 = new Road(2, 1.5, 0, 0, 5, 5, 1.5);
   var road2 = new Road(3, 1.5, 0, 0, -1, 5, 1.5);
+  var road2_1 = new Road(3, 1.5, 6, 0, -1, 5, 1.5);
+  var road2_2 = new Road(3, 1.5, 12, 0, -1, 5, 1.5);
+
+
   var road3 = new Road(1, 1.5, 0, 0, -4.5, 5, 1.5);
   var lake1 = new Lake(1, 1.5, 0, 0, -7, 5, 1.5);
   var wood1 = new Oak(0, 0.05, -7, 2);
@@ -357,9 +361,13 @@ function Start() {
   cena.add(carro);
   cena.add(arvore1);
   cena.add(flower1);
+  
   cena.add(road1);
   cena.add(road2);
+  cena.add(road2_1);
+  cena.add(road2_2);
   cena.add(road3);
+
   cena.add(lake1);
   cena.add(wood1);
 
