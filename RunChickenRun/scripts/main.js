@@ -103,7 +103,7 @@ function Road(
     new THREE.MeshStandardMaterial({ color: 0xccff5e })
   );
 
-  grass_inicial.position.set(x, y + 0.001, z - lane_width +0.2);
+  grass_inicial.position.set(x, y + 0.001, z - lane_width + 0.2);
   road.add(grass_inicial);
 
   // Criar passeio inicial
@@ -111,8 +111,8 @@ function Road(
     new THREE.BoxGeometry(0.1, 0.1, 7),
     new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
   );
-  
-  walk_start.position.set(x, y + 0.15, z - lane_width - 0.45 );
+
+  walk_start.position.set(x, y + 0.13, z - lane_width + 0.75);
   walk_start.rotateY(Math.PI / 2);
   road.add(walk_start);
 
@@ -157,8 +157,8 @@ function Road(
     new THREE.BoxGeometry(0.1, 0.1, 7),
     new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
   );
-  
-  walk_final.position.set(x, y + 0.15, z + num_lanes * lane_width + lane_width + 0.45);
+
+  walk_final.position.set(x, y + 0.13, z + num_lanes * lane_width - 0.7);
   walk_final.rotateY(Math.PI / 2);
   road.add(walk_final);
 
@@ -207,6 +207,19 @@ function Lake(
   lake.add(grass_final);
 
   return lake;
+}
+
+function Oak(x, y, z, dim){
+  var texture = new THREE.TextureLoader().load("./Images/wood.jpg");
+
+  var oak = new THREE.Mesh(
+    new THREE.BoxGeometry(dim, 0.1, 1),
+    new THREE.MeshStandardMaterial({ map: texture })
+  );
+
+  oak.position.set(x, y, z);
+
+  return oak;
 }
 
 
@@ -271,23 +284,62 @@ function Galinha() {
   bico.receiveShadow = true;
   galinha.add(bico);
 
-  // bordas na corpo da galinha
-  var geo = new THREE.EdgesGeometry(corpo.geometry);
-  var mat = new THREE.LineBasicMaterial({ color: 0x9c9c9c, flatShading: true });
-  var bordas = new THREE.LineSegments(geo, mat);
-  corpo.add(bordas);
+  // bordas na corpo da galinha, neste momento off fica melhor
+  //var geo = new THREE.EdgesGeometry(corpo.geometry);
+  //var mat = new THREE.LineBasicMaterial({ color: 0x9c9c9c, flatShading: true });
+  //var bordas = new THREE.LineSegments(geo, mat);
+  //corpo.add(bordas);
 
   return galinha;
 }
 
-function Start() {
-  var arvore1 = new Tree(-2, 0.2, -1.6, 0.6, 1, 0.6);
-  var flower1 = new Flower(2, 0.2, -1.6);
-  var road1 = new Road(2, 1.5,  0,  0,   5,   5,  1.5);
-  var road2 = new Road(3, 1.5,  0,  0,  -1,   5,  1.5);
-  var road3 = new Road(1, 1.5,  0,  0,  -4.5,   5,   1.5);
-  var lake1 = new Lake(1, 1.5,    0,  0,  -10 ,   5,   1.5);
+function Rodas() {
+  var geometry = new THREE.CylinderGeometry(9, 9, 31);
+  var material = new THREE.MeshLambertMaterial({ color: 0x333333 });
+  var roda = new THREE.Mesh(geometry, material);
+  roda.rotation.x=Math.PI/2;
+  return roda;
+}
 
+function Carro() {
+  var carro = new THREE.Group();
+
+  var rodastraseiras = Rodas();
+  rodastraseiras.position.y = 6;
+  rodastraseiras.position.x = -18;
+  carro.add(rodastraseiras);
+
+  var rodasfrente = Rodas();
+  rodasfrente.position.y = 6;  
+  rodasfrente.position.x = 18;
+  carro.add(rodasfrente);
+
+  var chasi = new THREE.Mesh(
+    new THREE.BoxGeometry(60, 15, 30),
+    new THREE.MeshLambertMaterial({ color: 0x78b14b })
+  );
+  chasi.position.y = 12;
+  carro.add(chasi);
+
+  var cockpit = new THREE.Mesh(
+    new THREE.BoxGeometry(33, 12, 24),
+    new THREE.MeshLambertMaterial({ color: 0xffffff })
+  );
+  cockpit.position.x = -6;
+  cockpit.position.y = 25.5;
+  carro.add(cockpit);
+
+  return carro;
+}
+
+function Start() {
+  var arvore1 = new Tree(-2, 0.2, -2.5, 0.6, 1, 0.6);
+  var flower1 = new Flower(2, 0.2, -2.5);
+  var road1 = new Road(2, 1.5, 0, 0, 5, 5, 1.5);
+  var road2 = new Road(3, 1.5, 0, 0, -1, 5, 1.5);
+  var road3 = new Road(1, 1.5, 0, 0, -4.5, 5, 1.5);
+  var lake1 = new Lake(1, 1.5, 0, 0, -7, 5, 1.5);
+  var wood1 = new Oak(0, 0.05, -7, 2);
 
   // Definições iniciais Galinha
   var galinha = new Galinha();
@@ -295,18 +347,25 @@ function Start() {
   galinha.translateY(0.3);
   galinha.translateZ(-5.0);
 
+  //Definições iniciais Carro
+  var carro = new Carro();
+  carro.scale.set(0.03,0.03,0.03);
+  carro.translateY(0.15);
+  carro.translateZ(-0.2);
 
   cena.add(galinha);
+  cena.add(carro);
   cena.add(arvore1);
   cena.add(flower1);
   cena.add(road1);
   cena.add(road2);
   cena.add(road3);
   cena.add(lake1);
+  cena.add(wood1);
 
-  var xSpeed = 1;
-  var zSpeed = 1;
-  var jump_can = 1;
+  var xSpeed = 1.5;
+  var zSpeed = 1.5;
+  var jump_can = 1; // variavel para salto da galinha fases de testes
 
   //movimento apenas por coordenadas, falta animar salto.
   document.addEventListener("keydown", onDocumentKeyDown, false);
@@ -321,10 +380,12 @@ function Start() {
       galinha.rotate.x =Math.PI/2;
     } else if (keyCode == 68) {
       galinha.position.x += xSpeed;
-    } else if (keyCode == 32) {
-      galinha.position.set(0, 0, 0);
     }
   }
+    /*} else if (keyCode == 32) {
+      galinha.position.set(0, 0.3, -4);
+    } 
+  }*/ //para já espaço nao usar
 
   cena.add(camaraPerspetiva);
   cena.add(controls);
@@ -347,6 +408,7 @@ function Start() {
 
   // Chamar a função loop()
   requestAnimationFrame(loop);
+  
 }
 
 function loop() {
