@@ -156,6 +156,8 @@ function Start(){
     var galinha= new Galinha();
     cena.add(galinha);
 
+
+    galinha.scale.set(2,2,2);
     var carro = new Carro();
     cena.add(carro);
 
