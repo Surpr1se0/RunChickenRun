@@ -12,22 +12,22 @@ document.body.appendChild(renderer.domElement);
 
 // Setting up camera
 var aspectRatio = window.innerWidth / window.innerHeight;
-var cameraWidth = 150; //alterar para visualizar melhor a galinha
-var cameraHeight = cameraWidth / aspectRatio;
+var camaraWidth = 150; //alterar para visualizar melhor a galinha
+var camaraHeight = camaraWidth / aspectRatio;
 
-var camera = new THREE.OrthographicCamera(
-  cameraWidth / -2, // left
-  cameraWidth / 2, // right
-  cameraHeight / 2, // top
-  cameraHeight / -2, // bottom
+var camara = new THREE.OrthographicCamera(
+  camaraWidth / -2, // left
+  camaraWidth / 2, // right
+  camaraHeight / 2, // top
+  camaraHeight / -2, // bottom
   0, // near plane
   1000 // far plane
 );
-camera.position.set(200, 200, 200);
-camera.lookAt(0, 10, 0);
+camara.position.set(200, 200, 200);
+camara.lookAt(0, 10, 0);
 
 // Linha responsavel pela criação da camara perpective
-var camaraPerspetiva = new THREE.PerspectiveCamera(45, 4/3, 0.1, 100);
+var camaraPerspetiva = new THREE.PerspectiveCamera(45, aspectRatio, 0.1, 1000);
 /*
 var geometriaCubo = new THREE.BoxGeometry(1,1,1);
 
@@ -86,7 +86,7 @@ function Galinha() {
     olhoe.position.z = 25;
     olhoe.position.y = 12;
     olhoe.position.x = 12;
-    olhoe.castShadow = true;
+    olhoe.castShadow = true; 
     olhoe.receiveShadow = true;
     galinha.add(olhoe);
     
@@ -129,11 +129,13 @@ function Start(){
     directionalLight.position.set(200, 500, 300);
     cena.add(directionalLight); 
 
-    renderer.render(cena, camera);
+    renderer.render(cena, camara);
 
     //alterar em conformidade estes valores      
     var xSpeed = 1;
     var ySpeed = 1;
+    var jump_can = 1;
+
 
     //movimento apenas por coordenadas, falta animar salto.
     document.addEventListener("keydown", onDocumentKeyDown, false);
@@ -141,7 +143,8 @@ function Start(){
         var keyCode = event.which;
         if (keyCode == 87) {
             galinha.position.y += ySpeed;
-        } else if (keyCode == 83) {
+
+          } else if (keyCode == 83) {
             galinha.position.y -= ySpeed;
         } else if (keyCode == 65) {
             galinha.position.x -= xSpeed;
@@ -159,7 +162,7 @@ function loop(){
 
     //meshCubo.rotateY(Math.PI/180 * 1);
 
-    renderer.render(cena, camera);
+    renderer.render(cena, camara);
 
     requestAnimationFrame(loop);
 }
