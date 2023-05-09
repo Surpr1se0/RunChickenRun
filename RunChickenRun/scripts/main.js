@@ -342,6 +342,7 @@ function Start() {
       galinha.position.z -= zSpeed;
     } else if (keyCode == 65) {
       galinha.position.x -= xSpeed;
+      galinha.rotate.x =Math.PI/2;
     } else if (keyCode == 68) {
       galinha.position.x += xSpeed;
     } else if (keyCode == 32) {
