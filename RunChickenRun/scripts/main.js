@@ -299,7 +299,14 @@ function Start() {
   var road2 = new Road(3, 1.5,  0,  0,  -1,   5,  1.5);
   var road3 = new Road(1, 1.5,  0,  0,  -4.5,   5,   1.5);
   var lake1 = new Lake(1, 1.5,    0,  0,  -10 ,   5,   1.5);
+
+
+  // Definições iniciais Galinha
   var galinha = new Galinha();
+  galinha.scale.set(0.05, 0.05, 0.05);
+  galinha.translateY(0.3);
+  galinha.translateZ(-5.0);
+
 
   cena.add(galinha);
   cena.add(arvore1);
