@@ -111,14 +111,58 @@ function Galinha() {
     return galinha;  
   }
   
+  function Rodas() {
+    var geometry = new THREE.CylinderGeometry(9, 9, 31);
+    var material = new THREE.MeshLambertMaterial({ color: 0x333333 });
+    var roda = new THREE.Mesh(geometry, material);
+    roda.rotation.x=Math.PI/2;
+    return roda;
+  }
+
+  function Carro() {
+    var carro = new THREE.Group();
+    
+    var rodastraseiras = Rodas();
+    rodastraseiras.position.y = 6;
+    rodastraseiras.position.x = -18;
+    carro.add(rodastraseiras);
+    
+    var rodasfrente = Rodas();
+    rodasfrente.position.y = 6;  
+    rodasfrente.position.x = 18;
+    carro.add(rodasfrente);
+  
+    var chasi = new THREE.Mesh(
+      new THREE.BoxGeometry(60, 15, 30),
+      new THREE.MeshLambertMaterial({ color: 0x78b14b })
+    );
+    chasi.position.y = 12;
+    carro.add(chasi);
+  
+    var cockpit = new THREE.Mesh(
+      new THREE.BoxGeometry(33, 12, 24),
+      new THREE.MeshLambertMaterial({ color: 0xffffff })
+    );
+    cockpit.position.x = -6;
+    cockpit.position.y = 25.5;
+    carro.add(cockpit);
+  
+    return carro;
+  }
+
 
 function Start(){
 
     var galinha= new Galinha();
     cena.add(galinha);
 
+    var carro = new Carro();
+    cena.add(carro);
+
     //Posição Inicial
     galinha.translateZ(-14.0);
+
+    carro.translateZ(-15.0)
 
     //luz ambiente que brilha de todo o lado
     var ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
