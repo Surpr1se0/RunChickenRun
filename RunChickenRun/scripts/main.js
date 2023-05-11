@@ -273,13 +273,14 @@ function Galinha() {
   galinha.add(olhoe);
 
   var bico = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 2),
+    new THREE.ConeGeometry(1.5, 5, 64),
     new THREE.MeshPhongMaterial({ color: 0xff7800, flatShading: true })
   );
 
   bico.position.z = 15;
   bico.position.y = 0;
   bico.position.x = 0;
+  bico.rotation.x=Math.PI/2;
   bico.castShadow = true;
   bico.receiveShadow = true;
   galinha.add(bico);
@@ -388,12 +389,10 @@ function Start() {
       galinha.position.z += zSpeed;
       galinha.rotation.y = 2*Math.PI;
     } else if (keyCode == 65) {
-      //a key para esquerda rotação
+      //a key para esquerda ainda sem rotação
       galinha.position.x -= xSpeed;
-      if (galinha.rotation.y = Math.PI){
-        galinha.rotate.y = Math.PI/2;
-      }
     } else if (keyCode == 68) {
+      //d key para direira ainda sem rotação
       galinha.position.x += xSpeed;
     }
   }
