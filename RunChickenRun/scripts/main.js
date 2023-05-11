@@ -349,7 +349,7 @@ function Start() {
   var galinha = new Galinha();
   galinha.scale.set(0.05, 0.05, 0.05);
   galinha.translateY(0.3);
-  galinha.translateZ(-5.0);
+  galinha.translateZ(8.5);
 
   //Definições iniciais Carro
   var carro = new Carro();
@@ -371,8 +371,8 @@ function Start() {
   cena.add(lake1);
   cena.add(wood1);
 
-  var xSpeed = 1.5;
-  var zSpeed = 1.5;
+  var xSpeed = 1.2;
+  var zSpeed = 1.2;
   var jump_can = 1; // variavel para salto da galinha fases de testes
 
   //movimento apenas por coordenadas, falta animar salto.
@@ -380,12 +380,19 @@ function Start() {
   function onDocumentKeyDown(event) {
     var keyCode = event.which;
     if (keyCode == 87) {
-      galinha.position.z += zSpeed;
-    } else if (keyCode == 83) {
+      //w key para frente rotação 180
       galinha.position.z -= zSpeed;
+      galinha.rotation.y = Math.PI;
+    } else if (keyCode == 83) {
+      //s key para trás rotação 
+      galinha.position.z += zSpeed;
+      galinha.rotation.y = 2*Math.PI;
     } else if (keyCode == 65) {
+      //a key para esquerda rotação
       galinha.position.x -= xSpeed;
-      galinha.rotate.x =Math.PI/2;
+      if (galinha.rotation.y = Math.PI){
+        galinha.rotate.y = Math.PI/2;
+      }
     } else if (keyCode == 68) {
       galinha.position.x += xSpeed;
     }
