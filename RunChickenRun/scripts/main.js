@@ -22,6 +22,17 @@ var camera1 = new THREE.OrthographicCamera(left, right, topValue, bottom, -50, 5
 camera1.position.set(2, 4, 0);
 
 
+var importer = new THREE.FBXLoader();
+
+importer.load('./Javascript/objects/sketchfab.fbx', function(object){
+  cena.add(object);
+
+  object.rotateY(Math.PI / 2);
+
+  object.position.set(2, 2, 2);
+  object.set.scale(0.1);
+});
+
 // Definir a segunda câmera
 var fov = 70; // Campo de visão em graus
 var aspect = window.innerWidth / window.innerHeight;
@@ -49,6 +60,11 @@ function toggleCamera() {
   // Atualizar a renderização da cena
   renderCameras();
 }
+
+var galinha = new Galinha();
+galinha.scale.set(0.05, 0.05, 0.05);
+galinha.translateY(0.3);
+galinha.translateZ(-5.0);
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
@@ -302,10 +318,7 @@ function generateRandomRoad() {
 }
 
 
-var galinha = new Galinha();
-galinha.scale.set(0.05, 0.05, 0.05);
-galinha.translateY(0.3);
-galinha.translateZ(-5.0);
+
 
 function Start() {
   
@@ -386,7 +399,7 @@ function Start() {
 
 function loop() {
 
-  controls.update();
+  //controls.update();
 
   renderCameras();
 
