@@ -1,22 +1,81 @@
 document.addEventListener("DOMContentLoaded", Start);
 
 var cena = new THREE.Scene();
-//var camara = new THREE.OrthographicCamera(-1, 1, 1, -1, -10, 10);
 
-var camaraPerspetiva = new THREE.PerspectiveCamera(
-  45,
-  window.innerWidth / window.innerHeight,
-  1,
-  1000
-);
-camaraPerspetiva.position.set(0, 20, 50);
+var camera1, camera2;
+var toggleButton = document.getElementById('toggleButton');
+toggleButton.addEventListener('click', toggleCamera);
+
+var isCamera1Active = true;
+
+// Definir a primeira câmera
+var zoomFactor = 40; // Fator de zoom, 2 para dobrar o tamanho visível
+var width = window.innerWidth;
+var height = window.innerHeight;
+
+var left = -(width / 2) / zoomFactor;
+var right = (width / 2) / zoomFactor;
+var topValue = (height / 2) / zoomFactor;
+var bottom = -(height / 2) / zoomFactor;
+
+var camera1 = new THREE.OrthographicCamera(left, right, topValue, bottom, -50, 50);
+camera1.position.set(2, 4, 0);
+
+
+// Definir a segunda câmera
+var fov = 70; // Campo de visão em graus
+var aspect = window.innerWidth / window.innerHeight;
+var near = 0.1; // Distância mínima de renderização
+var far = 100; // Distância máxima de renderização
+
+var camera2 = new THREE.PerspectiveCamera(fov, aspect, near, far);
+camera2.position.set(0, 7, 0);
+
+// Adicionar ambas as câmeras à cena
+cena.add(camera1);
+cena.add(camera2);
+
+// Função para alternar entre as câmeras
+function toggleCamera() {
+  if (isCamera1Active) {
+    camera1.enabled = false;
+    camera2.enabled = true;
+    isCamera1Active = false;
+  } else {
+    camera1.enabled = true;
+    camera2.enabled = false;
+    isCamera1Active = true;
+  }
+  // Atualizar a renderização da cena
+  renderCameras();
+}
+
+var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
+var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
+
+function renderCameras() {
+  // Renderizar a cena com a câmera ativa
+  if (isCamera1Active) {
+    camera1.position.x = galinha.position.x + 10;
+    camera1.position.y = galinha.position.y + 10;
+    camera1.position.z = galinha.position.z + 10;
+    camera1.lookAt(galinha.position);
+      renderer.render(cena, camera1);
+  } else {
+    camera1.position.x = galinha.position.x + 7;
+    camera1.position.y = galinha.position.y + 7;
+    camera1.position.z = galinha.position.z + 7;
+    camera2.lookAt(galinha.position);
+    renderer.render(cena, camera2);
+  }
+}
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth - 15, window.innerHeight - 80);
 renderer.setClearColor(0xaaaaaa);
 document.body.appendChild(renderer.domElement);
 
-var controls = new THREE.OrbitControls(camaraPerspetiva, renderer.domElement);
+var controls = new THREE.OrbitControls(camera1, renderer.domElement);
 controls.update();
 
 document.body.appendChild(renderer.domElement);
@@ -243,6 +302,11 @@ function generateRandomRoad() {
 }
 
 
+var galinha = new Galinha();
+galinha.scale.set(0.05, 0.05, 0.05);
+galinha.translateY(0.3);
+galinha.translateZ(-5.0);
+
 function Start() {
   
   GenerateMap();
@@ -261,10 +325,7 @@ function Start() {
   var wood1 = new Oak(0, 0.05, -7, 2);
 
   // Definições iniciais Galinha
-  var galinha = new Galinha();
-  galinha.scale.set(0.05, 0.05, 0.05);
-  galinha.translateY(0.3);
-  galinha.translateZ(-5.0);
+
 
   //Definições iniciais Carro
   var carro = new Carro();
@@ -302,7 +363,6 @@ function Start() {
     } 
   }*/ //para já espaço nao usar
 
-  cena.add(camaraPerspetiva);
   cena.add(controls);
 
   // criar os axis
@@ -318,8 +378,6 @@ function Start() {
   var helper = new THREE.DirectionalLightHelper(luz, 5);
   cena.add(helper);
 
-  // Chamar a função de renderização
-  renderer.render(cena, camaraPerspetiva);
 
   // Chamar a função loop()
   requestAnimationFrame(loop);
@@ -327,9 +385,11 @@ function Start() {
 }
 
 function loop() {
-  renderer.render(cena, camaraPerspetiva);
 
   controls.update();
 
+  renderCameras();
+
   requestAnimationFrame(loop);
+
 }
