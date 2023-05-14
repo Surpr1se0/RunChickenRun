@@ -64,6 +64,7 @@ function AddPasseio(x, y, z) {
 
   cena.add(meshPasseio1);
 }
+
 // -2       // 0.2      //-1.6
 function Flower(x, y, z) {
   var flower = new THREE.Group();
@@ -85,129 +86,6 @@ function Flower(x, y, z) {
   return flower;
 }
 
-function Road(
-  num_lanes,
-  lane_width,
-  x,
-  y,
-  z,
-  num_stripes,
-  distance_between_stripes
-) {
-  var road = new THREE.Group();
-
-  // Criar patch de relva inicial
-  var grass_inicial = new THREE.Mesh(
-    new THREE.BoxGeometry(7, 0.2, 1),
-    new THREE.MeshStandardMaterial({ color: 0xccff5e })
-  );
-
-  grass_inicial.position.set(x, y + 0.001, z - lane_width + 0.2);
-  road.add(grass_inicial);
-
-  // Criar passeio inicial
-  var walk_start = new THREE.Mesh(
-    new THREE.BoxGeometry(0.1, 0.1, 7),
-    new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
-  );
-
-  walk_start.position.set(x, y + 0.13, z - lane_width + 0.75);
-  walk_start.rotateY(Math.PI / 2);
-  road.add(walk_start);
-
-  // Criar estrada
-  for (var i = 0; i < num_lanes; i++) {
-    var asfalt = new THREE.Mesh(
-      new THREE.BoxGeometry(7, 0.1, lane_width),
-      new THREE.MeshStandardMaterial({ color: 0x4b5161 })
-    );
-
-    asfalt.position.set(x, y + 0.001, z + i * lane_width);
-    road.add(asfalt);
-
-    // Criar Linhas da Estrada
-    for (var j = 0; j < num_stripes; j++) {
-      var lines = new THREE.Mesh(
-        new THREE.BoxGeometry(0.15, 0.1, 1),
-        new THREE.MeshStandardMaterial({ color: 0xf7bd00 })
-      );
-
-      lines.position.set(
-        x + distance_between_stripes * j - 2 * distance_between_stripes,
-        0.002,
-        z + i * lane_width
-      );
-
-      lines.rotateY(Math.PI / 2);
-      road.add(lines);
-    }
-  }
-
-  var grass_final = new THREE.Mesh(
-    new THREE.BoxGeometry(7, 0.2, 1),
-    new THREE.MeshStandardMaterial({ color: 0xccff5e })
-  );
-
-  grass_final.position.set(x, y + 0.001, z + num_lanes * lane_width - 0.2);
-  road.add(grass_final);
-
-  // Criar passeio inicial
-  var walk_final = new THREE.Mesh(
-    new THREE.BoxGeometry(0.1, 0.1, 7),
-    new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
-  );
-
-  walk_final.position.set(x, y + 0.13, z + num_lanes * lane_width - 0.7);
-  walk_final.rotateY(Math.PI / 2);
-  road.add(walk_final);
-
-  return road;
-}
-
-function Lake(
-  num_lanes, //retirar
-  lane_width,
-  x,
-  y,
-  z,
-  num_stripes,
-  distance_between_stripes
-) {
-  var lake = new THREE.Group();
-
-  // Criar patch de relva inicial
-  var grass_inicial = new THREE.Mesh(
-    new THREE.BoxGeometry(7, 0.2, 1),
-    new THREE.MeshStandardMaterial({ color: 0xccff5e })
-  );
-
-  grass_inicial.position.set(x, y + 0.001, z - lane_width + 0.2);
-  lake.add(grass_inicial);
-
-  // Criar estrada
-  for (var i = 0; i < num_lanes; i++) {
-    var texture = new THREE.TextureLoader().load("./Images/water.jpg");
-
-    var water = new THREE.Mesh(
-      new THREE.BoxGeometry(7, 0.1, lane_width),
-      new THREE.MeshStandardMaterial({ map: texture })
-    );
-
-    water.position.set(x, y + 0.001, z + i * lane_width);
-    lake.add(water);
-  }
-
-  var grass_final = new THREE.Mesh(
-    new THREE.BoxGeometry(7, 0.2, 1),
-    new THREE.MeshStandardMaterial({ color: 0xccff5e })
-  );
-
-  grass_final.position.set(x, y + 0.001, z + num_lanes * lane_width - 0.2);
-  lake.add(grass_final);
-
-  return lake;
-}
-
 function Oak(x, y, z, dim){
   var texture = new THREE.TextureLoader().load("./Images/wood.jpg");
 
@@ -221,12 +99,12 @@ function Oak(x, y, z, dim){
   return oak;
 }
 
-var galinhaSize = 2; //evitar mexer nisto que ainda não está a 100%
+
 function Galinha() {
   var galinha = new THREE.Group();
 
   var corpo = new THREE.Mesh(
-    new THREE.BoxGeometry(galinhaSize * 5, galinhaSize * 5, galinhaSize * 5),
+    new THREE.BoxGeometry(10, 10, 10),
     new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true })
   );
 
@@ -236,7 +114,7 @@ function Galinha() {
   galinha.add(corpo);
 
   var crista = new THREE.Mesh(
-    new THREE.BoxGeometry(galinhaSize * 1, galinhaSize * 1, galinhaSize * 2),
+    new THREE.BoxGeometry(2, 2, 4),
     new THREE.MeshPhongMaterial({ color: 0xff6949, flatShading: true })
   );
 
@@ -248,11 +126,7 @@ function Galinha() {
   galinha.add(crista);
 
   var olhod = new THREE.Mesh(
-    new THREE.BoxGeometry(
-      galinhaSize * 0.5,
-      galinhaSize * 0.5,
-      galinhaSize * 0.5
-    ),
+    new THREE.BoxGeometry(1, 1, 1),
     new THREE.MeshPhongMaterial({ color: 0x000000, flatShading: true })
   );
 
@@ -264,11 +138,7 @@ function Galinha() {
   galinha.add(olhod);
 
   var olhoe = new THREE.Mesh(
-    new THREE.BoxGeometry(
-      galinhaSize * 0.5,
-      galinhaSize * 0.5,
-      galinhaSize * 0.5
-    ),
+    new THREE.BoxGeometry(1, 1, 1),
     new THREE.MeshPhongMaterial({ color: 0x000000, flatShading: true })
   );
 
@@ -280,11 +150,7 @@ function Galinha() {
   galinha.add(olhoe);
 
   var bico = new THREE.Mesh(
-    new THREE.BoxGeometry(
-      galinhaSize * 0.5,
-      galinhaSize * 0.5,
-      galinhaSize * 1
-    ),
+    new THREE.BoxGeometry(1, 1, 2),
     new THREE.MeshPhongMaterial({ color: 0xff7800, flatShading: true })
   );
 
@@ -295,39 +161,126 @@ function Galinha() {
   bico.receiveShadow = true;
   galinha.add(bico);
 
-  // bordas na corpo da galinha
-  var geo = new THREE.EdgesGeometry(corpo.geometry);
-  var mat = new THREE.LineBasicMaterial({ color: 0x9c9c9c, flatShading: true });
-  var bordas = new THREE.LineSegments(geo, mat);
-  corpo.add(bordas);
+  // bordas na corpo da galinha, neste momento off fica melhor
+  //var geo = new THREE.EdgesGeometry(corpo.geometry);
+  //var mat = new THREE.LineBasicMaterial({ color: 0x9c9c9c, flatShading: true });
+  //var bordas = new THREE.LineSegments(geo, mat);
+  //corpo.add(bordas);
 
   return galinha;
 }
 
-function Start() {
-  var arvore1 = new Tree(-2, 0.2, -1.6, 0.6, 1, 0.6);
-  var flower1 = new Flower(2, 0.2, -1.6);
-  var road1 = new Road(2, 1.5, 0, 0, 5, 5, 1.5);
-  var road2 = new Road(3, 1.5, 0, 0, -1, 5, 1.5);
-  var road21 = new Road(3, 1.5, 7, 0, -1, 5, 1.5);
-  var road3 = new Road(1, 1.5, 0, 0, -4.5, 5, 1.5);
-  var lake1 = new Lake(1, 1.5,  0,  0,  -7, 5, 1.5);
-  var wood1 = new Oak(0, 0.2, -7, 2);
-  var galinha = new Galinha();
+function Rodas() {
+  var geometry = new THREE.CylinderGeometry(9, 9, 31);
+  var material = new THREE.MeshLambertMaterial({ color: 0x333333 });
+  var roda = new THREE.Mesh(geometry, material);
+  roda.rotation.x=Math.PI/2;
+  return roda;
+}
 
-  cena.add(wood1);
+function Carro() {
+  var carro = new THREE.Group();
+
+  var rodastraseiras = Rodas();
+  rodastraseiras.position.y = 6;
+  rodastraseiras.position.x = -18;
+  carro.add(rodastraseiras);
+
+  var rodasfrente = Rodas();
+  rodasfrente.position.y = 6;  
+  rodasfrente.position.x = 18;
+  carro.add(rodasfrente);
+
+  var chasi = new THREE.Mesh(
+    new THREE.BoxGeometry(60, 15, 30),
+    new THREE.MeshLambertMaterial({ color: 0x78b14b })
+  );
+  chasi.position.y = 12;
+  carro.add(chasi);
+
+  var cockpit = new THREE.Mesh(
+    new THREE.BoxGeometry(33, 12, 24),
+    new THREE.MeshLambertMaterial({ color: 0xffffff })
+  );
+  cockpit.position.x = -6;
+  cockpit.position.y = 25.5;
+  carro.add(cockpit);
+
+  return carro;
+}
+
+var lastRoadPosition = new THREE.Vector3();
+var lastRoadQuaternion = new THREE.Quaternion();
+
+function generateRandomRoad() {
+  // Defina os valores mínimos e máximos para cada parâmetro da estrada
+  var minLanes = 2;
+  var maxLanes = 4;
+
+  var offset = 10;
+
+  // Gera valores aleatórios dentro desses limites para cada parâmetro da estrada
+  var lanes = Math.floor(Math.random() * (maxLanes - minLanes + 1)) + minLanes;
+
+  // Define a posição da estrada de forma aleatória, paralela à estrada anterior
+  var normal = new THREE.Vector3(0, 0, 1);
+  normal.applyQuaternion(lastRoadQuaternion);
+  var position = new THREE.Vector3(lastRoadPosition.x, lastRoadPosition.y, lastRoadPosition.z);
+  position.addScaledVector(normal, offset);
+
+  // Cria a estrada com os valores aleatórios gerados
+  var road = new Road(lanes, 1.5, 20, 0, 20, 5, 1.5);
+
+  // Define a posição e a rotação da estrada para que fique paralela à estrada anterior
+  road.position.copy(position);
+  road.quaternion.copy(lastRoadQuaternion);
+
+  // Atualiza a posição e a rotação da última estrada gerada
+  lastRoadPosition.copy(road.position);
+  lastRoadQuaternion.copy(road.quaternion);
+
+  return road;
+}
+
+
+function Start() {
+  
+  GenerateMap();
+
+  // var firstRoad = new Road(2, 1.5, 0, 0, 5, 5, 1.5);
+  // cena.add(firstRoad);
+  
+  // for (var i = 0; i < 9; i++) {
+  //   var road = generateRandomRoad(firstRoad);
+  //   cena.add(road);
+  //   firstRoad = road;
+  // }
+
+  var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
+  var flower1 = new Flower(2, 0.2, -2.5);
+  var wood1 = new Oak(0, 0.05, -7, 2);
+
+  // Definições iniciais Galinha
+  var galinha = new Galinha();
+  galinha.scale.set(0.05, 0.05, 0.05);
+  galinha.translateY(0.3);
+  galinha.translateZ(-5.0);
+
+  //Definições iniciais Carro
+  var carro = new Carro();
+  carro.scale.set(0.03,0.03,0.03);
+  carro.translateY(0.15);
+  carro.translateZ(-0.2);
+
   cena.add(galinha);
+  cena.add(carro);
   cena.add(arvore1);
   cena.add(flower1);
-  cena.add(road1);
-  cena.add(road2);
-  cena.add(road21);
-  cena.add(road3);
-  cena.add(lake1);
+  cena.add(wood1);
 
-  var xSpeed = 1;
-  var zSpeed = 1;
-  var jump_can = 1;
+  var xSpeed = 1.5;
+  var zSpeed = 1.5;
+  var jump_can = 1; // variavel para salto da galinha fases de testes
 
   //movimento apenas por coordenadas, falta animar salto.
   document.addEventListener("keydown", onDocumentKeyDown, false);
@@ -339,13 +292,15 @@ function Start() {
       galinha.position.z -= zSpeed;
     } else if (keyCode == 65) {
       galinha.position.x -= xSpeed;
-      galinha.rotate.x = Math.PI / 2;
+      galinha.rotate.x =Math.PI/2;
     } else if (keyCode == 68) {
       galinha.position.x += xSpeed;
-    } else if (keyCode == 32) {
-      galinha.position.set(0, 0, 0);
     }
   }
+    /*} else if (keyCode == 32) {
+      galinha.position.set(0, 0.3, -4);
+    } 
+  }*/ //para já espaço nao usar
 
   cena.add(camaraPerspetiva);
   cena.add(controls);
@@ -368,6 +323,7 @@ function Start() {
 
   // Chamar a função loop()
   requestAnimationFrame(loop);
+  
 }
 
 function loop() {
