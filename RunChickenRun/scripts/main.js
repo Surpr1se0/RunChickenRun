@@ -1,22 +1,97 @@
 document.addEventListener("DOMContentLoaded", Start);
 
 var cena = new THREE.Scene();
-//var camara = new THREE.OrthographicCamera(-1, 1, 1, -1, -10, 10);
 
-var camaraPerspetiva = new THREE.PerspectiveCamera(
-  45,
-  window.innerWidth / window.innerHeight,
-  1,
-  1000
-);
-camaraPerspetiva.position.set(0, 20, 50);
+var camera1, camera2;
+var toggleButton = document.getElementById('toggleButton');
+toggleButton.addEventListener('click', toggleCamera);
+
+var isCamera1Active = true;
+
+// Definir a primeira câmera
+var zoomFactor = 40; // Fator de zoom, 2 para dobrar o tamanho visível
+var width = window.innerWidth;
+var height = window.innerHeight;
+
+var left = -(width / 2) / zoomFactor;
+var right = (width / 2) / zoomFactor;
+var topValue = (height / 2) / zoomFactor;
+var bottom = -(height / 2) / zoomFactor;
+
+var camera1 = new THREE.OrthographicCamera(left, right, topValue, bottom, -50, 50);
+camera1.position.set(2, 4, 0);
+
+
+var importer = new THREE.FBXLoader();
+
+importer.load('./Javascript/objects/sketchfab.fbx', function(object){
+  cena.add(object);
+
+  object.rotateY(Math.PI / 2);
+
+  object.position.set(2, 2, 2);
+  object.set.scale(0.1);
+});
+
+// Definir a segunda câmera
+var fov = 70; // Campo de visão em graus
+var aspect = window.innerWidth / window.innerHeight;
+var near = 0.1; // Distância mínima de renderização
+var far = 100; // Distância máxima de renderização
+
+var camera2 = new THREE.PerspectiveCamera(fov, aspect, near, far);
+camera2.position.set(0, 7, 0);
+
+// Adicionar ambas as câmeras à cena
+cena.add(camera1);
+cena.add(camera2);
+
+// Função para alternar entre as câmeras
+function toggleCamera() {
+  if (isCamera1Active) {
+    camera1.enabled = false;
+    camera2.enabled = true;
+    isCamera1Active = false;
+  } else {
+    camera1.enabled = true;
+    camera2.enabled = false;
+    isCamera1Active = true;
+  }
+  // Atualizar a renderização da cena
+  renderCameras();
+}
+
+var galinha = new Galinha();
+galinha.scale.set(0.05, 0.05, 0.05);
+galinha.translateY(0.3);
+galinha.translateZ(-5.0);
+
+var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
+var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
+
+function renderCameras() {
+  // Renderizar a cena com a câmera ativa
+  if (isCamera1Active) {
+    camera1.position.x = galinha.position.x + 10;
+    camera1.position.y = galinha.position.y + 10;
+    camera1.position.z = galinha.position.z + 10;
+    camera1.lookAt(galinha.position);
+      renderer.render(cena, camera1);
+  } else {
+    camera1.position.x = galinha.position.x + 7;
+    camera1.position.y = galinha.position.y + 7;
+    camera1.position.z = galinha.position.z + 7;
+    camera2.lookAt(galinha.position);
+    renderer.render(cena, camera2);
+  }
+}
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth - 15, window.innerHeight - 80);
 renderer.setClearColor(0xaaaaaa);
 document.body.appendChild(renderer.domElement);
 
-var controls = new THREE.OrbitControls(camaraPerspetiva, renderer.domElement);
+var controls = new THREE.OrbitControls(camera1, renderer.domElement);
 controls.update();
 
 document.body.appendChild(renderer.domElement);
@@ -86,129 +161,6 @@ function Flower(x, y, z) {
   return flower;
 }
 
-function Road(
-  num_lanes,
-  lane_width,
-  x,
-  y,
-  z,
-  num_stripes,
-  distance_between_stripes
-) {
-  var road = new THREE.Group();
-
-  // Criar patch de relva inicial
-  var grass_inicial = new THREE.Mesh(
-    new THREE.BoxGeometry(7, 0.2, 1),
-    new THREE.MeshStandardMaterial({ color: 0xccff5e })
-  );
-
-  grass_inicial.position.set(x, y + 0.001, z - lane_width + 0.2);
-  road.add(grass_inicial);
-
-  // Criar passeio inicial
-  var walk_start = new THREE.Mesh(
-    new THREE.BoxGeometry(0.1, 0.1, 7),
-    new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
-  );
-
-  walk_start.position.set(x, y + 0.13, z - lane_width + 0.75);
-  walk_start.rotateY(Math.PI / 2);
-  road.add(walk_start);
-
-  // Criar estrada
-  for (var i = 0; i < num_lanes; i++) {
-    var asfalt = new THREE.Mesh(
-      new THREE.BoxGeometry(7, 0.1, lane_width),
-      new THREE.MeshStandardMaterial({ color: 0x4b5161 })
-    );
-
-    asfalt.position.set(x, y + 0.001, z + i * lane_width);
-    road.add(asfalt);
-
-    // Criar Linhas da Estrada
-    for (var j = 0; j < num_stripes; j++) {
-      var lines = new THREE.Mesh(
-        new THREE.BoxGeometry(0.15, 0.1, 1),
-        new THREE.MeshStandardMaterial({ color: 0xf7bd00 })
-      );
-
-      lines.position.set(
-        x + distance_between_stripes * j - 2 * distance_between_stripes,
-        0.002,
-        z + i * lane_width
-      );
-
-      lines.rotateY(Math.PI / 2);
-      road.add(lines);
-    }
-  }
-
-  var grass_final = new THREE.Mesh(
-    new THREE.BoxGeometry(7, 0.2, 1),
-    new THREE.MeshStandardMaterial({ color: 0xccff5e })
-  );
-
-  grass_final.position.set(x, y + 0.001, z + num_lanes * lane_width - 0.2);
-  road.add(grass_final);
-
-  // Criar passeio inicial
-  var walk_final = new THREE.Mesh(
-    new THREE.BoxGeometry(0.1, 0.1, 7),
-    new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
-  );
-
-  walk_final.position.set(x, y + 0.13, z + num_lanes * lane_width - 0.7);
-  walk_final.rotateY(Math.PI / 2);
-  road.add(walk_final);
-
-  return road;
-}
-
-function Lake(
-  num_lanes, //retirar
-  lane_width,
-  x,
-  y,
-  z,
-  num_stripes,
-  distance_between_stripes
-) {
-  var lake = new THREE.Group();
-
-  // Criar patch de relva inicial
-  var grass_inicial = new THREE.Mesh(
-    new THREE.BoxGeometry(7, 0.2, 1),
-    new THREE.MeshStandardMaterial({ color: 0xccff5e })
-  );
-
-  grass_inicial.position.set(x, y + 0.001, z - lane_width +0.2);
-  lake.add(grass_inicial);
-
-  // Criar estrada
-  for (var i = 0; i < num_lanes; i++) {
-    var texture = new THREE.TextureLoader().load('./Images/water.jpg');
-
-    var water = new THREE.Mesh(
-      new THREE.BoxGeometry(7, 0.1, lane_width),
-      new THREE.MeshStandardMaterial({ map: texture })
-    );
-
-    water.position.set(x, y + 0.001, z + i * lane_width);
-    lake.add(water);
-  }
-
-  var grass_final = new THREE.Mesh(
-    new THREE.BoxGeometry(7, 0.2, 1),
-    new THREE.MeshStandardMaterial({ color: 0xccff5e })
-  );
-
-  grass_final.position.set(x, y + 0.001, z + num_lanes * lane_width - 0.2);
-  lake.add(grass_final);
-
-  return lake;
-}
-
 function Oak(x, y, z, dim){
   var texture = new THREE.TextureLoader().load("./Images/wood.jpg");
 
@@ -273,14 +225,13 @@ function Galinha() {
   galinha.add(olhoe);
 
   var bico = new THREE.Mesh(
-    new THREE.ConeGeometry(1.5, 5, 64),
+    new THREE.BoxGeometry(1, 1, 2),
     new THREE.MeshPhongMaterial({ color: 0xff7800, flatShading: true })
   );
 
   bico.position.z = 15;
   bico.position.y = 0;
   bico.position.x = 0;
-  bico.rotation.x=Math.PI/2;
   bico.castShadow = true;
   bico.receiveShadow = true;
   galinha.add(bico);
@@ -333,24 +284,61 @@ function Carro() {
   return carro;
 }
 
+var lastRoadPosition = new THREE.Vector3();
+var lastRoadQuaternion = new THREE.Quaternion();
+
+function generateRandomRoad() {
+  // Defina os valores mínimos e máximos para cada parâmetro da estrada
+  var minLanes = 2;
+  var maxLanes = 4;
+
+  var offset = 10;
+
+  // Gera valores aleatórios dentro desses limites para cada parâmetro da estrada
+  var lanes = Math.floor(Math.random() * (maxLanes - minLanes + 1)) + minLanes;
+
+  // Define a posição da estrada de forma aleatória, paralela à estrada anterior
+  var normal = new THREE.Vector3(0, 0, 1);
+  normal.applyQuaternion(lastRoadQuaternion);
+  var position = new THREE.Vector3(lastRoadPosition.x, lastRoadPosition.y, lastRoadPosition.z);
+  position.addScaledVector(normal, offset);
+
+  // Cria a estrada com os valores aleatórios gerados
+  var road = new Road(lanes, 1.5, 20, 0, 20, 5, 1.5);
+
+  // Define a posição e a rotação da estrada para que fique paralela à estrada anterior
+  road.position.copy(position);
+  road.quaternion.copy(lastRoadQuaternion);
+
+  // Atualiza a posição e a rotação da última estrada gerada
+  lastRoadPosition.copy(road.position);
+  lastRoadQuaternion.copy(road.quaternion);
+
+  return road;
+}
+
+
+
+
 function Start() {
+  
+  GenerateMap();
+
+  // var firstRoad = new Road(2, 1.5, 0, 0, 5, 5, 1.5);
+  // cena.add(firstRoad);
+  
+  // for (var i = 0; i < 9; i++) {
+  //   var road = generateRandomRoad(firstRoad);
+  //   cena.add(road);
+  //   firstRoad = road;
+  // }
+
   var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
   var flower1 = new Flower(2, 0.2, -2.5);
-  var road1 = new Road(2, 1.5, 0, 0, 5, 5, 1.5);
-  var road2 = new Road(3, 1.5, 0, 0, -1, 5, 1.5);
-  var road2_1 = new Road(3, 1.5, 6, 0, -1, 5, 1.5);
-  var road2_2 = new Road(3, 1.5, 12, 0, -1, 5, 1.5);
-
-
-  var road3 = new Road(1, 1.5, 0, 0, -4.5, 5, 1.5);
-  var lake1 = new Lake(1, 1.5, 0, 0, -7, 5, 1.5);
   var wood1 = new Oak(0, 0.05, -7, 2);
 
   // Definições iniciais Galinha
-  var galinha = new Galinha();
-  galinha.scale.set(0.05, 0.05, 0.05);
-  galinha.translateY(0.3);
-  galinha.translateZ(8.5);
+
 
   //Definições iniciais Carro
   var carro = new Carro();
@@ -362,18 +350,10 @@ function Start() {
   cena.add(carro);
   cena.add(arvore1);
   cena.add(flower1);
-  
-  cena.add(road1);
-  cena.add(road2);
-  cena.add(road2_1);
-  cena.add(road2_2);
-  cena.add(road3);
-
-  cena.add(lake1);
   cena.add(wood1);
 
-  var xSpeed = 1.2;
-  var zSpeed = 1.2;
+  var xSpeed = 1.5;
+  var zSpeed = 1.5;
   var jump_can = 1; // variavel para salto da galinha fases de testes
 
   //movimento apenas por coordenadas, falta animar salto.
@@ -381,18 +361,13 @@ function Start() {
   function onDocumentKeyDown(event) {
     var keyCode = event.which;
     if (keyCode == 87) {
-      //w key para frente rotação 180
-      galinha.position.z -= zSpeed;
-      galinha.rotation.y = Math.PI;
-    } else if (keyCode == 83) {
-      //s key para trás rotação 
       galinha.position.z += zSpeed;
-      galinha.rotation.y = 2*Math.PI;
+    } else if (keyCode == 83) {
+      galinha.position.z -= zSpeed;
     } else if (keyCode == 65) {
-      //a key para esquerda ainda sem rotação
       galinha.position.x -= xSpeed;
+      galinha.rotate.x =Math.PI/2;
     } else if (keyCode == 68) {
-      //d key para direira ainda sem rotação
       galinha.position.x += xSpeed;
     }
   }
@@ -401,7 +376,6 @@ function Start() {
     } 
   }*/ //para já espaço nao usar
 
-  cena.add(camaraPerspetiva);
   cena.add(controls);
 
   // criar os axis
@@ -417,8 +391,6 @@ function Start() {
   var helper = new THREE.DirectionalLightHelper(luz, 5);
   cena.add(helper);
 
-  // Chamar a função de renderização
-  renderer.render(cena, camaraPerspetiva);
 
   // Chamar a função loop()
   requestAnimationFrame(loop);
@@ -426,9 +398,11 @@ function Start() {
 }
 
 function loop() {
-  renderer.render(cena, camaraPerspetiva);
 
-  controls.update();
+  //controls.update();
+
+  renderCameras();
 
   requestAnimationFrame(loop);
+
 }
