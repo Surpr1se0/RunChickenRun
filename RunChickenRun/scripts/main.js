@@ -137,13 +137,15 @@ function Galinha() {
   return galinha;
 }
 
-var galinha = new Galinha();
-galinha.scale.set(0.05, 0.05, 0.05);
-galinha.translateY(0.3);
-galinha.translateZ(-5.0);
+
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
+
+var galinha = new Galinha();
+  galinha.scale.set(0.05, 0.05, 0.05);
+  galinha.translateY(0.3);
+  galinha.translateZ(-5.0);
 
 function renderCameras() {
   // Renderizar a cena com a câmera ativa
@@ -222,7 +224,7 @@ function Start() {
       }
       galinha.position.z -= zSpeed;
       galinha.rotation.y = Math.PI;
-      
+
     } else if (keyCode == 83) {
       if (!isJumping) {
         isJumping = true;
@@ -244,7 +246,7 @@ function Start() {
       }
       galinha.position.x += xSpeed;
       galinha.rotation.y = Math.PI / 2;
-      
+
     } else if (keyCode == 32) { // Tecla de salto (espaço)
       if (!isJumping) {
         isJumping = true;
@@ -256,7 +258,7 @@ function Start() {
   function jump() {
     var initialPositionY = galinha.position.y; // Posição inicial em Y da galinha
     var jumpTime = 0.5; // Tempo total para completar o salto
-    var jumpSpeed = jumpHeight / jumpTime; // Velocidade de salto (ajuste conforme necessário)
+    var jumpSpeed = jumpHeight / jumpTime; // Velocidade de salto 
 
     var startTime = Date.now(); // Tempo de início do salto
 
@@ -286,7 +288,17 @@ function Start() {
     updateJump();
   }
 
+  // a
+  function animatecar() {
+    var velocidadeX = 1;
+    // Move o carro no eixo x
 
+    carro.position.x += velocidadeX; // Movimenta carro no eixo x
+    //object.position.x += velocidadeX; // Movimenta carro importado no eixo x
+
+    requestAnimationFrame(animatecar);
+  }
+  animatecar();
   cena.add(controls);
 
   // criar os axis
