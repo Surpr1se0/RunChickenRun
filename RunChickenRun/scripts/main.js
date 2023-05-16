@@ -352,23 +352,26 @@ function Start() {
   cena.add(flower1);
   cena.add(wood1);
 
-  var xSpeed = 1.5;
-  var zSpeed = 1.5;
-  var jump_can = 1; // variavel para salto da galinha fases de testes
+  var xSpeed = 1;
+  var zSpeed = 1;
 
   //movimento apenas por coordenadas, falta animar salto.
+  //temos que mudar a rotação o centro de rotação da galinha não é o centro da galinha
   document.addEventListener("keydown", onDocumentKeyDown, false);
   function onDocumentKeyDown(event) {
     var keyCode = event.which;
     if (keyCode == 87) {
-      galinha.position.z += zSpeed;
-    } else if (keyCode == 83) {
       galinha.position.z -= zSpeed;
+      galinha.rotation.y = Math.PI;
+    } else if (keyCode == 83) {
+      galinha.position.z += zSpeed;
+      galinha.rotation.y = 2*Math.PI;
     } else if (keyCode == 65) {
       galinha.position.x -= xSpeed;
-      galinha.rotate.x =Math.PI/2;
+      galinha.rotation.y = -Math.PI/2;
     } else if (keyCode == 68) {
       galinha.position.x += xSpeed;
+      galinha.rotation.y = Math.PI/2;
     }
   }
     /*} else if (keyCode == 32) {
