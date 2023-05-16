@@ -357,17 +357,23 @@ function Start() {
   var jump_can = 1; // variavel para salto da galinha fases de testes
 
   //movimento apenas por coordenadas, falta animar salto.
+  //movimento apenas por coordenadas, falta animar salto.
   document.addEventListener("keydown", onDocumentKeyDown, false);
   function onDocumentKeyDown(event) {
     var keyCode = event.which;
     if (keyCode == 87) {
-      galinha.position.z += zSpeed;
-    } else if (keyCode == 83) {
+      //w key para frente rotação 180
       galinha.position.z -= zSpeed;
+      galinha.rotation.y = Math.PI;
+    } else if (keyCode == 83) {
+      //s key para trás rotação 
+      galinha.position.z += zSpeed;
+      galinha.rotation.y = 2*Math.PI;
     } else if (keyCode == 65) {
+      //a key para esquerda ainda sem rotação
       galinha.position.x -= xSpeed;
-      galinha.rotate.x =Math.PI/2;
     } else if (keyCode == 68) {
+      //d key para direira ainda sem rotação
       galinha.position.x += xSpeed;
     }
   }
