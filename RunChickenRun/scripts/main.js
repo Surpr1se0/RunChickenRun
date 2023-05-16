@@ -246,7 +246,7 @@ function Galinha() {
 }
 
 function Rodas() {
-  var geometry = new THREE.CylinderGeometry(9, 9, 31);
+  var geometry = new THREE.CylinderGeometry(9, 9, 5);
   var material = new THREE.MeshLambertMaterial({ color: 0x333333 });
   var roda = new THREE.Mesh(geometry, material);
   roda.rotation.x=Math.PI/2;
@@ -256,15 +256,32 @@ function Rodas() {
 function Carro() {
   var carro = new THREE.Group();
 
-  var rodastraseiras = Rodas();
-  rodastraseiras.position.y = 6;
-  rodastraseiras.position.x = -18;
-  carro.add(rodastraseiras);
+  var rodatraseiradireita = Rodas();
+  rodatraseiradireita.position.y = 6;
+  rodatraseiradireita.position.x = -20;
+  rodatraseiradireita.position.z = 13;
+  carro.add(rodatraseiradireita);
 
-  var rodasfrente = Rodas();
-  rodasfrente.position.y = 6;  
-  rodasfrente.position.x = 18;
-  carro.add(rodasfrente);
+  var rodatraseiraesquerda = Rodas();
+  rodatraseiraesquerda.position.y = 6;  
+  rodatraseiraesquerda.position.x = -20;
+  rodatraseiraesquerda.position.z = -13;
+
+  carro.add(rodatraseiraesquerda);
+
+  var rodadianteiradireira = Rodas();
+  rodadianteiradireira.position.y = 6;  
+  rodadianteiradireira.position.x = 20;
+  rodadianteiradireira.position.z = 13;
+
+  carro.add(rodadianteiradireira);
+
+  var rodadianteiraesquerda = Rodas();
+  rodadianteiraesquerda.position.y = 6;  
+  rodadianteiraesquerda.position.x = 20;
+  rodadianteiraesquerda.position.z = -13;
+
+  carro.add(rodadianteiraesquerda);
 
   var chasi = new THREE.Mesh(
     new THREE.BoxGeometry(60, 15, 30),
