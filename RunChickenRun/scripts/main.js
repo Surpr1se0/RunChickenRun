@@ -35,8 +35,8 @@ importer.load("./Javascript/objects/sketchfab.fbx", function (object) {
 
   object.rotateY(Math.PI / 2);
 
-  object.position.set(2, 2, 2);
-  object.set.scale(0.1);
+  object.position.set(5, 1, 1.7);
+  object.scale.set(0.5, 0.5, 0.5);
 });
 
 // Definir a segunda câmera
@@ -347,8 +347,18 @@ function Start() {
   carro.translateY(0.15);
   carro.translateZ(-0.2);
 
-  var xSpeed = 1;
-  var zSpeed = 1;
+  cena.add(galinha);
+  cena.add(carro);
+  cena.add(arvore1);
+  cena.add(flower1);
+  cena.add(wood1);
+
+  var xSpeed = 0.5;
+  var zSpeed = 0.5;
+  var isJumping = false;
+  var jumpHeight = 1;
+  var groundHeight = 0.3;  // Ajuste a altura do chão conforme necessário
+
 
   //movimento apenas por coordenadas, falta animar salto.
   //temos que mudar a rotação o centro de rotação da galinha não é o centro da galinha
@@ -363,17 +373,65 @@ function Start() {
     var novaPosicaoZ = galinha.position.z;
 
     if (keyCode == 87) {
+      if (!isJumping) {
+        isJumping = true;
+        jump();
+      }
       novaPosicaoZ -= zSpeed;
       galinha.rotation.y = Math.PI;
+
     } else if (keyCode == 83) {
+      if (!isJumping) {
+        isJumping = true;
+        jump();
+      }
       novaPosicaoZ += zSpeed;
       galinha.rotation.y = 2 * Math.PI;
     } else if (keyCode == 65) {
+      if (!isJumping) {
+        isJumping = true;
+        jump();
+      }
       novaPosicaoX -= xSpeed;
       galinha.rotation.y = -Math.PI / 2;
     } else if (keyCode == 68) {
+      if (!isJumping) {
+        isJumping = true;
+        jump();
+      }
       novaPosicaoX += xSpeed;
       galinha.rotation.y = Math.PI / 2;
+
+    } else if (keyCode == 32) { // Tecla de salto (espaço)
+      if (!isJumping) {
+        isJumping = true;
+        jump();
+      }
+    }
+
+    var colisaoDetectada = false;
+
+    // Verifique colisões antes de atualizar a posição
+    for (var i = 0; i < arvores.length; i++) {
+      var arvore = arvores[i];
+      if (detectCollision(galinha, arvore)) {
+        colisaoDetectada = true;
+        break;
+      }
+    }
+
+    if (!colisaoDetectada) {
+      // Atualize a posição da galinha com as novas posições se não houver colisão
+      galinha.position.x = novaPosicaoX;
+      galinha.position.z = novaPosicaoZ;
+
+      // Atualize as variáveis de posição
+      galinhaX = novaPosicaoX;
+      galinhaZ = novaPosicaoZ;
+    } else {
+      // Restaure as posições para a posição original antes do movimento
+      galinha.position.x = galinhaX;
+      galinha.position.z = galinhaZ;
     }
 
     var colisaoDetectada = false;
@@ -402,11 +460,51 @@ function Start() {
     }
   }
 
-  /*} else if (keyCode == 32) {
-      galinha.position.set(0, 0.3, -4);
-    } 
-  }*/ //para já espaço nao usar
 
+  function jump() {
+    var initialPositionY = galinha.position.y; // Posição inicial em Y da galinha
+    var jumpTime = 0.5; // Tempo total para completar o salto
+    var jumpSpeed = jumpHeight / jumpTime; // Velocidade de salto 
+
+    var startTime = Date.now(); // Tempo de início do salto
+
+    function updateJump() {
+      var elapsedTime = (Date.now() - startTime) / 1000; // Tempo decorrido desde o início do salto
+      if (elapsedTime <= jumpTime) {
+        var jumpDistance = jumpSpeed * elapsedTime; // Distância de salto alcançada até o momento
+
+        // Atualiza a posição vertical da galinha
+        galinha.position.y = initialPositionY + jumpDistance - 0.5 * 9.8 * elapsedTime * elapsedTime;
+
+        // Verifica se a posição da galinha está abaixo do chão
+        if (galinha.position.y <= groundHeight) {
+          galinha.position.y = groundHeight; // Mantém a galinha no chão
+          isJumping = false; // O salto foi concluído
+        }
+
+        // Chama recursivamente a função para atualizar o salto
+        requestAnimationFrame(updateJump);
+      } else {
+        // O salto foi concluído
+        isJumping = false;
+      }
+    }
+
+    // Inicia o salto
+    updateJump();
+  }
+
+  // a
+  function animatecar() {
+    var velocidadeX = 1;
+    // Move o carro no eixo x
+
+    carro.position.x += velocidadeX; // Movimenta carro no eixo x
+    //object.position.x += velocidadeX; // Movimenta carro importado no eixo x
+
+    requestAnimationFrame(animatecar);
+  }
+  animatecar();
   cena.add(controls);
 
   // criar os axis
