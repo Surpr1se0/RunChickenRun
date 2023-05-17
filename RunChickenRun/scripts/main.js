@@ -67,6 +67,144 @@ function toggleCamera() {
   renderCameras();
 }
 
+function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
+  var tree = new THREE.Group();
+
+  var log = new THREE.Mesh(
+    new THREE.BoxGeometry(0.3, 0.8, 0.3),
+    new THREE.MeshStandardMaterial({ color: 0x421b01 })
+  );
+
+  log.position.set(tronco_x, tronco_y, tronco_z);
+  tree.add(log);
+
+  var green = new THREE.Mesh(
+    new THREE.BoxGeometry(brush_x, brush_y, brush_z),
+    new THREE.MeshStandardMaterial({ color: 0x5b7327 })
+  );
+
+
+  green.position.set(tronco_x - 0.05, tronco_y + 0.5, tronco_z - 0.05);
+  tree.add(green);
+  var boundingBox = new THREE.Box3().setFromObject(tree);
+  tree.boundingBox = boundingBox;
+
+  return tree;
+}
+//0, 0.04, -2.3
+function AddPasseio(x, y, z) {
+  var geometriaPasseio = new THREE.BoxGeometry(0.1, 0.1, 7);
+
+  var passeioTextura = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
+
+  var meshPasseio = new THREE.Mesh(geometriaPasseio, passeioTextura);
+  meshPasseio.position.set(x, y, z);
+  meshPasseio.rotateY(Math.PI / 2);
+
+  cena.add(meshPasseio);
+
+  var geometriaPasseio1 = new THREE.BoxGeometry(0.1, 0.1, 7);
+
+  var passeioTextura1 = new THREE.MeshStandardMaterial({ color: 0xaaaaaa });
+
+  var meshPasseio1 = new THREE.Mesh(geometriaPasseio1, passeioTextura1);
+  meshPasseio1.position.set(x, y, z - 1.4);
+  meshPasseio1.rotateY(Math.PI / 2);
+
+  cena.add(meshPasseio1);
+}
+
+// -2       // 0.2      //-1.6
+function Flower(x, y, z) {
+  var flower = new THREE.Group();
+
+  var bottom = new THREE.Mesh(
+    new THREE.BoxGeometry(0.05, 0.6, 0.05),
+    new THREE.MeshStandardMaterial({ color: 0x2a4f19 })
+  );
+  bottom.position.set(x, y, z);
+  flower.add(bottom);
+
+  var top = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(0.16, 0),
+    new THREE.MeshStandardMaterial({ color: 0xc957a7 })
+  );
+  top.position.set(x, y + 0.2, z);
+  flower.add(top);
+
+  return flower;
+}
+
+function Oak(x, y, z, dim) {
+  var texture = new THREE.TextureLoader().load("./Images/wood.jpg");
+
+  var oak = new THREE.Mesh(
+    new THREE.BoxGeometry(dim, 0.1, 1),
+    new THREE.MeshStandardMaterial({ map: texture })
+  );
+
+  oak.position.set(x, y, z);
+
+  return oak;
+}
+
+
+function Rodas() {
+  var geometry = new THREE.CylinderGeometry(9, 9, 5);
+  var material = new THREE.MeshLambertMaterial({ color: 0x333333 });
+  var roda = new THREE.Mesh(geometry, material);
+  roda.rotation.x = Math.PI / 2;
+  return roda;
+}
+
+function Carro() {
+  var carro = new THREE.Group();
+
+  var rodatraseiradireita = Rodas();
+  rodatraseiradireita.position.y = 6;
+  rodatraseiradireita.position.x = -20;
+  rodatraseiradireita.position.z = 13;
+  carro.add(rodatraseiradireita);
+
+  var rodatraseiraesquerda = Rodas();
+  rodatraseiraesquerda.position.y = 6;
+  rodatraseiraesquerda.position.x = -20;
+  rodatraseiraesquerda.position.z = -13;
+
+  carro.add(rodatraseiraesquerda);
+
+  var rodadianteiradireira = Rodas();
+  rodadianteiradireira.position.y = 6;
+  rodadianteiradireira.position.x = 20;
+  rodadianteiradireira.position.z = 13;
+
+  carro.add(rodadianteiradireira);
+
+  var rodadianteiraesquerda = Rodas();
+  rodadianteiraesquerda.position.y = 6;
+  rodadianteiraesquerda.position.x = 20;
+  rodadianteiraesquerda.position.z = -13;
+
+  carro.add(rodadianteiraesquerda);
+
+  var chasi = new THREE.Mesh(
+    new THREE.BoxGeometry(60, 15, 30),
+    new THREE.MeshLambertMaterial({ color: 0x78b14b })
+  );
+  chasi.position.y = 12;
+  carro.add(chasi);
+
+  var cockpit = new THREE.Mesh(
+    new THREE.BoxGeometry(33, 12, 24),
+    new THREE.MeshLambertMaterial({ color: 0xffffff })
+  );
+  cockpit.position.x = -6;
+  cockpit.position.y = 25.5;
+  carro.add(cockpit);
+
+  return carro;
+}
+
 function Galinha() {
   var galinha = new THREE.Group();
 
@@ -133,6 +271,8 @@ function Galinha() {
   //var mat = new THREE.LineBasicMaterial({ color: 0x9c9c9c, flatShading: true });
   //var bordas = new THREE.LineSegments(geo, mat);
   //corpo.add(bordas);
+  var boundingBox = new THREE.Box3().setFromObject(galinha);
+  galinha.boundingBox = boundingBox;
 
   return galinha;
 }
@@ -175,33 +315,112 @@ document.body.appendChild(renderer.domElement);
 var lastRoadPosition = new THREE.Vector3();
 var lastRoadQuaternion = new THREE.Quaternion();
 
+function calcularBoundingBoxGalinha() {
+  var tamanhoX = 10 * galinha.scale.x; // Tamanho da galinha no eixo X
+  var tamanhoY = 10 * galinha.scale.y; // Tamanho da galinha no eixo Y
+  var tamanhoZ = 10 * galinha.scale.z; // Tamanho da galinha no eixo Z
+
+  var minX = galinha.position.x - tamanhoX / 2; // Valor mínimo de x
+  var maxX = galinha.position.x + tamanhoX / 2; // Valor máximo de x
+  var minY = galinha.position.y - tamanhoY / 2; // Valor mínimo de y
+  var maxY = galinha.position.y + tamanhoY / 2; // Valor máximo de y
+  var minZ = galinha.position.z - tamanhoZ / 2; // Valor mínimo de z
+  var maxZ = galinha.position.z + tamanhoZ / 2; // Valor máximo de z
+
+  return {
+    minX: minX,
+    maxX: maxX,
+    minY: minY,
+    maxY: maxY,
+    minZ: minZ,
+    maxZ: maxZ,
+  };
+}
+
+function calcularBoundingBoxArvore(
+  tronco_x,
+  tronco_y,
+  tronco_z,
+  brush_x,
+  brush_y,
+  brush_z
+) {
+  var minX = tronco_x - 0.15; // Valor mínimo de x (considerando o tronco)
+  var maxX = tronco_x + 0.15; // Valor máximo de x (considerando o tronco)
+  var minY = tronco_y; // Valor mínimo de y (considerando a posição do tronco)
+  var maxY = tronco_y + 0.8; // Valor máximo de y (considerando a altura do tronco)
+  var minZ = tronco_z - 0.15; // Valor mínimo de z (considerando o tronco)
+  var maxZ = tronco_z + 0.15; // Valor máximo de z (considerando o tronco)
+
+  // Verificar se as dimensões da folhagem são maiores que o tronco
+  if (brush_x > 0) {
+    minX = Math.min(minX, tronco_x - brush_x / 2);
+    maxX = Math.max(maxX, tronco_x + brush_x / 2);
+  }
+  if (brush_y > 0) {
+    maxY = Math.max(maxY, tronco_y + brush_y);
+  }
+  if (brush_z > 0) {
+    minZ = Math.min(minZ, tronco_z - brush_z / 2);
+    maxZ = Math.max(maxZ, tronco_z + brush_z / 2);
+  }
+
+  return {
+    minX: minX,
+    maxX: maxX,
+    minY: minY,
+    maxY: maxY,
+    minZ: minZ,
+    maxZ: maxZ,
+  };
+}
+
+function verificarColisoes() {
+  var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
+  var arvores = [];
+  arvores.push(arvore1);
+
+  // Percorrer todas as árvores
+  for (var i = 0; i < arvores.length; i++) {
+    var arvore = arvores[i]; // Grupo de objetos da árvore
+
+    // Percorrer todas as partes da galinha
+    galinha.traverse(function (parteGalinha) {
+      if (parteGalinha instanceof THREE.Mesh) {
+        var parteGalinhaBoundingBox = parteGalinha.geometry.boundingBox.clone(); // Caixa delimitadora da parte da galinha
+
+        // Percorrer todas as partes da árvore
+        arvore.traverse(function (parteArvore) {
+          if (parteArvore instanceof THREE.Mesh) {
+            var parteArvoreBoundingBox =
+              parteArvore.geometry.boundingBox.clone(); // Caixa delimitadora da parte da árvore
+
+            // Verificar se há colisão entre a parte da galinha e a parte da árvore
+            if (parteGalinhaBoundingBox.intersectsBox(parteArvoreBoundingBox)) {
+              // Colisão detectada!
+              console.log(
+                "Colisão entre a parte da galinha e a parte da árvore ",
+                i
+              );
+              // Aqui você pode realizar alguma ação, como interromper o movimento da galinha ou executar algum código específico para tratar a colisão.
+            }
+          }
+        });
+      }
+    });
+  }
+}
+
 function Start() {
   GenerateMap();
 
-  // var firstRoad = new Road(2, 1.5, 0, 0, 5, 5, 1.5);
-  // cena.add(firstRoad);
 
-  // for (var i = 0; i < 9; i++) {
-  //   var road = generateRandomRoad(firstRoad);
-  //   cena.add(road);
-  //   firstRoad = road;
-  // }
-
-  var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
-  var flower1 = new Flower(2, 0.2, -2.5);
-  var wood1 = new Oak(0, 0.05, -7, 2);
 
   //Definições iniciais Carro
   var carro = new Carro();
   carro.scale.set(0.03, 0.03, 0.03);
   carro.translateY(0.15);
   carro.translateZ(-0.2);
-
-  cena.add(galinha);
-  cena.add(carro);
-  cena.add(arvore1);
-  cena.add(flower1);
-  cena.add(wood1);
 
   var xSpeed = 1;
   var zSpeed = 1;
@@ -251,6 +470,7 @@ function Start() {
 
 function loop() {
   //controls.update();
+  verificarColisoes();
 
   renderCameras();
 
