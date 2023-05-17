@@ -350,15 +350,12 @@ function Start() {
   cena.add(galinha);
   cena.add(carro);
   cena.add(arvore1);
-  cena.add(flower1);
-  cena.add(wood1);
 
   var xSpeed = 0.5;
   var zSpeed = 0.5;
   var isJumping = false;
   var jumpHeight = 1;
-  var groundHeight = 0.3;  // Ajuste a altura do chão conforme necessário
-
+  var groundHeight = 0.3; // Ajuste a altura do chão conforme necessário
 
   //movimento apenas por coordenadas, falta animar salto.
   //temos que mudar a rotação o centro de rotação da galinha não é o centro da galinha
@@ -379,7 +376,6 @@ function Start() {
       }
       novaPosicaoZ -= zSpeed;
       galinha.rotation.y = Math.PI;
-
     } else if (keyCode == 83) {
       if (!isJumping) {
         isJumping = true;
@@ -401,8 +397,8 @@ function Start() {
       }
       novaPosicaoX += xSpeed;
       galinha.rotation.y = Math.PI / 2;
-
-    } else if (keyCode == 32) { // Tecla de salto (espaço)
+    } else if (keyCode == 32) {
+      // Tecla de salto (espaço)
       if (!isJumping) {
         isJumping = true;
         jump();
@@ -460,11 +456,10 @@ function Start() {
     }
   }
 
-
   function jump() {
     var initialPositionY = galinha.position.y; // Posição inicial em Y da galinha
     var jumpTime = 0.5; // Tempo total para completar o salto
-    var jumpSpeed = jumpHeight / jumpTime; // Velocidade de salto 
+    var jumpSpeed = jumpHeight / jumpTime; // Velocidade de salto
 
     var startTime = Date.now(); // Tempo de início do salto
 
@@ -474,7 +469,10 @@ function Start() {
         var jumpDistance = jumpSpeed * elapsedTime; // Distância de salto alcançada até o momento
 
         // Atualiza a posição vertical da galinha
-        galinha.position.y = initialPositionY + jumpDistance - 0.5 * 9.8 * elapsedTime * elapsedTime;
+        galinha.position.y =
+          initialPositionY +
+          jumpDistance -
+          0.5 * 9.8 * elapsedTime * elapsedTime;
 
         // Verifica se a posição da galinha está abaixo do chão
         if (galinha.position.y <= groundHeight) {
@@ -513,7 +511,7 @@ function Start() {
 
   // cria a luz
   var luz = new THREE.DirectionalLight(0xffffff, 1);
-  luz.position.set(-6, 4, 2);
+  luz.position.set(-20, 10, 2);
   cena.add(luz);
 
   // cria o helper da luz
