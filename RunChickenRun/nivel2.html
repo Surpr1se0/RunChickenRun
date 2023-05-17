@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Three.js Project</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body onload="Start()">
+    <div id="canvas-container">
+      <canvas></canvas>
+    </div>
+    <div id="end">
+      <button id="retry" onclick="window.location.href='Menu.html'">
+        Back to Menu
+      </button>
+    </div>
+
+    <div>
+      <button id="toggleButton">Change Camera</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="./Javascript/three.js"></script>
+    <script src="./Javascript/addons/OrbitControls.js"></script>
+    <script src="./Javascript/addons/FBXLoader.js"></script>
+    <script src="./Javascript/addons/fflate.min.js"></script>
+
+    <!--Main and Funcs-->
+    <script src="./scripts/main.js"></script>
+    <script src="./scripts/map.js"></script>
+  </body>
+</html>
