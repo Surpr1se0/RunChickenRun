@@ -83,7 +83,6 @@ function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
     new THREE.MeshStandardMaterial({ color: 0x5b7327 })
   );
 
-
   green.position.set(tronco_x - 0.05, tronco_y + 0.5, tronco_z - 0.05);
   tree.add(green);
   var boundingBox = new THREE.Box3().setFromObject(tree);
@@ -147,7 +146,6 @@ function Oak(x, y, z, dim) {
 
   return oak;
 }
-
 
 function Rodas() {
   var geometry = new THREE.CylinderGeometry(9, 9, 5);
@@ -277,14 +275,6 @@ function Galinha() {
   return galinha;
 }
 
-var galinha = new Galinha();
-galinha.scale.set(0.05, 0.05, 0.05);
-galinha.translateY(0.3);
-galinha.translateZ(-5.0);
-
-var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
-var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
-
 function renderCameras() {
   // Renderizar a cena com a câmera ativa
   if (isCamera1Active) {
@@ -312,110 +302,45 @@ controls.update();
 
 document.body.appendChild(renderer.domElement);
 
-var lastRoadPosition = new THREE.Vector3();
-var lastRoadQuaternion = new THREE.Quaternion();
+var galinha = new Galinha();
+cena.add(galinha);
+galinha.scale.set(0.05, 0.05, 0.05);
+galinha.translateY(0.3);
+galinha.translateZ(-5.0);
+var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
+var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
 
-function calcularBoundingBoxGalinha() {
-  var tamanhoX = 10 * galinha.scale.x; // Tamanho da galinha no eixo X
-  var tamanhoY = 10 * galinha.scale.y; // Tamanho da galinha no eixo Y
-  var tamanhoZ = 10 * galinha.scale.z; // Tamanho da galinha no eixo Z
+var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
+var arvores = [];
+arvores.push(arvore1);
+cena.add(arvore1);
 
-  var minX = galinha.position.x - tamanhoX / 2; // Valor mínimo de x
-  var maxX = galinha.position.x + tamanhoX / 2; // Valor máximo de x
-  var minY = galinha.position.y - tamanhoY / 2; // Valor mínimo de y
-  var maxY = galinha.position.y + tamanhoY / 2; // Valor máximo de y
-  var minZ = galinha.position.z - tamanhoZ / 2; // Valor mínimo de z
-  var maxZ = galinha.position.z + tamanhoZ / 2; // Valor máximo de z
+function detectCollision(obj1, obj2) {
+  var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
+  var box2 = obj2.boundingBox.clone().applyMatrix4(obj2.matrixWorld);
 
-  return {
-    minX: minX,
-    maxX: maxX,
-    minY: minY,
-    maxY: maxY,
-    minZ: minZ,
-    maxZ: maxZ,
-  };
+  return box1.intersectsBox(box2);
 }
 
-function calcularBoundingBoxArvore(
-  tronco_x,
-  tronco_y,
-  tronco_z,
-  brush_x,
-  brush_y,
-  brush_z
-) {
-  var minX = tronco_x - 0.15; // Valor mínimo de x (considerando o tronco)
-  var maxX = tronco_x + 0.15; // Valor máximo de x (considerando o tronco)
-  var minY = tronco_y; // Valor mínimo de y (considerando a posição do tronco)
-  var maxY = tronco_y + 0.8; // Valor máximo de y (considerando a altura do tronco)
-  var minZ = tronco_z - 0.15; // Valor mínimo de z (considerando o tronco)
-  var maxZ = tronco_z + 0.15; // Valor máximo de z (considerando o tronco)
-
-  // Verificar se as dimensões da folhagem são maiores que o tronco
-  if (brush_x > 0) {
-    minX = Math.min(minX, tronco_x - brush_x / 2);
-    maxX = Math.max(maxX, tronco_x + brush_x / 2);
-  }
-  if (brush_y > 0) {
-    maxY = Math.max(maxY, tronco_y + brush_y);
-  }
-  if (brush_z > 0) {
-    minZ = Math.min(minZ, tronco_z - brush_z / 2);
-    maxZ = Math.max(maxZ, tronco_z + brush_z / 2);
-  }
-
-  return {
-    minX: minX,
-    maxX: maxX,
-    minY: minY,
-    maxY: maxY,
-    minZ: minZ,
-    maxZ: maxZ,
-  };
-}
-
-function verificarColisoes() {
-  var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
-  var arvores = [];
-  arvores.push(arvore1);
-
-  // Percorrer todas as árvores
+function checkCollisions() {
   for (var i = 0; i < arvores.length; i++) {
-    var arvore = arvores[i]; // Grupo de objetos da árvore
-
-    // Percorrer todas as partes da galinha
-    galinha.traverse(function (parteGalinha) {
-      if (parteGalinha instanceof THREE.Mesh) {
-        var parteGalinhaBoundingBox = parteGalinha.geometry.boundingBox.clone(); // Caixa delimitadora da parte da galinha
-
-        // Percorrer todas as partes da árvore
-        arvore.traverse(function (parteArvore) {
-          if (parteArvore instanceof THREE.Mesh) {
-            var parteArvoreBoundingBox =
-              parteArvore.geometry.boundingBox.clone(); // Caixa delimitadora da parte da árvore
-
-            // Verificar se há colisão entre a parte da galinha e a parte da árvore
-            if (parteGalinhaBoundingBox.intersectsBox(parteArvoreBoundingBox)) {
-              // Colisão detectada!
-              console.log(
-                "Colisão entre a parte da galinha e a parte da árvore ",
-                i
-              );
-              // Aqui você pode realizar alguma ação, como interromper o movimento da galinha ou executar algum código específico para tratar a colisão.
-            }
-          }
-        });
-      }
-    });
+    var arvore = arvores[i];
+    if (detectCollision(galinha, arvore)) {
+      // Colisão detectada entre a galinha e a árvore
+      console.log("Colisão detectada!");
+      // Faça aqui o que deseja fazer em caso de colisão
+    }
   }
 }
 
 function Start() {
   GenerateMap();
 
+  var boxHelper = new THREE.BoxHelper(galinha, 0xffff00); // Passando o objeto e a cor desejada como parâmetros
+  cena.add(boxHelper);
 
-
+  var treeHelper = new THREE.BoxHelper(arvore1, 0xffff00);
+  cena.add(treeHelper);
   //Definições iniciais Carro
   var carro = new Carro();
   carro.scale.set(0.03, 0.03, 0.03);
@@ -428,22 +353,55 @@ function Start() {
   //movimento apenas por coordenadas, falta animar salto.
   //temos que mudar a rotação o centro de rotação da galinha não é o centro da galinha
   document.addEventListener("keydown", onDocumentKeyDown, false);
+
+  var galinhaX = galinha.position.x;
+  var galinhaZ = galinha.position.z;
+
   function onDocumentKeyDown(event) {
     var keyCode = event.which;
+    var novaPosicaoX = galinha.position.x;
+    var novaPosicaoZ = galinha.position.z;
+
     if (keyCode == 87) {
-      galinha.position.z -= zSpeed;
+      novaPosicaoZ -= zSpeed;
       galinha.rotation.y = Math.PI;
     } else if (keyCode == 83) {
-      galinha.position.z += zSpeed;
+      novaPosicaoZ += zSpeed;
       galinha.rotation.y = 2 * Math.PI;
     } else if (keyCode == 65) {
-      galinha.position.x -= xSpeed;
+      novaPosicaoX -= xSpeed;
       galinha.rotation.y = -Math.PI / 2;
     } else if (keyCode == 68) {
-      galinha.position.x += xSpeed;
+      novaPosicaoX += xSpeed;
       galinha.rotation.y = Math.PI / 2;
     }
+
+    var colisaoDetectada = false;
+
+    // Verifique colisões antes de atualizar a posição
+    for (var i = 0; i < arvores.length; i++) {
+      var arvore = arvores[i];
+      if (detectCollision(galinha, arvore)) {
+        colisaoDetectada = true;
+        break;
+      }
+    }
+
+    if (!colisaoDetectada) {
+      // Atualize a posição da galinha com as novas posições se não houver colisão
+      galinha.position.x = novaPosicaoX;
+      galinha.position.z = novaPosicaoZ;
+
+      // Atualize as variáveis de posição
+      galinhaX = novaPosicaoX;
+      galinhaZ = novaPosicaoZ;
+    } else {
+      // Restaure as posições para a posição original antes do movimento
+      galinha.position.x = galinhaX;
+      galinha.position.z = galinhaZ;
+    }
   }
+
   /*} else if (keyCode == 32) {
       galinha.position.set(0, 0.3, -4);
     } 
@@ -469,10 +427,9 @@ function Start() {
 }
 
 function loop() {
-  //controls.update();
-  verificarColisoes();
-
   renderCameras();
 
   requestAnimationFrame(loop);
+
+  checkCollisions();
 }
