@@ -324,55 +324,95 @@ function Start() {
   
   GenerateMap();
 
-
 var arvores = [
   { x: -7, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 3, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -9, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
 
+  { x: -12, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -4, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 1, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 4, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 8, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 16, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
 
   { x: -2, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 4, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 7, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
 
   { x: -0, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 1, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -7, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 2, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 20, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 5, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
 
   { x: -8, y: 0.3, z: -11, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 10, y: 0.3, z: -11, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -5, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 8, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 2, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: -2, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 4, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
 
   { x: 1, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 6, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 8, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 5, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -15, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -4, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: -3, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 1, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
-
-  { x: 3.5, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -11, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -7, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 7, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 5, y: 0.3, z: 3, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 20, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 12, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 9, y: 0.3, z: 3, width: 0.6, height: 0.8, depth: 0.6 },
 
   { x: 4, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 0, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 7, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 6, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -9, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 10, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
 
   { x: 2, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
   { x: -5, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 8, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -11, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -9, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
 
   { x: 8, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 3, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 2, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 3, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 6, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 1, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
 
   { x: 5, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
   { x: -15, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 11, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 15, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: 5, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -10, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 20, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -2, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -6.5, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 7, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 9, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: 2, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
-
-  { x: -2, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -7, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 8, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  
+  { x: -6, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -1, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 5, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
 ];
 
 // Crie e adicione os objetos de árvore à cena usando um loop
@@ -388,8 +428,44 @@ for (var i = 0; i < arvores.length; i++) {
   cena.add(arvore);
 }
 
-  var flower1 = new Flower(2, 0.2, -2.5);
-  var wood1 = new Oak(0, 0.05, -7, 2);
+var woods = [
+  {x: -3, y: 0.05, z: -7, lenght: 2},
+  {x: 3, y: 0.05, z: -7, lenght: 2},
+
+  {x: -3, y: 0.05, z: -26, lenght: 2},
+  {x: 2.5, y: 0.05, z: -26, lenght: 2},
+  {x: 5, y: 0.05, z: -26, lenght: 2},
+
+  {x: -3, y: 0.05, z: 18, lenght: 2},
+  {x: 2.5, y: 0.05, z: 18, lenght: 2},
+  {x: 5, y: 0.05, z: 18, lenght: 2},
+
+];
+for(var i = 0; i < woods.length; i++)
+{
+  var wood = new Oak(
+    woods[i].x,
+    woods[i].y,
+    woods[i].z,
+    woods[i].lenght,
+  );
+  cena.add(wood);
+}
+
+var flowers = [
+  {x: 2, y: 0.2, z: -2.5},
+];
+for(var i = 0; i < flowers.length; i++)
+{
+  var flower = new Flower(
+    flowers[i].x,
+    flowers[i].y,
+    flowers[i].z,
+  );
+  cena.add(flower);
+}
+
+
 
   // Definições iniciais Galinha
 
@@ -402,8 +478,6 @@ for (var i = 0; i < arvores.length; i++) {
 
   cena.add(galinha);
   cena.add(carro);
-  cena.add(flower1);
-  cena.add(wood1);
 
   var xSpeed = 1.5;
   var zSpeed = 1.5;
