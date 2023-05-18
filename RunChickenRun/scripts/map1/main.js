@@ -495,10 +495,18 @@ function Start() {
   // a
   function animatecar() {
     var velocidadeX = 1;
-    // Move o carro no eixo x
+    var limiteX = 30;
+    var posicaoInicialX = -30;
+
 
     carro.position.x += velocidadeX; // Movimenta carro no eixo x
     //object.position.x += velocidadeX; // Movimenta carro importado no eixo x
+
+    // Verifica se o carro ultrapassou o limite do mapa
+    if (carro.position.x >= limiteX) {
+      carro.position.x = posicaoInicialX; // Volta o carro para a posição inicial
+    }
+
 
     requestAnimationFrame(animatecar);
   }
