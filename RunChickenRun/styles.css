@@ -1,6 +1,6 @@
 @font-face {
     font-family: '8 Bit Wonder';
-    src: url('/RunChickenRun/fonts/8-BIT\ WONDER.TTF') format('truetype');
+    src: url('./fonts/8-BIT\ WONDER.TTF') format('truetype');
   }
 
   body {
