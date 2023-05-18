@@ -16,6 +16,8 @@ function Road(
   );
 
   grass_inicial.position.set(x, y + 0.001, z - lane_width + 0.2);
+  grass_inicial.receiveShadow = true; // Permite que o objeto receba sombras
+
   road.add(grass_inicial);
 
   // Criar passeio inicial
@@ -26,6 +28,8 @@ function Road(
 
   walk_start.position.set(x, y + 0.13, z - lane_width + 0.75);
   walk_start.rotateY(Math.PI / 2);
+  walk_start.receiveShadow = true; // Permite que o objeto receba sombras
+
   road.add(walk_start);
 
   // Criar estrada
@@ -36,6 +40,8 @@ function Road(
     );
 
     asfalt.position.set(x, y + 0.001, z + i * lane_width);
+    asfalt.receiveShadow = true; // Permite que o objeto receba sombras
+
     road.add(asfalt);
 
     // Criar Linhas da Estrada
@@ -52,6 +58,8 @@ function Road(
       );
 
       lines.rotateY(Math.PI / 2);
+      lines.receiveShadow = true; // Permite que o objeto receba sombras
+
       road.add(lines);
     }
   }
@@ -62,6 +70,8 @@ function Road(
   );
 
   grass_final.position.set(x, y + 0.001, z + num_lanes * lane_width - 0.2);
+  grass_final.receiveShadow = true; // Permite que o objeto receba sombras
+
   road.add(grass_final);
 
   // Criar passeio inicial
@@ -279,6 +289,7 @@ function GenerateMap() {
       (roads[i].stripes = 5),
       (roads[i].stripeDistance = 1.5)
     );
+    road.castShadow  = true; // Permite que o objeto receba sombras
     cena.add(road);
   }
 

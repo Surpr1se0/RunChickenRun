@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", Start);
 var cena = new THREE.Scene();
 
 var camera1, camera2;
-var toggleButton = document.getElementById('toggleButton');
-toggleButton.addEventListener('click', toggleCamera);
+var toggleButton = document.getElementById("toggleButton");
+toggleButton.addEventListener("click", toggleCamera);
 
 var isCamera1Active = true;
 
@@ -14,17 +14,23 @@ var width = window.innerWidth;
 var height = window.innerHeight;
 
 var left = -(width / 2) / zoomFactor;
-var right = (width / 2) / zoomFactor;
-var topValue = (height / 2) / zoomFactor;
+var right = width / 2 / zoomFactor;
+var topValue = height / 2 / zoomFactor;
 var bottom = -(height / 2) / zoomFactor;
 
-var camera1 = new THREE.OrthographicCamera(left, right, topValue, bottom, -50, 50);
+var camera1 = new THREE.OrthographicCamera(
+  left,
+  right,
+  topValue,
+  bottom,
+  -50,
+  50
+);
 camera1.position.set(2, 4, 0);
-
 
 var importer = new THREE.FBXLoader();
 
-importer.load('./Javascript/objects/sketchfab.fbx', function(object){
+importer.load("./Javascript/objects/sketchfab.fbx", function (object) {
   cena.add(object);
 
   object.rotateY(Math.PI / 2);
@@ -76,7 +82,7 @@ function renderCameras() {
     camera1.position.y = galinha.position.y + 10;
     camera1.position.z = galinha.position.z + 10;
     camera1.lookAt(galinha.position);
-      renderer.render(cena, camera1);
+    renderer.render(cena, camera1);
   } else {
     camera1.position.x = galinha.position.x + 7;
     camera1.position.y = galinha.position.y + 7;
@@ -89,6 +95,9 @@ function renderCameras() {
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth - 15, window.innerHeight - 80);
 renderer.setClearColor(0xaaaaaa);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Define o tipo de sombra suave
+
 document.body.appendChild(renderer.domElement);
 
 var controls = new THREE.OrbitControls(camera1, renderer.domElement);
@@ -103,7 +112,8 @@ function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
     new THREE.BoxGeometry(0.3, 0.8, 0.3),
     new THREE.MeshStandardMaterial({ color: 0x421b01 })
   );
-
+  
+  log.castShadow = true;
   log.position.set(tronco_x, tronco_y, tronco_z);
   tree.add(log);
 
@@ -112,6 +122,7 @@ function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
     new THREE.MeshStandardMaterial({ color: 0x5b7327 })
   );
 
+  green.castShadow = true;
   green.position.set(tronco_x - 0.05, tronco_y + 0.5, tronco_z - 0.05);
   tree.add(green);
 
@@ -148,6 +159,8 @@ function Flower(x, y, z) {
     new THREE.BoxGeometry(0.05, 0.6, 0.05),
     new THREE.MeshStandardMaterial({ color: 0x2a4f19 })
   );
+  bottom.castShadow = true;
+
   bottom.position.set(x, y, z);
   flower.add(bottom);
 
@@ -156,12 +169,13 @@ function Flower(x, y, z) {
     new THREE.MeshStandardMaterial({ color: 0xc957a7 })
   );
   top.position.set(x, y + 0.2, z);
+  top.castShadow = true;
   flower.add(top);
 
   return flower;
 }
 
-function Oak(x, y, z, dim){
+function Oak(x, y, z, dim) {
   var texture = new THREE.TextureLoader().load("./Images/wood.jpg");
 
   var oak = new THREE.Mesh(
@@ -174,7 +188,6 @@ function Oak(x, y, z, dim){
   return oak;
 }
 
-
 function Galinha() {
   var galinha = new THREE.Group();
 
@@ -185,7 +198,6 @@ function Galinha() {
 
   corpo.position.z = 10;
   corpo.castShadow = true;
-  corpo.receiveShadow = true;
   galinha.add(corpo);
 
   var crista = new THREE.Mesh(
@@ -197,7 +209,6 @@ function Galinha() {
   crista.position.y = 6;
   crista.position.x = 0;
   crista.castShadow = true;
-  crista.receiveShadow = true;
   galinha.add(crista);
 
   var olhod = new THREE.Mesh(
@@ -208,8 +219,6 @@ function Galinha() {
   olhod.position.z = 15;
   olhod.position.y = 2;
   olhod.position.x = 2;
-  olhod.castShadow = true;
-  olhod.receiveShadow = true;
   galinha.add(olhod);
 
   var olhoe = new THREE.Mesh(
@@ -220,8 +229,6 @@ function Galinha() {
   olhoe.position.z = 15;
   olhoe.position.y = 2;
   olhoe.position.x = -2;
-  olhoe.castShadow = true;
-  olhoe.receiveShadow = true;
   galinha.add(olhoe);
 
   var bico = new THREE.Mesh(
@@ -232,15 +239,7 @@ function Galinha() {
   bico.position.z = 15;
   bico.position.y = 0;
   bico.position.x = 0;
-  bico.castShadow = true;
-  bico.receiveShadow = true;
   galinha.add(bico);
-
-  // bordas na corpo da galinha, neste momento off fica melhor
-  //var geo = new THREE.EdgesGeometry(corpo.geometry);
-  //var mat = new THREE.LineBasicMaterial({ color: 0x9c9c9c, flatShading: true });
-  //var bordas = new THREE.LineSegments(geo, mat);
-  //corpo.add(bordas);
 
   return galinha;
 }
@@ -249,7 +248,9 @@ function Rodas() {
   var geometry = new THREE.CylinderGeometry(9, 9, 31);
   var material = new THREE.MeshLambertMaterial({ color: 0x333333 });
   var roda = new THREE.Mesh(geometry, material);
-  roda.rotation.x=Math.PI/2;
+
+  roda.rotation.x = Math.PI / 2;
+  roda.castShadow = true;
   return roda;
 }
 
@@ -262,7 +263,7 @@ function Carro() {
   carro.add(rodastraseiras);
 
   var rodasfrente = Rodas();
-  rodasfrente.position.y = 6;  
+  rodasfrente.position.y = 6;
   rodasfrente.position.x = 18;
   carro.add(rodasfrente);
 
@@ -271,6 +272,7 @@ function Carro() {
     new THREE.MeshLambertMaterial({ color: 0x78b14b })
   );
   chasi.position.y = 12;
+  chasi.castShadow = true;
   carro.add(chasi);
 
   var cockpit = new THREE.Mesh(
@@ -300,7 +302,11 @@ function generateRandomRoad() {
   // Define a posição da estrada de forma aleatória, paralela à estrada anterior
   var normal = new THREE.Vector3(0, 0, 1);
   normal.applyQuaternion(lastRoadQuaternion);
-  var position = new THREE.Vector3(lastRoadPosition.x, lastRoadPosition.y, lastRoadPosition.z);
+  var position = new THREE.Vector3(
+    lastRoadPosition.x,
+    lastRoadPosition.y,
+    lastRoadPosition.z
+  );
   position.addScaledVector(normal, offset);
 
   // Cria a estrada com os valores aleatórios gerados
@@ -317,162 +323,140 @@ function generateRandomRoad() {
   return road;
 }
 
-
-
-
 function Start() {
-  
   GenerateMap();
 
-var arvores = [
-  { x: -7, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 3, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -9, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 0, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+  var arvores = [
+    { x: -7, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 3, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -9, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 0, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: -12, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -4, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 1, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 4, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 8, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 16, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -12, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -4, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 1, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 4, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 8, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 16, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: -2, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 4, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 7, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 0, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -2, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 4, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 7, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 0, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: -0, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 1, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -7, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 2, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 20, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 5, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -0, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 1, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -7, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 2, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 20, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 5, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: -8, y: 0.3, z: -11, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 10, y: 0.3, z: -11, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -5, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 8, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 2, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -8, y: 0.3, z: -11, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 10, y: 0.3, z: -11, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -5, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 8, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 2, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
 
+    { x: 1, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 8, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 5, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -15, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -4, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 0, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: 1, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 8, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 5, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -15, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -4, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 0, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -11, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -7, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 7, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 5, y: 0.3, z: 3, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 20, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 12, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 9, y: 0.3, z: 3, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: -11, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -7, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 7, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 5, y: 0.3, z: 3, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 20, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 12, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 9, y: 0.3, z: 3, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 4, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 0, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 7, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 6, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -9, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 10, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: 4, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 0, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 7, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 6, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -9, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 10, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 2, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -5, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 8, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -11, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 0, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -9, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: 2, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -5, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 8, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -11, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 0, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -9, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 8, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 3, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 2, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 3, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 6, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 1, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: 8, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 3, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 2, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 3, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 6, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 1, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 5, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -15, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 11, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 0, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 15, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: 5, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -15, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 11, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 0, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 15, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 20, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -2, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -6.5, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 7, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 9, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: 20, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -2, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -6.5, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 7, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 9, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 8, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
 
-  { x: -6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 8, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
-  
-  { x: -6, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: -1, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 5, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
-  { x: 0, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
-];
+    { x: -6, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: -1, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 5, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+    { x: 0, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+  ];
 
-// Crie e adicione os objetos de árvore à cena usando um loop
-for (var i = 0; i < arvores.length; i++) {
-  var arvore = new Tree(
-    arvores[i].x,
-    arvores[i].y,
-    arvores[i].z,
-    arvores[i].width,
-    arvores[i].height,
-    arvores[i].depth
-  );
-  cena.add(arvore);
-}
+  // Crie e adicione os objetos de árvore à cena usando um loop
+  for (var i = 0; i < arvores.length; i++) {
+    var arvore = new Tree(
+      arvores[i].x,
+      arvores[i].y,
+      arvores[i].z,
+      arvores[i].width,
+      arvores[i].height,
+      arvores[i].depth
+    );
+    cena.add(arvore);
+  }
 
-var woods = [
-  {x: -3, y: 0.05, z: -7, lenght: 2},
-  {x: 3, y: 0.05, z: -7, lenght: 2},
+  var woods = [
+    { x: -3, y: 0.05, z: -7, lenght: 2 },
+    { x: 3, y: 0.05, z: -7, lenght: 2 },
 
-  {x: -3, y: 0.05, z: -26, lenght: 2},
-  {x: 2.5, y: 0.05, z: -26, lenght: 2},
-  {x: 5, y: 0.05, z: -26, lenght: 2},
+    { x: -3, y: 0.05, z: -26, lenght: 2 },
+    { x: 2.5, y: 0.05, z: -26, lenght: 2 },
+    { x: 5, y: 0.05, z: -26, lenght: 2 },
 
-  {x: -3, y: 0.05, z: 18, lenght: 2},
-  {x: 2.5, y: 0.05, z: 18, lenght: 2},
-  {x: 5, y: 0.05, z: 18, lenght: 2},
+    { x: -3, y: 0.05, z: 18, lenght: 2 },
+    { x: 2.5, y: 0.05, z: 18, lenght: 2 },
+    { x: 5, y: 0.05, z: 18, lenght: 2 },
+  ];
+  for (var i = 0; i < woods.length; i++) {
+    var wood = new Oak(woods[i].x, woods[i].y, woods[i].z, woods[i].lenght);
+    cena.add(wood);
+  }
 
-];
-for(var i = 0; i < woods.length; i++)
-{
-  var wood = new Oak(
-    woods[i].x,
-    woods[i].y,
-    woods[i].z,
-    woods[i].lenght,
-  );
-  cena.add(wood);
-}
-
-var flowers = [
-  {x: 2, y: 0.2, z: -2.5},
-];
-for(var i = 0; i < flowers.length; i++)
-{
-  var flower = new Flower(
-    flowers[i].x,
-    flowers[i].y,
-    flowers[i].z,
-  );
-  cena.add(flower);
-}
-
-
+  var flowers = [{ x: 2, y: 0.2, z: -2.5 }];
+  for (var i = 0; i < flowers.length; i++) {
+    var flower = new Flower(flowers[i].x, flowers[i].y, flowers[i].z);
+    cena.add(flower);
+  }
 
   // Definições iniciais Galinha
 
-
   //Definições iniciais Carro
   var carro = new Carro();
-  carro.scale.set(0.03,0.03,0.03);
+  carro.scale.set(0.03, 0.03, 0.03);
   carro.translateY(0.15);
   carro.translateZ(-0.2);
 
@@ -493,9 +477,9 @@ for(var i = 0; i < flowers.length; i++)
       galinha.position.z -= zSpeed;
       galinha.rotation.y = Math.PI;
     } else if (keyCode == 83) {
-      //s key para trás rotação 
+      //s key para trás rotação
       galinha.position.z += zSpeed;
-      galinha.rotation.y = 2*Math.PI;
+      galinha.rotation.y = 2 * Math.PI;
     } else if (keyCode == 65) {
       //a key para esquerda ainda sem rotação
       galinha.position.x -= xSpeed;
@@ -504,7 +488,7 @@ for(var i = 0; i < flowers.length; i++)
       galinha.position.x += xSpeed;
     }
   }
-    /*} else if (keyCode == 32) {
+  /*} else if (keyCode == 32) {
       galinha.position.set(0, 0.3, -4);
     } 
   }*/ //para já espaço nao usar
@@ -518,24 +502,26 @@ for(var i = 0; i < flowers.length; i++)
   // cria a luz
   var luz = new THREE.DirectionalLight(0xffffff, 1);
   luz.position.set(-6, 4, 2);
+  luz.castShadow = true;
+  luz.shadow.mapSize.width = 1024; // Resolução horizontal da sombra
+  luz.shadow.mapSize.height = 1024; // Resolução vertical da sombra
+  luz.shadow.camera.near = 0.5; // Distância mínima da câmera para a luz
+  luz.shadow.camera.far = 200; // Distância máxima da câmera para a luz
+
   cena.add(luz);
 
   // cria o helper da luz
   var helper = new THREE.DirectionalLightHelper(luz, 5);
   cena.add(helper);
 
-
   // Chamar a função loop()
   requestAnimationFrame(loop);
-  
 }
 
 function loop() {
-
   //controls.update();
 
   renderCameras();
 
   requestAnimationFrame(loop);
-
 }
