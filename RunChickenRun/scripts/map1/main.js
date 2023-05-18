@@ -189,9 +189,12 @@ function Carro() {
   cockpit.position.y = 25.5;
   carro.add(cockpit);
 
+  var boundingBox = new THREE.Box3().setFromObject(carro);
+  carro.boundingBox = boundingBox;
   return carro;
 }
 
+// Centro de rotação da galinha errado tentar corrigir
 function Galinha() {
   var galinha = new THREE.Group();
 
@@ -306,8 +309,8 @@ document.body.appendChild(renderer.domElement);
 var galinha = new Galinha();
 cena.add(galinha);
 galinha.scale.set(0.05, 0.05, 0.05);
-galinha.translateY(0.3);
-galinha.translateZ(-5.0);
+galinha.position.set(0,0.3,-5.0);
+
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
 
@@ -404,8 +407,7 @@ function Start() {
   //Definições iniciais Carro
   var carro = new Carro();
   carro.scale.set(0.03, 0.03, 0.03);
-  carro.translateY(0.15);
-  carro.translateZ(-0.2);
+  carro.position.set(-30,0.15,-0.2);
 
   cena.add(galinha);
   cena.add(carro);
@@ -416,6 +418,8 @@ function Start() {
   var jumpHeight = 1;
   var groundHeight = 0.3; // Ajuste a altura do chão conforme necessário
 
+  var boxHelper = new THREE.BoxHelper(carro , 0xffff00)
+  cena.add(boxHelper);
   //movimento apenas por coordenadas, falta animar salto.
   //temos que mudar a rotação o centro de rotação da galinha não é o centro da galinha
   document.addEventListener("keydown", onDocumentKeyDown, false);
@@ -569,7 +573,12 @@ function Start() {
 
     requestAnimationFrame(animatecar);
   }
-  animatecar();
+
+  //de modo a começar só passado os segundos que quisermos
+  setTimeout(function(){
+    animatecar();
+  }, 5000);
+  
   cena.add(controls);
 
   // criar os axis
