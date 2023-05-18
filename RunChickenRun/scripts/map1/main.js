@@ -9,7 +9,7 @@ toggleButton.addEventListener("click", toggleCamera);
 var isCamera1Active = true;
 
 // Definir a primeira câmera
-var zoomFactor = 40; // Fator de zoom, 2 para dobrar o tamanho visível
+var zoomFactor = 55; // Fator de zoom, 2 para dobrar o tamanho visível
 var width = window.innerWidth;
 var height = window.innerHeight;
 
@@ -27,17 +27,6 @@ var camera1 = new THREE.OrthographicCamera(
   50
 );
 camera1.position.set(2, 4, 0);
-
-var importer = new THREE.FBXLoader();
-
-importer.load("./Javascript/objects/sketchfab.fbx", function (object) {
-  cena.add(object);
-
-  object.rotateY(Math.PI / 2);
-
-  object.position.set(5, 1, 1.7);
-  object.scale.set(0.5, 0.5, 0.5);
-});
 
 // Definir a segunda câmera
 var fov = 70; // Campo de visão em graus
@@ -295,6 +284,18 @@ function renderCameras() {
   }
 }
 
+
+var importer = new THREE.FBXLoader();
+
+importer.load("./Javascript/objects/sketchfab.fbx", function (object) {
+  cena.add(object);
+
+  object.rotateY(Math.PI / 2);
+
+  object.position.set(5, 1, 1.7);
+  object.scale.set(0.5, 0.5, 0.5);
+});
+
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0xaaaaaa);
@@ -314,9 +315,11 @@ var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
 
 var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
+var arvore2 = new Tree(6, 0.3, -2.5, 0.6, 0.8, 0.5);
 var arvores = [];
-arvores.push(arvore1);
+arvores.push(arvore1, arvore2);
 cena.add(arvore1);
+cena.add(arvore2);
 
 function detectCollision(obj1, obj2) {
   var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
@@ -529,7 +532,7 @@ function Start() {
 
   // cria a luz
   var luz = new THREE.DirectionalLight(0xffffff, 1);
-  luz.position.set(-20, 10, 2);
+  luz.position.set(-20, 10, 15);
   cena.add(luz);
 
   // cria o helper da luz
