@@ -9,7 +9,7 @@ toggleButton.addEventListener('click', toggleCamera);
 var isCamera1Active = true;
 
 // Definir a primeira câmera
-var zoomFactor = 40; // Fator de zoom, 2 para dobrar o tamanho visível
+var zoomFactor = 20; // Fator de zoom, 2 para dobrar o tamanho visível
 var width = window.innerWidth;
 var height = window.innerHeight;
 
@@ -30,7 +30,7 @@ importer.load('./Javascript/objects/sketchfab.fbx', function(object){
   object.rotateY(Math.PI / 2);
 
   object.position.set(2, 2, 2);
-  object.set.scale(0.1);
+  object.scale.set(0.1);
 });
 
 // Definir a segunda câmera
@@ -324,16 +324,70 @@ function Start() {
   
   GenerateMap();
 
-  // var firstRoad = new Road(2, 1.5, 0, 0, 5, 5, 1.5);
-  // cena.add(firstRoad);
-  
-  // for (var i = 0; i < 9; i++) {
-  //   var road = generateRandomRoad(firstRoad);
-  //   cena.add(road);
-  //   firstRoad = road;
-  // }
 
-  var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
+var arvores = [
+  { x: -7, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 3, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 1, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 4, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -2, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 4, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -0, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 1, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -8, y: 0.3, z: -11, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 10, y: 0.3, z: -11, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -2, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 4, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 1, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 6, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -3, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 1, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 3.5, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 5, y: 0.3, z: 3, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 4, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 2, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -5, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 8, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 3, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 5, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -15, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 5, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -10, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 2, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -2, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -7, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+];
+
+// Crie e adicione os objetos de árvore à cena usando um loop
+for (var i = 0; i < arvores.length; i++) {
+  var arvore = new Tree(
+    arvores[i].x,
+    arvores[i].y,
+    arvores[i].z,
+    arvores[i].width,
+    arvores[i].height,
+    arvores[i].depth
+  );
+  cena.add(arvore);
+}
+
   var flower1 = new Flower(2, 0.2, -2.5);
   var wood1 = new Oak(0, 0.05, -7, 2);
 
@@ -348,7 +402,6 @@ function Start() {
 
   cena.add(galinha);
   cena.add(carro);
-  cena.add(arvore1);
   cena.add(flower1);
   cena.add(wood1);
 
