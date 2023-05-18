@@ -144,7 +144,7 @@ function Rodas() {
   return roda;
 }
 
-function Carro() {
+function Carro(color) {
   var carro = new THREE.Group();
 
   var rodatraseiradireita = Rodas();
@@ -176,7 +176,7 @@ function Carro() {
 
   var chasi = new THREE.Mesh(
     new THREE.BoxGeometry(60, 15, 30),
-    new THREE.MeshLambertMaterial({ color: 0x78b14b })
+    new THREE.MeshLambertMaterial({ color: color })
   );
   chasi.position.y = 12;
   carro.add(chasi);
@@ -481,7 +481,7 @@ function Start() {
   cena.add(boxHelper);
 
   //Definições iniciais Carro
-  var carro = new Carro();
+  var carro = new Carro(0x78b14b);
   carro.scale.set(0.03, 0.03, 0.03);
   carro.position.set(-30,0.15,-0.2);
 
