@@ -56,6 +56,25 @@ function toggleCamera() {
   renderCameras();
 }
 
+//SKYBOX, não está funcional
+
+var geometry = new THREE.BoxGeometry( 1000, 1000, 1000 );
+var cubeMaterials = [
+    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( "./Images/skybox_dia/front.jpg" ), side: THREE.DoubleSide }), //front side
+    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'Images/skybox_dia/back.jpg' ), side: THREE.DoubleSide }), //back side
+    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'Images/skybox_dia/top.jpg' ), side: THREE.DoubleSide }), //up side
+    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'Images/skybox_dia/bottom.jpg' ), side: THREE.DoubleSide }), //down side
+    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'Images/skybox_dia/right.jpg' ), side: THREE.DoubleSide }), //right side
+    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'Images/skybox_dia/left.jpg' ), side: THREE.DoubleSide }) //left side
+];
+
+var cubeMaterial = new THREE.MeshBasicMaterial( cubeMaterials );
+var cube = new THREE.Mesh( geometry, cubeMaterial );
+cena.add(cube);
+
+
+
+
 function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
   var tree = new THREE.Group();
 
@@ -490,7 +509,7 @@ function Start() {
 
   var boxHelper = new THREE.BoxHelper(carro, 0xffff00);
   cena.add(boxHelper);
-  //movimento apenas por coordenadas, falta animar salto.
+
   //temos que mudar a rotação o centro de rotação da galinha não é o centro da galinha
   document.addEventListener("keydown", onDocumentKeyDown, false);
 
@@ -498,6 +517,7 @@ function Start() {
   var galinhaZ = galinha.position.z;
 
   function onDocumentKeyDown(event) {
+
     var keyCode = event.which;
     var novaPosicaoX = galinha.position.x;
     var novaPosicaoZ = galinha.position.z;
@@ -506,30 +526,35 @@ function Start() {
       if (!isJumping) {
         isJumping = true;
         jump();
+
+        novaPosicaoZ -= zSpeed;
+        galinha.rotation.y = Math.PI;
       }
-      novaPosicaoZ -= zSpeed;
-      galinha.rotation.y = Math.PI;
     } else if (keyCode == 83) {
       if (!isJumping) {
         isJumping = true;
         jump();
+
+        novaPosicaoZ += zSpeed;
+        galinha.rotation.y = 2 * Math.PI;
       }
-      novaPosicaoZ += zSpeed;
-      galinha.rotation.y = 2 * Math.PI;
     } else if (keyCode == 65) {
       if (!isJumping) {
         isJumping = true;
         jump();
+
+        galinha.rotation.y = -Math.PI / 2;
+
+        novaPosicaoX -= xSpeed;
+
       }
-      novaPosicaoX -= xSpeed;
-      galinha.rotation.y = -Math.PI / 2;
     } else if (keyCode == 68) {
       if (!isJumping) {
         isJumping = true;
         jump();
+        galinha.rotation.y = Math.PI / 2;
+        novaPosicaoX += xSpeed;
       }
-      novaPosicaoX += xSpeed;
-      galinha.rotation.y = Math.PI / 2;
     } else if (keyCode == 32) {
       // Tecla de salto (espaço)
       if (!isJumping) {
@@ -655,7 +680,7 @@ function Start() {
 
   // cria a luz
   var luz = new THREE.DirectionalLight(0xffffff, 1);
-  luz.position.set(-6, 4, 2);
+  luz.position.set(-50, 25, 0);
   luz.castShadow = true;
   luz.shadow.mapSize.width = 1024; // Resolução horizontal da sombra
   luz.shadow.mapSize.height = 1024; // Resolução vertical da sombra
