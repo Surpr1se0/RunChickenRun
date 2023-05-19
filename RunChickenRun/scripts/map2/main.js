@@ -9,7 +9,7 @@ toggleButton.addEventListener("click", toggleCamera);
 var isCamera1Active = true;
 
 // Definir a primeira câmera
-var zoomFactor = 40; // Fator de zoom, 2 para dobrar o tamanho visível
+var zoomFactor = 55; // Fator de zoom, 2 para dobrar o tamanho visível
 var width = window.innerWidth;
 var height = window.innerHeight;
 
@@ -27,17 +27,6 @@ var camera1 = new THREE.OrthographicCamera(
   50
 );
 camera1.position.set(2, 4, 0);
-
-var importer = new THREE.FBXLoader();
-
-importer.load("./Javascript/objects/sketchfab.fbx", function (object) {
-  cena.add(object);
-
-  object.rotateY(Math.PI / 2);
-
-  object.position.set(5, 1, 1.7);
-  object.scale.set(0.5, 0.5, 0.5);
-});
 
 // Definir a segunda câmera
 var fov = 70; // Campo de visão em graus
@@ -76,7 +65,7 @@ function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
   );
   log.castShadow = true;
   log.position.set(tronco_x, tronco_y, tronco_z);
-  tree.add(log);  
+  tree.add(log);
 
   var green = new THREE.Mesh(
     new THREE.BoxGeometry(brush_x, brush_y, brush_z),
@@ -115,6 +104,7 @@ function AddPasseio(x, y, z) {
 }
 
 // -2       // 0.2      //-1.6
+
 function Flower(x, y, z) {
   var flower = new THREE.Group();
 
@@ -122,6 +112,8 @@ function Flower(x, y, z) {
     new THREE.BoxGeometry(0.05, 0.6, 0.05),
     new THREE.MeshStandardMaterial({ color: 0x2a4f19 })
   );
+  bottom.castShadow = true;
+
   bottom.position.set(x, y, z);
   flower.add(bottom);
 
@@ -130,6 +122,7 @@ function Flower(x, y, z) {
     new THREE.MeshStandardMaterial({ color: 0xc957a7 })
   );
   top.position.set(x, y + 0.2, z);
+  top.castShadow = true;
   flower.add(top);
 
   return flower;
@@ -149,48 +142,34 @@ function Oak(x, y, z, dim) {
 }
 
 function Rodas() {
-  var geometry = new THREE.CylinderGeometry(9, 9, 5);
+  var geometry = new THREE.CylinderGeometry(9, 9, 31);
   var material = new THREE.MeshLambertMaterial({ color: 0x333333 });
   var roda = new THREE.Mesh(geometry, material);
+
   roda.rotation.x = Math.PI / 2;
+  roda.castShadow = true;
   return roda;
 }
 
 function Carro() {
   var carro = new THREE.Group();
 
-  var rodatraseiradireita = Rodas();
-  rodatraseiradireita.position.y = 6;
-  rodatraseiradireita.position.x = -20;
-  rodatraseiradireita.position.z = 13;
-  carro.add(rodatraseiradireita);
+  var rodastraseiras = Rodas();
+  rodastraseiras.position.y = 6;
+  rodastraseiras.position.x = -18;
+  carro.add(rodastraseiras);
 
-  var rodatraseiraesquerda = Rodas();
-  rodatraseiraesquerda.position.y = 6;
-  rodatraseiraesquerda.position.x = -20;
-  rodatraseiraesquerda.position.z = -13;
-
-  carro.add(rodatraseiraesquerda);
-
-  var rodadianteiradireira = Rodas();
-  rodadianteiradireira.position.y = 6;
-  rodadianteiradireira.position.x = 20;
-  rodadianteiradireira.position.z = 13;
-
-  carro.add(rodadianteiradireira);
-
-  var rodadianteiraesquerda = Rodas();
-  rodadianteiraesquerda.position.y = 6;
-  rodadianteiraesquerda.position.x = 20;
-  rodadianteiraesquerda.position.z = -13;
-
-  carro.add(rodadianteiraesquerda);
+  var rodasfrente = Rodas();
+  rodasfrente.position.y = 6;
+  rodasfrente.position.x = 18;
+  carro.add(rodasfrente);
 
   var chasi = new THREE.Mesh(
     new THREE.BoxGeometry(60, 15, 30),
     new THREE.MeshLambertMaterial({ color: 0x78b14b })
   );
   chasi.position.y = 12;
+  chasi.castShadow = true;
   carro.add(chasi);
 
   var cockpit = new THREE.Mesh(
@@ -201,8 +180,6 @@ function Carro() {
   cockpit.position.y = 25.5;
   carro.add(cockpit);
 
-  var boundingBox = new THREE.Box3().setFromObject(carro);
-  carro.boundingBox = boundingBox;
   return carro;
 }
 
@@ -217,7 +194,6 @@ function Galinha() {
 
   corpo.position.z = 10;
   corpo.castShadow = true;
-  corpo.receiveShadow = true;
   galinha.add(corpo);
 
   var crista = new THREE.Mesh(
@@ -229,7 +205,6 @@ function Galinha() {
   crista.position.y = 6;
   crista.position.x = 0;
   crista.castShadow = true;
-  crista.receiveShadow = true;
   galinha.add(crista);
 
   var olhod = new THREE.Mesh(
@@ -240,8 +215,6 @@ function Galinha() {
   olhod.position.z = 15;
   olhod.position.y = 2;
   olhod.position.x = 2;
-  olhod.castShadow = true;
-  olhod.receiveShadow = true;
   galinha.add(olhod);
 
   var olhoe = new THREE.Mesh(
@@ -252,8 +225,6 @@ function Galinha() {
   olhoe.position.z = 15;
   olhoe.position.y = 2;
   olhoe.position.x = -2;
-  olhoe.castShadow = true;
-  olhoe.receiveShadow = true;
   galinha.add(olhoe);
 
   var bico = new THREE.Mesh(
@@ -264,15 +235,8 @@ function Galinha() {
   bico.position.z = 15;
   bico.position.y = 0;
   bico.position.x = 0;
-  bico.castShadow = true;
-  bico.receiveShadow = true;
   galinha.add(bico);
 
-  // bordas na corpo da galinha, neste momento off fica melhor
-  //var geo = new THREE.EdgesGeometry(corpo.geometry);
-  //var mat = new THREE.LineBasicMaterial({ color: 0x9c9c9c, flatShading: true });
-  //var bordas = new THREE.LineSegments(geo, mat);
-  //corpo.add(bordas);
   var boundingBox = new THREE.Box3().setFromObject(galinha);
   galinha.boundingBox = boundingBox;
 
@@ -296,9 +260,22 @@ function renderCameras() {
   }
 }
 
+var importer = new THREE.FBXLoader();
+
+importer.load("./Javascript/objects/sketchfab.fbx", function (object) {
+  cena.add(object);
+
+  object.rotateY(Math.PI / 2);
+
+  object.position.set(5, 1, 1.7);
+  object.scale.set(0.5, 0.5, 0.5);
+});
+
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0xaaaaaa);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.appendChild(renderer.domElement);
 
 var controls = new THREE.OrbitControls(camera1, renderer.domElement);
@@ -309,18 +286,171 @@ document.body.appendChild(renderer.domElement);
 var galinha = new Galinha();
 cena.add(galinha);
 galinha.scale.set(0.05, 0.05, 0.05);
-galinha.position.set(0,0.3,-5.0);
+galinha.position.set(0, 0.3, -5.0);
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
 
-var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
+
+
+var woods = [
+  { x: -3, y: 0.05, z: -7, lenght: 2 },
+  { x: 3, y: 0.05, z: -7, lenght: 2 },
+
+  { x: -3, y: 0.05, z: -26, lenght: 2 },
+  { x: 2.5, y: 0.05, z: -26, lenght: 2 },
+  { x: 5, y: 0.05, z: -26, lenght: 2 },
+
+  { x: -3, y: 0.05, z: 18, lenght: 2 },
+  { x: 2.5, y: 0.05, z: 18, lenght: 2 },
+  { x: 5, y: 0.05, z: 18, lenght: 2 },
+];
+for (var i = 0; i < woods.length; i++) {
+  var wood = new Oak(woods[i].x, woods[i].y, woods[i].z, woods[i].lenght);
+  cena.add(wood);
+}
+
+var flowers = [
+  { x: 2, y: 0.2, z: -2.5 },
+  { x: 2, y: 0.2, z: -33 },
+  { x: 4, y: 0.2, z: -27 },
+  { x: 4, y: 0.2, z: -27.4 },
+  { x: 6, y: 0.2, z: -24.5 },
+  { x: 6, y: 0.2, z: -24.9 },
+  { x: 8, y: 0.2, z: -18 },
+  { x: 10, y: 0.2, z: -11.1 },
+  { x: 10, y: 0.2, z: -11.8 },
+  { x: 12, y: 0.2, z: -8 },
+  { x: 12, y: 0.2, z: -8.3 },
+  { x: 12, y: 0.2, z: -8.7 },
+  { x: 14, y: 0.2, z: -6.2 },
+  { x: 14, y: 0.2, z: -6.6 },
+  { x: 16, y: 0.2, z: -2.5 },
+  { x: 18, y: 0.2, z: 3.2 },
+  { x: 20, y: 0.2, z: 3.5 },
+  { x: 22, y: 0.2, z: 8 },
+  { x: 22, y: 0.2, z: 8.8 },
+  { x: 24, y: 0.2, z: 16.3 },
+  { x: 24, y: 0.2, z: 16.7 },
+  { x: 26, y: 0.2, z: 20.1 },
+  { x: 26, y: 0.2, z: 20.4 },
+  { x: 28, y: 0.2, z: 26.5 },
+  { x: 30, y: 0.2, z: 29 },
+  { x: 32, y: 0.2, z: 36.2 },
+  { x: 32, y: 0.2, z: 36.5 },
+  { x: 32, y: 0.2, z: 36.9 },
+];
+for (var i = 0; i < flowers.length; i++) {
+  var flower = new Flower(flowers[i].x, flowers[i].y, flowers[i].z);
+  cena.add(flower);
+}
+
+
 var arvores = [];
-arvores.push(arvore1);
-cena.add(arvore1);
+
+var objetos = [
+  { x: -7, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 3, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -9, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: -33, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -12, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -4, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 1, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 4, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 8, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 16, y: 0.3, z: -27, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -2, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 4, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 7, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: -24, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -0, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 1, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -7, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 2, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 20, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 5, y: 0.3, z: -18, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -8, y: 0.3, z: -11, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 10, y: 0.3, z: -11, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -5, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 8, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 2, y: 0.3, z: -8, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 1, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 8, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 5, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -15, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -4, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: -6, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -11, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -7, y: 0.3, z: -2.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 7, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 5, y: 0.3, z: 3, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 20, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 12, y: 0.3, z: 3.5, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 9, y: 0.3, z: 3, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 4, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 7, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 6, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -9, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 10, y: 0.3, z: 8, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 2, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -5, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 8, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -11, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -9, y: 0.3, z: 16, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 8, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 3, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 2, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 3, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 6, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 1, y: 0.3, z: 20, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 5, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -15, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 11, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 15, y: 0.3, z: 26, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: 20, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -2, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -6.5, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 7, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 9, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 8, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 6, y: 0.3, z: 29, width: 0.6, height: 0.8, depth: 0.6 },
+
+  { x: -6, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: -1, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 5, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+  { x: 0, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+];
+
+for (var i = 0; i < objetos.length; i++) {
+  var obj = objetos[i];
+  var arvore = new Tree(obj.x, obj.y, obj.z, obj.width, obj.height, obj.depth);
+  arvores.push(arvore);
+  cena.add(arvore);
+}
+
+// var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
+// var arvores = [];
+// arvores.push(arvore1);
+// cena.add(arvore1);
 
 function detectCollision(obj1, obj2) {
-  
   var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
   var box2 = obj2.boundingBox.clone().applyMatrix4(obj2.matrixWorld);
 
@@ -338,26 +468,19 @@ function checkCollisions() {
   }
 }
 
-
-
-
 function Start() {
   GenerateMap();
 
   var boxHelper = new THREE.BoxHelper(galinha, 0xffff00); // Passando o objeto e a cor desejada como parâmetros
   cena.add(boxHelper);
 
-  var treeHelper = new THREE.BoxHelper(arvore1, 0xffff00);
-  cena.add(treeHelper);
-
   //Definições iniciais Carro
-  var carro = new Carro();
+  var carro = new Carro(0x78b14b);
   carro.scale.set(0.03, 0.03, 0.03);
-  carro.position.set(-30,0.15,-0.2);
+  carro.position.set(-30, 0.15, -0.2);
 
   cena.add(galinha);
   cena.add(carro);
-  cena.add(arvore1);
 
   var xSpeed = 0.5;
   var zSpeed = 0.5;
@@ -365,7 +488,7 @@ function Start() {
   var jumpHeight = 1;
   var groundHeight = 0.3; // Ajuste a altura do chão conforme necessário
 
-  var boxHelper = new THREE.BoxHelper(carro , 0xffff00)
+  var boxHelper = new THREE.BoxHelper(carro, 0xffff00);
   cena.add(boxHelper);
   //movimento apenas por coordenadas, falta animar salto.
   //temos que mudar a rotação o centro de rotação da galinha não é o centro da galinha
@@ -508,7 +631,6 @@ function Start() {
     var limiteX = 30;
     var posicaoInicialX = -30;
 
-
     carro.position.x += velocidadeX; // Movimenta carro no eixo x
     //object.position.x += velocidadeX; // Movimenta carro importado no eixo x
 
@@ -517,15 +639,14 @@ function Start() {
       carro.position.x = posicaoInicialX; // Volta o carro para a posição inicial
     }
 
-
     requestAnimationFrame(animatecar);
   }
 
   //de modo a começar só passado os segundos que quisermos
-  setTimeout(function(){
+  setTimeout(function () {
     animatecar();
   }, 5000);
-  
+
   cena.add(controls);
 
   // criar os axis
@@ -534,7 +655,12 @@ function Start() {
 
   // cria a luz
   var luz = new THREE.DirectionalLight(0xffffff, 1);
-  luz.position.set(-20, 10, 2);
+  luz.position.set(-6, 4, 2);
+  luz.castShadow = true;
+  luz.shadow.mapSize.width = 1024; // Resolução horizontal da sombra
+  luz.shadow.mapSize.height = 1024; // Resolução vertical da sombra
+  luz.shadow.camera.near = 0.5; // Distância mínima da câmera para a luz
+  luz.shadow.camera.far = 200; // Distância máxima da câmera para a luz
   cena.add(luz);
 
   // cria o helper da luz
