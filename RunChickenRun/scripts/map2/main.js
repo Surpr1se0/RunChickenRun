@@ -74,15 +74,16 @@ function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
     new THREE.BoxGeometry(0.3, 0.8, 0.3),
     new THREE.MeshStandardMaterial({ color: 0x421b01 })
   );
-
+  log.castShadow = true;
   log.position.set(tronco_x, tronco_y, tronco_z);
-  tree.add(log);
+  tree.add(log);  
 
   var green = new THREE.Mesh(
     new THREE.BoxGeometry(brush_x, brush_y, brush_z),
     new THREE.MeshStandardMaterial({ color: 0x5b7327 })
   );
 
+  green.castShadow = true;
   green.position.set(tronco_x - 0.05, tronco_y + 0.5, tronco_z - 0.05);
   tree.add(green);
   var boundingBox = new THREE.Box3().setFromObject(tree);
@@ -319,6 +320,7 @@ arvores.push(arvore1);
 cena.add(arvore1);
 
 function detectCollision(obj1, obj2) {
+  
   var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
   var box2 = obj2.boundingBox.clone().applyMatrix4(obj2.matrixWorld);
 
@@ -335,6 +337,9 @@ function checkCollisions() {
     }
   }
 }
+
+
+
 
 function Start() {
   GenerateMap();

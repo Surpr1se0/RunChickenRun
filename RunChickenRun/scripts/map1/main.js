@@ -63,7 +63,7 @@ function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
     new THREE.BoxGeometry(0.3, 0.8, 0.3),
     new THREE.MeshStandardMaterial({ color: 0x421b01 })
   );
-
+  log.castShadow = true;
   log.position.set(tronco_x, tronco_y, tronco_z);
   tree.add(log);
 
@@ -72,6 +72,7 @@ function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
     new THREE.MeshStandardMaterial({ color: 0x5b7327 })
   );
 
+  green.castShadow = true;
   green.position.set(tronco_x - 0.05, tronco_y + 0.5, tronco_z - 0.05);
   tree.add(green);
   var boundingBox = new THREE.Box3().setFromObject(tree);
@@ -103,6 +104,7 @@ function AddPasseio(x, y, z) {
 }
 
 // -2       // 0.2      //-1.6
+
 function Flower(x, y, z) {
   var flower = new THREE.Group();
 
@@ -110,6 +112,8 @@ function Flower(x, y, z) {
     new THREE.BoxGeometry(0.05, 0.6, 0.05),
     new THREE.MeshStandardMaterial({ color: 0x2a4f19 })
   );
+  bottom.castShadow = true;
+
   bottom.position.set(x, y, z);
   flower.add(bottom);
 
@@ -118,6 +122,7 @@ function Flower(x, y, z) {
     new THREE.MeshStandardMaterial({ color: 0xc957a7 })
   );
   top.position.set(x, y + 0.2, z);
+  top.castShadow = true;
   flower.add(top);
 
   return flower;
@@ -136,49 +141,37 @@ function Oak(x, y, z, dim) {
   return oak;
 }
 
+
 function Rodas() {
-  var geometry = new THREE.CylinderGeometry(9, 9, 5);
+  var geometry = new THREE.CylinderGeometry(9, 9, 31);
   var material = new THREE.MeshLambertMaterial({ color: 0x333333 });
   var roda = new THREE.Mesh(geometry, material);
+
   roda.rotation.x = Math.PI / 2;
+  roda.castShadow = true;
   return roda;
 }
 
-function Carro(color) {
+
+function Carro() {
   var carro = new THREE.Group();
 
-  var rodatraseiradireita = Rodas();
-  rodatraseiradireita.position.y = 6;
-  rodatraseiradireita.position.x = -20;
-  rodatraseiradireita.position.z = 13;
-  carro.add(rodatraseiradireita);
+  var rodastraseiras = Rodas();
+  rodastraseiras.position.y = 6;
+  rodastraseiras.position.x = -18;
+  carro.add(rodastraseiras);
 
-  var rodatraseiraesquerda = Rodas();
-  rodatraseiraesquerda.position.y = 6;
-  rodatraseiraesquerda.position.x = -20;
-  rodatraseiraesquerda.position.z = -13;
-
-  carro.add(rodatraseiraesquerda);
-
-  var rodadianteiradireira = Rodas();
-  rodadianteiradireira.position.y = 6;
-  rodadianteiradireira.position.x = 20;
-  rodadianteiradireira.position.z = 13;
-
-  carro.add(rodadianteiradireira);
-
-  var rodadianteiraesquerda = Rodas();
-  rodadianteiraesquerda.position.y = 6;
-  rodadianteiraesquerda.position.x = 20;
-  rodadianteiraesquerda.position.z = -13;
-
-  carro.add(rodadianteiraesquerda);
+  var rodasfrente = Rodas();
+  rodasfrente.position.y = 6;
+  rodasfrente.position.x = 18;
+  carro.add(rodasfrente);
 
   var chasi = new THREE.Mesh(
     new THREE.BoxGeometry(60, 15, 30),
-    new THREE.MeshLambertMaterial({ color: color })
+    new THREE.MeshLambertMaterial({ color: 0x78b14b })
   );
   chasi.position.y = 12;
+  chasi.castShadow = true;
   carro.add(chasi);
 
   var cockpit = new THREE.Mesh(
@@ -189,8 +182,6 @@ function Carro(color) {
   cockpit.position.y = 25.5;
   carro.add(cockpit);
 
-  var boundingBox = new THREE.Box3().setFromObject(carro);
-  carro.boundingBox = boundingBox;
   return carro;
 }
 
@@ -205,7 +196,6 @@ function Galinha() {
 
   corpo.position.z = 10;
   corpo.castShadow = true;
-  corpo.receiveShadow = true;
   galinha.add(corpo);
 
   var crista = new THREE.Mesh(
@@ -217,7 +207,6 @@ function Galinha() {
   crista.position.y = 6;
   crista.position.x = 0;
   crista.castShadow = true;
-  crista.receiveShadow = true;
   galinha.add(crista);
 
   var olhod = new THREE.Mesh(
@@ -228,8 +217,6 @@ function Galinha() {
   olhod.position.z = 15;
   olhod.position.y = 2;
   olhod.position.x = 2;
-  olhod.castShadow = true;
-  olhod.receiveShadow = true;
   galinha.add(olhod);
 
   var olhoe = new THREE.Mesh(
@@ -240,8 +227,6 @@ function Galinha() {
   olhoe.position.z = 15;
   olhoe.position.y = 2;
   olhoe.position.x = -2;
-  olhoe.castShadow = true;
-  olhoe.receiveShadow = true;
   galinha.add(olhoe);
 
   var bico = new THREE.Mesh(
@@ -252,17 +237,11 @@ function Galinha() {
   bico.position.z = 15;
   bico.position.y = 0;
   bico.position.x = 0;
-  bico.castShadow = true;
-  bico.receiveShadow = true;
   galinha.add(bico);
 
-  // bordas na corpo da galinha, neste momento off fica melhor
-  //var geo = new THREE.EdgesGeometry(corpo.geometry);
-  //var mat = new THREE.LineBasicMaterial({ color: 0x9c9c9c, flatShading: true });
-  //var bordas = new THREE.LineSegments(geo, mat);
-  //corpo.add(bordas);
   var boundingBox = new THREE.Box3().setFromObject(galinha);
   galinha.boundingBox = boundingBox;
+
 
   return galinha;
 }
@@ -297,8 +276,10 @@ importer.load("./Javascript/objects/sketchfab.fbx", function (object) {
 });
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(window.innerWidth , window.innerHeight );
 renderer.setClearColor(0xaaaaaa);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
 document.body.appendChild(renderer.domElement);
 
 var controls = new THREE.OrbitControls(camera1, renderer.domElement);
@@ -403,6 +384,7 @@ var arvores = [
   { x: -1, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 5, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
   { x: 0, y: 0.3, z: 36, width: 0.6, height: 0.8, depth: 0.6 },
+  
 ];
 
 // Crie e adicione os objetos de árvore à cena usando um loop
@@ -415,6 +397,8 @@ for (var i = 0; i < arvores.length; i++) {
     arvores[i].height,
     arvores[i].depth
   );
+  var boundingBox = new THREE.Box3().setFromObject(arvore);
+  arvore.boundingBox = boundingBox;
   cena.add(arvore);
 }
 
@@ -455,6 +439,10 @@ for(var i = 0; i < flowers.length; i++)
   cena.add(flower);
 }
 
+var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
+var arvores = [];
+arvores.push(arvore1);
+cena.add(arvore1);
 
 function detectCollision(obj1, obj2) {
   var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
@@ -663,7 +651,12 @@ function Start() {
 
   // cria a luz
   var luz = new THREE.DirectionalLight(0xffffff, 1);
-  luz.position.set(-20, 10, 15);
+  luz.position.set(-6, 4, 2);
+  luz.castShadow = true;
+  luz.shadow.mapSize.width = 1024; // Resolução horizontal da sombra
+  luz.shadow.mapSize.height = 1024; // Resolução vertical da sombra
+  luz.shadow.camera.near = 0.5; // Distância mínima da câmera para a luz
+  luz.shadow.camera.far = 200; // Distância máxima da câmera para a luz
   cena.add(luz);
 
   // cria o helper da luz
