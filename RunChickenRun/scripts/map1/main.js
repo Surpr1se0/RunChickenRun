@@ -58,21 +58,31 @@ function toggleCamera() {
 
 //SKYBOX, não está funcional
 
-var geometry = new THREE.BoxGeometry( 1000, 1000, 1000 );
-var cubeMaterials = [
-    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( "./Images/skybox_dia/front.jpg" ), side: THREE.DoubleSide }), //front side
-    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'Images/skybox_dia/back.jpg' ), side: THREE.DoubleSide }), //back side
-    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'Images/skybox_dia/top.jpg' ), side: THREE.DoubleSide }), //up side
-    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'Images/skybox_dia/bottom.jpg' ), side: THREE.DoubleSide }), //down side
-    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'Images/skybox_dia/right.jpg' ), side: THREE.DoubleSide }), //right side
-    new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( 'Images/skybox_dia/left.jpg' ), side: THREE.DoubleSide }) //left side
-];
-
-var cubeMaterial = new THREE.MeshBasicMaterial( cubeMaterials );
-var cube = new THREE.Mesh( geometry, cubeMaterial );
-cena.add(cube);
+var textura_direita = new THREE.TextureLoader().load('./Images/skybox_dia/right.jpg');
+var textura_esquerda = new THREE.TextureLoader().load('./Images/skybox_dia/left.jpg');
+var textura_cima = new THREE.TextureLoader().load('./Images/skybox_dia/top.jpg');
+var textura_baixo = new THREE.TextureLoader().load('./Images/skybox_dia/bottom.jpg');
+var textura_tras = new THREE.TextureLoader().load('./Images/skybox_dia/back.jpg');
+var textura_frente = new THREE.TextureLoader().load('./Images/skybox_dia/front.jpg');
 
 
+var materialArray= [];
+
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_direita }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_esquerda }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_cima }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_baixo }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_tras }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_frente }));
+
+for (var i = 0; i < 6; i++)
+    materialArray[i].side = THREE.BackSide;
+
+var skyboxGeo = new THREE.BoxGeometry(50,50,50); // alterar conforme o tamanho do mapa
+
+var skybox = new THREE.Mesh(skyboxGeo, materialArray);
+
+cena.add(skybox);
 
 
 function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
@@ -505,7 +515,7 @@ function Start() {
   var zSpeed = 0.5;
   var isJumping = false;
   var jumpHeight = 1;
-  var groundHeight = 0.3; // Ajuste a altura do chão conforme necessário
+  var groundHeight = 0.3; // Ajustar a altura do chão conforme necessário
 
   var boxHelper = new THREE.BoxHelper(carro, 0xffff00);
   cena.add(boxHelper);
