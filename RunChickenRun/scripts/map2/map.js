@@ -334,6 +334,7 @@ function GenerateMap() {
   }
 }
 
+
 function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
   var tree = new THREE.Group();
 

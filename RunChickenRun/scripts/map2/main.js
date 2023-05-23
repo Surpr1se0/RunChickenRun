@@ -468,8 +468,43 @@ function checkCollisions() {
   }
 }
 
+function Lamp() {
+  var lamp = new THREE.Group();
+
+  var bottom = new THREE.Mesh(
+    new THREE.BoxGeometry(0.1, 4, 0.1),
+    new THREE.MeshStandardMaterial({ color: 0x000000 })
+  );
+
+  bottom.castShadow = true;
+  bottom.position.set(0, 0, 0);
+  lamp.add(bottom);
+
+  var top = new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 0.1, 0.1),
+    new THREE.MeshStandardMaterial({ color: 0x000000 })
+  );
+
+  var PointLight = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(0.1, 0),
+    new THREE.MeshStandardMaterial({ color: 0xFFFF00 })
+  );
+  top.position.set(0.2, 2, 0);
+  top.castShadow = true;
+  PointLight.position.set(0.25, -0.1, 0);
+  top.add(PointLight);
+  lamp.add(top);
+
+
+  lamp.rotation.y = Math.PI / 2;
+  return lamp;
+}
+
 function Start() {
   GenerateMap();
+
+  var lamp = new Lamp();
+  cena.add(lamp);
 
   var boxHelper = new THREE.BoxHelper(galinha, 0xffff00); // Passando o objeto e a cor desejada como parâmetros
   cena.add(boxHelper);
