@@ -6,6 +6,7 @@ var camera1, camera2;
 var toggleButton = document.getElementById("toggleButton");
 toggleButton.addEventListener("click", toggleCamera);
 
+var luz;
 var isCamera1Active = true;
 
 // Definir a primeira câmera
@@ -56,17 +57,26 @@ function toggleCamera() {
   renderCameras();
 }
 
-//SKYBOX, não está funcional
+var textura_direita = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/right.jpg"
+);
+var textura_esquerda = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/left.jpg"
+);
+var textura_cima = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/top.jpg"
+);
+var textura_baixo = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/bottom.jpg"
+);
+var textura_tras = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/back.jpg"
+);
+var textura_frente = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/front.jpg"
+);
 
-var textura_direita = new THREE.TextureLoader().load('./Images/skybox_dia/right.jpg');
-var textura_esquerda = new THREE.TextureLoader().load('./Images/skybox_dia/left.jpg');
-var textura_cima = new THREE.TextureLoader().load('./Images/skybox_dia/top.jpg');
-var textura_baixo = new THREE.TextureLoader().load('./Images/skybox_dia/bottom.jpg');
-var textura_tras = new THREE.TextureLoader().load('./Images/skybox_dia/back.jpg');
-var textura_frente = new THREE.TextureLoader().load('./Images/skybox_dia/front.jpg');
-
-
-var materialArray= [];
+var materialArray = [];
 
 materialArray.push(new THREE.MeshBasicMaterial({ map: textura_direita }));
 materialArray.push(new THREE.MeshBasicMaterial({ map: textura_esquerda }));
@@ -75,15 +85,13 @@ materialArray.push(new THREE.MeshBasicMaterial({ map: textura_baixo }));
 materialArray.push(new THREE.MeshBasicMaterial({ map: textura_tras }));
 materialArray.push(new THREE.MeshBasicMaterial({ map: textura_frente }));
 
-for (var i = 0; i < 6; i++)
-    materialArray[i].side = THREE.BackSide;
+for (var i = 0; i < 6; i++) materialArray[i].side = THREE.BackSide;
 
-var skyboxGeo = new THREE.BoxGeometry(50,50,50); // alterar conforme o tamanho do mapa
+var skyboxGeo = new THREE.BoxGeometry(50, 50, 50); // alterar conforme o tamanho do mapa
 
 var skybox = new THREE.Mesh(skyboxGeo, materialArray);
 
 cena.add(skybox);
-
 
 function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
   var tree = new THREE.Group();
@@ -109,7 +117,6 @@ function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
 
   return tree;
 }
-//0, 0.04, -2.3
 function AddPasseio(x, y, z) {
   var geometriaPasseio = new THREE.BoxGeometry(0.1, 0.1, 7);
 
@@ -131,8 +138,6 @@ function AddPasseio(x, y, z) {
 
   cena.add(meshPasseio1);
 }
-
-// -2       // 0.2      //-1.6
 
 function Flower(x, y, z) {
   var flower = new THREE.Group();
@@ -272,6 +277,67 @@ function Galinha() {
   return galinha;
 }
 
+function renderizarMuro() {
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+
+  // Muro esquerdo
+  var muroEsquerdo = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 60),
+    muroMaterial
+  );
+  var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
+  muroEsquerdo.boundingBox = boundingBox;
+  muroEsquerdo.position.set(32, 0, 15);
+
+  return muroEsquerdo;
+}
+
+function renderizarMuroDireito() {
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+
+  // Muro esquerdo
+  var muroEsquerdo = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 60),
+    muroMaterial
+  );
+  var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
+  muroEsquerdo.boundingBox = boundingBox;
+  muroEsquerdo.position.set(32, 0, 15);
+
+  return muroEsquerdo;
+}
+
+function renderizarMuroCima() {
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+
+  // Muro esquerdo
+  var muroEsquerdo = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 60),
+    muroMaterial
+  );
+  var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
+  muroEsquerdo.boundingBox = boundingBox;
+  muroEsquerdo.position.set(32, 0, 15);
+
+  return muroEsquerdo;
+}
+
+function renderizarMuroBaixo() {
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+
+  // Muro esquerdo
+  var muroEsquerdo = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 60),
+    muroMaterial
+  );
+  var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
+  muroEsquerdo.boundingBox = boundingBox;
+  muroEsquerdo.position.set(32, 0, 15);
+
+  return muroEsquerdo;
+}
+
+
 function renderCameras() {
   // Renderizar a cena com a câmera ativa
   if (isCamera1Active) {
@@ -319,8 +385,6 @@ galinha.position.set(0, 0.3, -5.0);
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
-
-
 
 var woods = [
   { x: -3, y: 0.05, z: -7, lenght: 2 },
@@ -373,7 +437,6 @@ for (var i = 0; i < flowers.length; i++) {
   var flower = new Flower(flowers[i].x, flowers[i].y, flowers[i].z);
   cena.add(flower);
 }
-
 
 var arvores = [];
 
@@ -474,11 +537,6 @@ for (var i = 0; i < objetos.length; i++) {
   cena.add(arvore);
 }
 
-// var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
-// var arvores = [];
-// arvores.push(arvore1);
-// cena.add(arvore1);
-
 function detectCollision(obj1, obj2) {
   var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
   var box2 = obj2.boundingBox.clone().applyMatrix4(obj2.matrixWorld);
@@ -499,10 +557,8 @@ function checkCollisions() {
 
 function Start() {
   GenerateMap();
-
-  var boxHelper = new THREE.BoxHelper(galinha, 0xffff00); // Passando o objeto e a cor desejada como parâmetros
-  cena.add(boxHelper);
-
+  var muro = new renderizarMuro();
+  cena.add(muro);
   //Definições iniciais Carro
   var carro = new Carro(0x78b14b);
   carro.scale.set(0.03, 0.03, 0.03);
@@ -517,9 +573,6 @@ function Start() {
   var jumpHeight = 1;
   var groundHeight = 0.3; // Ajustar a altura do chão conforme necessário
 
-  var boxHelper = new THREE.BoxHelper(carro, 0xffff00);
-  cena.add(boxHelper);
-
   //temos que mudar a rotação o centro de rotação da galinha não é o centro da galinha
   document.addEventListener("keydown", onDocumentKeyDown, false);
 
@@ -527,7 +580,6 @@ function Start() {
   var galinhaZ = galinha.position.z;
 
   function onDocumentKeyDown(event) {
-
     var keyCode = event.which;
     var novaPosicaoX = galinha.position.x;
     var novaPosicaoZ = galinha.position.z;
@@ -556,7 +608,6 @@ function Start() {
         galinha.rotation.y = -Math.PI / 2;
 
         novaPosicaoX -= xSpeed;
-
       }
     } else if (keyCode == 68) {
       if (!isJumping) {
@@ -574,6 +625,7 @@ function Start() {
     }
 
     var colisaoDetectada = false;
+    var colisaoMuro = false;
 
     // Verifique colisões antes de atualizar a posição
     for (var i = 0; i < arvores.length; i++) {
@@ -582,9 +634,13 @@ function Start() {
         colisaoDetectada = true;
         break;
       }
+      if (detectCollision(galinha, muro)) {
+        colisaoMuro = true;
+        console.log("Colisao com muro");
+      }
     }
 
-    if (!colisaoDetectada) {
+    if (!colisaoMuro) {
       // Atualize a posição da galinha com as novas posições se não houver colisão
       galinha.position.x = novaPosicaoX;
       galinha.position.z = novaPosicaoZ;
@@ -689,13 +745,28 @@ function Start() {
   cena.add(axesHelper);
 
   // cria a luz
-  var luz = new THREE.DirectionalLight(0xffffff, 1);
-  luz.position.set(-50, 25, 0);
+  var luzAmbiente = new THREE.AmbientLight(0xffffff, 0.1); // Cor: branco, Intensidade: 0.5
+  cena.add(luzAmbiente);
+
+  luz = new THREE.DirectionalLight(0xffffff, 0.4);
+  luz.position.set(-20, 25, 0);
   luz.castShadow = true;
   luz.shadow.mapSize.width = 1024; // Resolução horizontal da sombra
   luz.shadow.mapSize.height = 1024; // Resolução vertical da sombra
   luz.shadow.camera.near = 0.5; // Distância mínima da câmera para a luz
   luz.shadow.camera.far = 200; // Distância máxima da câmera para a luz
+  luz.rotation.y = Math.PI / 2;
+
+  var shadowCamera = new THREE.OrthographicCamera(
+    -100,
+    100,
+    100,
+    -100,
+    0.1,
+    200
+  ); // Ajuste os limites da câmera de sombra conforme necessário
+  luz.shadow.camera = shadowCamera;
+
   cena.add(luz);
 
   // cria o helper da luz
@@ -709,7 +780,10 @@ function Start() {
 function loop() {
   renderCameras();
 
+  luz.position.copy(galinha.position);
   requestAnimationFrame(loop);
+  luz.position.y = 50;
+  luz.position.x = -40;
 
   checkCollisions();
 }
