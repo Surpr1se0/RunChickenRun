@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", Start);
 
-var jogoEmExecucao = true;
-
+var contador = 0;
 var cena = new THREE.Scene();
 
 var camera1, camera2;
@@ -10,6 +9,8 @@ toggleButton.addEventListener("click", toggleCamera);
 
 var luz;
 var isCamera1Active = true;
+var isCamera2Active = false;
+var iscamera3Active = false;
 
 // Definir a primeira câmera
 var zoomFactor = 55; // Fator de zoom, 2 para dobrar o tamanho visível
@@ -40,9 +41,20 @@ var far = 100; // Distância máxima de renderização
 var camera2 = new THREE.PerspectiveCamera(fov, aspect, near, far);
 camera2.position.set(0, 7, 0);
 
+
+// Definir a terceira câmera
+var fov = 30; // Campo de visão em graus
+var aspect = window.innerWidth / window.innerHeight;
+var near = 0.1; // Distância mínima de renderização
+var far = 100; // Distância máxima de renderização
+
+var camera3 = new THREE.PerspectiveCamera(fov, aspect, near, far);
+camera3.position.set(0, 7, 0);
+
 // Adicionar ambas as câmeras à cena
 cena.add(camera1);
 cena.add(camera2);
+cena.add(camera3);
 
 // Função para alternar entre as câmeras
 function toggleCamera() {
@@ -346,18 +358,61 @@ function renderizarMuroBaixo() {
 
 function renderCameras() {
   // Renderizar a cena com a câmera ativa
+
+  var toggleButton = document.getElementById("toggleButton");
+  
+
+
   if (isCamera1Active) {
     camera1.position.x = galinha.position.x + 10;
     camera1.position.y = galinha.position.y + 10;
     camera1.position.z = galinha.position.z + 10;
+
+    camera2.position.x = galinha.position.x + 0;
+    camera2.position.y = galinha.position.y + 3;
+    camera2.position.z = galinha.position.z + 6;
+
     camera1.lookAt(galinha.position);
     renderer.render(cena, camera1);
-  } else {
+
+
+    toggleButton.addEventListener("click", function() {
+      isCamera1Active = false;
+      isCamera2Active = true;
+      isCamera3Active = false;
+    });
+
+  } else if(isCamera2Active) {
     camera1.position.x = galinha.position.x + 7;
     camera1.position.y = galinha.position.y + 7;
     camera1.position.z = galinha.position.z + 7;
+
+    camera2.position.x = galinha.position.x + 0;
+    camera2.position.y = galinha.position.y + 3;
+    camera2.position.z = galinha.position.z + 6;
     camera2.lookAt(galinha.position);
     renderer.render(cena, camera2);
+
+    toggleButton.addEventListener("click", function() {
+      isCamera1Active = false;
+      isCamera2Active = false;
+      isCamera3Active = true;
+    });
+
+  } else if(isCamera3Active)
+  {
+    camera3.position.x = galinha.position.x + 0;
+    camera3.position.y = galinha.position.y + 20;
+    camera3.position.z = galinha.position.z + 0;
+    camera3.lookAt(galinha.position);
+    renderer.render(cena, camera3);
+    
+    toggleButton.addEventListener("click", function() {
+      isCamera1Active = true;
+      isCamera2Active = false;
+      isCamera3Active = false;
+    });
+
   }
 }
 
@@ -574,26 +629,25 @@ function checkCollisions() {
       detectCollision(galinha, muro) ||
       detectCollision(galinha, muro_dir) ||
       detectCollision(galinha, muro_baixo) ||
-      detectCollision(galinha, muro_cima) || 
-      detectCollision(galinha, carro)
+      detectCollision(galinha, muro_cima)
     ) {
       // Colisão detectada entre a galinha e a árvore
       console.log("Colisão detectada!");
-
-      if(detectCollision(galinha, carro))
-      {
-        console.log("PARAR O JOGO");
-      }
       // Faça aqui o que deseja fazer em caso de colisão
     }
-  }
-}
+    if (detectCollision(galinha, carro)) {
+      console.log("Colisao so com o carro!");
+      var retryButton = document.getElementById("retryButton");
+      var endGameElement = document.getElementById("endGame");
+      
+      endGameElement.style.visibility = "visible";
 
-function verificarFimDoJogo() {
-  if (!jogoEmExecucao) {
-    // Lógica de parada do jogo
-    console.log("O jogo foi interrompido devido a uma colisão.");
-    // Outras ações, como exibir uma mensagem de fim de jogo, reiniciar o jogo, etc.
+      retryButton.addEventListener("click", function() {
+        // Recarregar a página
+        contador = 0;
+        location.href = location.href;
+      });
+    }
   }
 }
 
@@ -626,6 +680,10 @@ function Start() {
 
         novaPosicaoZ -= zSpeed;
         galinha.rotation.y = Math.PI;
+        
+        contador++;
+        var contagemElemento = document.getElementById("contagem");
+        contagemElemento.textContent = contador/2;
       }
     } else if (keyCode == 83) {
       if (!isJumping) {
@@ -671,16 +729,17 @@ function Start() {
         detectCollision(galinha, muro) ||
         detectCollision(galinha, muro_baixo) ||
         detectCollision(galinha, muro_cima) ||
-        detectCollision(galinha, muro_dir) ||
-        detectCollision(galinha, carro)
+        detectCollision(galinha, muro_dir)
       ) {
         colisaoDetectada = true;
         colisaoMuro = true;
-        if(colisaoCarro)
-        {
-          console.log("PARA O JOGO");
-          jogoEmExecucao = false;
-        }
+
+        break;
+      }
+      if (detectCollision(galinha, carro)) {
+        console.log("Colisao so com o carro!");
+        colisaoCarro = true;
+
         break;
       }
     }
@@ -711,12 +770,16 @@ function Start() {
         detectCollision(galinha, muro) ||
         detectCollision(galinha, muro_baixo) ||
         detectCollision(galinha, muro_cima) ||
-        detectCollision(galinha, muro_dir) ||
-        detectCollision(galinha, carro)
+        detectCollision(galinha, muro_dir)
       ) {
         colisaoDetectada = true;
         colisaoMuro = true;
+        break;
+      }
+      if (detectCollision(galinha, carro)) {
+        console.log("Colisao so com o carro!");
         colisaoCarro = true;
+
         break;
       }
     }
@@ -833,18 +896,13 @@ function Start() {
   requestAnimationFrame(loop);
 }
 
-
 function loop() {
   renderCameras();
 
-  verificarFimDoJogo();
-  if(jogoEmExecucao)
-  {
-    luz.position.copy(galinha.position);
-    requestAnimationFrame(loop);
-    luz.position.y = 50;
-    luz.position.x = -40;
-  
-    checkCollisions();
-  }
+  luz.position.copy(galinha.position);
+  requestAnimationFrame(loop);
+  luz.position.y = 50;
+  luz.position.x = -40;
+
+  checkCollisions();
 }
