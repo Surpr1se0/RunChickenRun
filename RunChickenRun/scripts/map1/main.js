@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", Start);
 
+var jogoEmExecucao = true;
+
 var cena = new THREE.Scene();
 
 var camera1, camera2;
@@ -10,7 +12,7 @@ var luz;
 var isCamera1Active = true;
 
 // Definir a primeira câmera
-var zoomFactor = 22; // Fator de zoom, 2 para dobrar o tamanho visível
+var zoomFactor = 55; // Fator de zoom, 2 para dobrar o tamanho visível
 var width = window.innerWidth;
 var height = window.innerHeight;
 
@@ -214,6 +216,9 @@ function Carro() {
   cockpit.position.y = 25.5;
   carro.add(cockpit);
 
+  var boundingBox = new THREE.Box3().setFromObject(carro);
+  carro.boundingBox = boundingBox;
+
   return carro;
 }
 
@@ -318,7 +323,7 @@ function renderizarMuroCima() {
   var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
   muroEsquerdo.boundingBox = boundingBox;
   muroEsquerdo.position.set(0, 0, -25);
-  muroEsquerdo.rotation.y = Math.PI/2;
+  muroEsquerdo.rotation.y = Math.PI / 2;
 
   return muroEsquerdo;
 }
@@ -334,12 +339,10 @@ function renderizarMuroBaixo() {
   var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
   muroEsquerdo.boundingBox = boundingBox;
   muroEsquerdo.position.set(0, 0, 36);
-  muroEsquerdo.rotation.y = Math.PI/2;
-
+  muroEsquerdo.rotation.y = Math.PI / 2;
 
   return muroEsquerdo;
 }
-
 
 function renderCameras() {
   // Renderizar a cena com a câmera ativa
@@ -550,6 +553,12 @@ cena.add(muro_dir);
 cena.add(muro_baixo);
 cena.add(muro_cima);
 
+//Definições iniciais Carro
+var carro = new Carro(0x78b14b);
+carro.scale.set(0.03, 0.03, 0.03);
+carro.position.set(-30, 0.15, -0.2);
+cena.add(carro);
+
 function detectCollision(obj1, obj2) {
   var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
   var box2 = obj2.boundingBox.clone().applyMatrix4(obj2.matrixWorld);
@@ -560,24 +569,38 @@ function detectCollision(obj1, obj2) {
 function checkCollisions() {
   for (var i = 0; i < arvores.length; i++) {
     var arvore = arvores[i];
-    if (detectCollision(galinha, arvore) || detectCollision(galinha, muro)) {
+    if (
+      detectCollision(galinha, arvore) ||
+      detectCollision(galinha, muro) ||
+      detectCollision(galinha, muro_dir) ||
+      detectCollision(galinha, muro_baixo) ||
+      detectCollision(galinha, muro_cima) || 
+      detectCollision(galinha, carro)
+    ) {
       // Colisão detectada entre a galinha e a árvore
       console.log("Colisão detectada!");
+
+      if(detectCollision(galinha, carro))
+      {
+        console.log("PARAR O JOGO");
+      }
       // Faça aqui o que deseja fazer em caso de colisão
     }
-  } 
+  }
+}
+
+function verificarFimDoJogo() {
+  if (!jogoEmExecucao) {
+    // Lógica de parada do jogo
+    console.log("O jogo foi interrompido devido a uma colisão.");
+    // Outras ações, como exibir uma mensagem de fim de jogo, reiniciar o jogo, etc.
+  }
 }
 
 function Start() {
   GenerateMap();
 
-  //Definições iniciais Carro
-  var carro = new Carro(0x78b14b);
-  carro.scale.set(0.03, 0.03, 0.03);
-  carro.position.set(-30, 0.15, -0.2);
-
   cena.add(galinha);
-  cena.add(carro);
 
   var xSpeed = 0.5;
   var zSpeed = 0.5;
@@ -638,18 +661,31 @@ function Start() {
 
     var colisaoDetectada = false;
     var colisaoMuro = false;
+    var colisaoCarro = false;
 
     // Verifique colisões antes de atualizar a posição
     for (var i = 0; i < arvores.length; i++) {
       var arvore = arvores[i];
-      if (detectCollision(galinha, arvore) || detectCollision(galinha, muro)) {
+      if (
+        detectCollision(galinha, arvore) ||
+        detectCollision(galinha, muro) ||
+        detectCollision(galinha, muro_baixo) ||
+        detectCollision(galinha, muro_cima) ||
+        detectCollision(galinha, muro_dir) ||
+        detectCollision(galinha, carro)
+      ) {
         colisaoDetectada = true;
         colisaoMuro = true;
+        if(colisaoCarro)
+        {
+          console.log("PARA O JOGO");
+          jogoEmExecucao = false;
+        }
         break;
       }
     }
 
-    if (!colisaoMuro || !colisaoDetectada) {
+    if (!colisaoMuro || !colisaoDetectada || !colisaoCarro) {
       // Atualize a posição da galinha com as novas posições se não houver colisão
       galinha.position.x = novaPosicaoX;
       galinha.position.z = novaPosicaoZ;
@@ -665,18 +701,27 @@ function Start() {
 
     var colisaoDetectada = false;
     var colisaoMuro = false;
+    var colisaoCarro = false;
 
     // Verifique colisões antes de atualizar a posição
     for (var i = 0; i < arvores.length; i++) {
       var arvore = arvores[i];
-      if (detectCollision(galinha, arvore) || detectCollision(galinha, muro)) {
+      if (
+        detectCollision(galinha, arvore) ||
+        detectCollision(galinha, muro) ||
+        detectCollision(galinha, muro_baixo) ||
+        detectCollision(galinha, muro_cima) ||
+        detectCollision(galinha, muro_dir) ||
+        detectCollision(galinha, carro)
+      ) {
         colisaoDetectada = true;
         colisaoMuro = true;
+        colisaoCarro = true;
         break;
       }
     }
 
-    if (!colisaoDetectada || !colisaoMuro) {
+    if (!colisaoDetectada || !colisaoMuro || !colisaoCarro) {
       // Atualize a posição da galinha com as novas posições se não houver colisão
       galinha.position.x = novaPosicaoX;
       galinha.position.z = novaPosicaoZ;
@@ -788,13 +833,18 @@ function Start() {
   requestAnimationFrame(loop);
 }
 
+
 function loop() {
   renderCameras();
 
-  luz.position.copy(galinha.position);
-  requestAnimationFrame(loop);
-  luz.position.y = 50;
-  luz.position.x = -40;
-
-  checkCollisions();
+  verificarFimDoJogo();
+  if(jogoEmExecucao)
+  {
+    luz.position.copy(galinha.position);
+    requestAnimationFrame(loop);
+    luz.position.y = 50;
+    luz.position.x = -40;
+  
+    checkCollisions();
+  }
 }
