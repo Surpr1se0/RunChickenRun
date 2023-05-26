@@ -4,6 +4,7 @@
     <link rel="icon" href="./Images/icon.png">
     <title>Run Chicken Run</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="./fonts/8-BIT WONDER.TTF">
   </head>
 
   <body onload="Start()">
@@ -20,6 +21,10 @@
       <button id="toggleButton">Change Camera</button>
     </div>
 
+    <div>
+      <button id="contagem">0</button>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
     <script src="./Javascript/three.js"></script>
     <script src="./Javascript/addons/OrbitControls.js"></script>
@@ -27,7 +32,14 @@
     <script src="./Javascript/addons/fflate.min.js"></script>
 
     <!--Main and Funcs-->
-    <script src="./scripts/map2/main.js"></script>
-    <script src="./scripts/map2/map.js"></script>
+    <script src="./scripts/map1/main.js"></script>
+    <script src="./scripts/map1/map.js"></script>
   </body>
+
+  <div id="endGame">
+    <h1 id="gameOverText">u died</h1>
+    <button id="retryButton">Retry</button>
+  </div>
+  
+  
 </html>

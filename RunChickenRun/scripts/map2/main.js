@@ -1,12 +1,16 @@
 document.addEventListener("DOMContentLoaded", Start);
 
+var contador = 0;
 var cena = new THREE.Scene();
 
 var camera1, camera2;
 var toggleButton = document.getElementById("toggleButton");
 toggleButton.addEventListener("click", toggleCamera);
 
+var luz;
 var isCamera1Active = true;
+var isCamera2Active = false;
+var iscamera3Active = false;
 
 // Definir a primeira câmera
 var zoomFactor = 55; // Fator de zoom, 2 para dobrar o tamanho visível
@@ -37,9 +41,19 @@ var far = 100; // Distância máxima de renderização
 var camera2 = new THREE.PerspectiveCamera(fov, aspect, near, far);
 camera2.position.set(0, 7, 0);
 
+// Definir a terceira câmera
+var fov = 30; // Campo de visão em graus
+var aspect = window.innerWidth / window.innerHeight;
+var near = 0.1; // Distância mínima de renderização
+var far = 100; // Distância máxima de renderização
+
+var camera3 = new THREE.PerspectiveCamera(fov, aspect, near, far);
+camera3.position.set(0, 7, 0);
+
 // Adicionar ambas as câmeras à cena
 cena.add(camera1);
 cena.add(camera2);
+cena.add(camera3);
 
 // Função para alternar entre as câmeras
 function toggleCamera() {
@@ -55,6 +69,42 @@ function toggleCamera() {
   // Atualizar a renderização da cena
   renderCameras();
 }
+
+var textura_direita = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/right.jpg"
+);
+var textura_esquerda = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/left.jpg"
+);
+var textura_cima = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/top.jpg"
+);
+var textura_baixo = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/bottom.jpg"
+);
+var textura_tras = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/back.jpg"
+);
+var textura_frente = new THREE.TextureLoader().load(
+  "./Images/skybox_dia/front.jpg"
+);
+
+var materialArray = [];
+
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_direita }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_esquerda }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_cima }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_baixo }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_tras }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: textura_frente }));
+
+for (var i = 0; i < 6; i++) materialArray[i].side = THREE.BackSide;
+
+var skyboxGeo = new THREE.BoxGeometry(50, 50, 50); // alterar conforme o tamanho do mapa
+
+var skybox = new THREE.Mesh(skyboxGeo, materialArray);
+
+cena.add(skybox);
 
 function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
   var tree = new THREE.Group();
@@ -80,7 +130,6 @@ function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
 
   return tree;
 }
-//0, 0.04, -2.3
 function AddPasseio(x, y, z) {
   var geometriaPasseio = new THREE.BoxGeometry(0.1, 0.1, 7);
 
@@ -102,8 +151,6 @@ function AddPasseio(x, y, z) {
 
   cena.add(meshPasseio1);
 }
-
-// -2       // 0.2      //-1.6
 
 function Flower(x, y, z) {
   var flower = new THREE.Group();
@@ -180,6 +227,9 @@ function Carro() {
   cockpit.position.y = 25.5;
   carro.add(cockpit);
 
+  var boundingBox = new THREE.Box3().setFromObject(carro);
+  carro.boundingBox = boundingBox;
+
   return carro;
 }
 
@@ -243,20 +293,118 @@ function Galinha() {
   return galinha;
 }
 
+function renderizarMuro() {
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+
+  // Muro esquerdo
+  var muroEsquerdo = new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 1, 62),
+    muroMaterial
+  );
+  var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
+  muroEsquerdo.boundingBox = boundingBox;
+  muroEsquerdo.position.set(31, 0, 5);
+
+  return muroEsquerdo;
+}
+
+function renderizarMuroDireito() {
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+
+  // Muro esquerdo
+  var muroEsquerdo = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 62),
+    muroMaterial
+  );
+  var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
+  muroEsquerdo.boundingBox = boundingBox;
+  muroEsquerdo.position.set(-25, 0, 5);
+
+  return muroEsquerdo;
+}
+
+function renderizarMuroCima() {
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+
+  // Muro esquerdo
+  var muroEsquerdo = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 62),
+    muroMaterial
+  );
+  var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
+  muroEsquerdo.boundingBox = boundingBox;
+  muroEsquerdo.position.set(0, 0, -25);
+  muroEsquerdo.rotation.y = Math.PI / 2;
+
+  return muroEsquerdo;
+}
+
+function renderizarMuroBaixo() {
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+
+  // Muro esquerdo
+  var muroEsquerdo = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 62),
+    muroMaterial
+  );
+  var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
+  muroEsquerdo.boundingBox = boundingBox;
+  muroEsquerdo.position.set(0, 0, 36);
+  muroEsquerdo.rotation.y = Math.PI / 2;
+
+  return muroEsquerdo;
+}
+
 function renderCameras() {
   // Renderizar a cena com a câmera ativa
+
+  var toggleButton = document.getElementById("toggleButton");
+
   if (isCamera1Active) {
     camera1.position.x = galinha.position.x + 10;
     camera1.position.y = galinha.position.y + 10;
     camera1.position.z = galinha.position.z + 10;
+
+    camera2.position.x = galinha.position.x + 0;
+    camera2.position.y = galinha.position.y + 3;
+    camera2.position.z = galinha.position.z + 6;
+
     camera1.lookAt(galinha.position);
     renderer.render(cena, camera1);
-  } else {
+
+    toggleButton.addEventListener("click", function () {
+      isCamera1Active = false;
+      isCamera2Active = true;
+      isCamera3Active = false;
+    });
+  } else if (isCamera2Active) {
     camera1.position.x = galinha.position.x + 7;
     camera1.position.y = galinha.position.y + 7;
     camera1.position.z = galinha.position.z + 7;
+
+    camera2.position.x = galinha.position.x + 0;
+    camera2.position.y = galinha.position.y + 3;
+    camera2.position.z = galinha.position.z + 6;
     camera2.lookAt(galinha.position);
     renderer.render(cena, camera2);
+
+    toggleButton.addEventListener("click", function () {
+      isCamera1Active = false;
+      isCamera2Active = false;
+      isCamera3Active = true;
+    });
+  } else if (isCamera3Active) {
+    camera3.position.x = galinha.position.x + 0;
+    camera3.position.y = galinha.position.y + 20;
+    camera3.position.z = galinha.position.z + 0;
+    camera3.lookAt(galinha.position);
+    renderer.render(cena, camera3);
+
+    toggleButton.addEventListener("click", function () {
+      isCamera1Active = true;
+      isCamera2Active = false;
+      isCamera3Active = false;
+    });
   }
 }
 
@@ -290,8 +438,6 @@ galinha.position.set(0, 0.3, -5.0);
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
-
-
 
 var woods = [
   { x: -3, y: 0.05, z: -7, lenght: 2 },
@@ -344,7 +490,6 @@ for (var i = 0; i < flowers.length; i++) {
   var flower = new Flower(flowers[i].x, flowers[i].y, flowers[i].z);
   cena.add(flower);
 }
-
 
 var arvores = [];
 
@@ -445,10 +590,21 @@ for (var i = 0; i < objetos.length; i++) {
   cena.add(arvore);
 }
 
-// var arvore1 = new Tree(-2, 0.3, -2.5, 0.6, 0.8, 0.6);
-// var arvores = [];
-// arvores.push(arvore1);
-// cena.add(arvore1);
+var muro = new renderizarMuro();
+var muro_dir = new renderizarMuroDireito();
+var muro_cima = new renderizarMuroCima();
+var muro_baixo = new renderizarMuroBaixo();
+
+cena.add(muro);
+cena.add(muro_dir);
+cena.add(muro_baixo);
+cena.add(muro_cima);
+
+//Definições iniciais Carro
+var carro = new Carro(0x78b14b);
+carro.scale.set(0.03, 0.03, 0.03);
+carro.position.set(-30, 0.15, -0.2);
+cena.add(carro);
 
 function detectCollision(obj1, obj2) {
   var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
@@ -460,72 +616,44 @@ function detectCollision(obj1, obj2) {
 function checkCollisions() {
   for (var i = 0; i < arvores.length; i++) {
     var arvore = arvores[i];
-    if (detectCollision(galinha, arvore)) {
+    if (
+      detectCollision(galinha, arvore) ||
+      detectCollision(galinha, muro) ||
+      detectCollision(galinha, muro_dir) ||
+      detectCollision(galinha, muro_baixo) ||
+      detectCollision(galinha, muro_cima)
+    ) {
       // Colisão detectada entre a galinha e a árvore
       console.log("Colisão detectada!");
       // Faça aqui o que deseja fazer em caso de colisão
     }
+    if (detectCollision(galinha, carro)) {
+      console.log("Colisao so com o carro!");
+      var retryButton = document.getElementById("retryButton");
+      var endGameElement = document.getElementById("endGame");
+
+      endGameElement.style.visibility = "visible";
+
+      retryButton.addEventListener("click", function () {
+        // Recarregar a página
+        contador = 0;
+        location.href = location.href;
+      });
+    }
   }
-}
-
-function Lamp() {
-  var lamp = new THREE.Group();
-
-  var bottom = new THREE.Mesh(
-    new THREE.BoxGeometry(0.1, 4, 0.1),
-    new THREE.MeshStandardMaterial({ color: 0x000000 })
-  );
-
-  bottom.castShadow = true;
-  bottom.position.set(0, 0, 0);
-  lamp.add(bottom);
-
-  var top = new THREE.Mesh(
-    new THREE.BoxGeometry(0.5, 0.1, 0.1),
-    new THREE.MeshStandardMaterial({ color: 0x000000 })
-  );
-
-  var PointLight = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(0.1, 0),
-    new THREE.MeshStandardMaterial({ color: 0xFFFF00 })
-  );
-  top.position.set(0.2, 2, 0);
-  top.castShadow = true;
-  PointLight.position.set(0.25, -0.1, 0);
-  top.add(PointLight);
-  lamp.add(top);
-
-
-  lamp.rotation.y = Math.PI / 2;
-  return lamp;
 }
 
 function Start() {
   GenerateMap();
 
-  var lamp = new Lamp();
-  cena.add(lamp);
-
-  var boxHelper = new THREE.BoxHelper(galinha, 0xffff00); // Passando o objeto e a cor desejada como parâmetros
-  cena.add(boxHelper);
-
-  //Definições iniciais Carro
-  var carro = new Carro(0x78b14b);
-  carro.scale.set(0.03, 0.03, 0.03);
-  carro.position.set(-30, 0.15, -0.2);
-
   cena.add(galinha);
-  cena.add(carro);
 
   var xSpeed = 0.5;
   var zSpeed = 0.5;
   var isJumping = false;
   var jumpHeight = 1;
-  var groundHeight = 0.3; // Ajuste a altura do chão conforme necessário
+  var groundHeight = 0.3; // Ajustar a altura do chão conforme necessário
 
-  var boxHelper = new THREE.BoxHelper(carro, 0xffff00);
-  cena.add(boxHelper);
-  //movimento apenas por coordenadas, falta animar salto.
   //temos que mudar a rotação o centro de rotação da galinha não é o centro da galinha
   document.addEventListener("keydown", onDocumentKeyDown, false);
 
@@ -541,30 +669,38 @@ function Start() {
       if (!isJumping) {
         isJumping = true;
         jump();
+
+        novaPosicaoZ -= zSpeed;
+        galinha.rotation.y = Math.PI;
+
+        contador++;
+        var contagemElemento = document.getElementById("contagem");
+        contagemElemento.textContent = contador / 2;
       }
-      novaPosicaoZ -= zSpeed;
-      galinha.rotation.y = Math.PI;
     } else if (keyCode == 83) {
       if (!isJumping) {
         isJumping = true;
         jump();
+
+        novaPosicaoZ += zSpeed;
+        galinha.rotation.y = 2 * Math.PI;
       }
-      novaPosicaoZ += zSpeed;
-      galinha.rotation.y = 2 * Math.PI;
     } else if (keyCode == 65) {
       if (!isJumping) {
         isJumping = true;
         jump();
+
+        galinha.rotation.y = -Math.PI / 2;
+
+        novaPosicaoX -= xSpeed;
       }
-      novaPosicaoX -= xSpeed;
-      galinha.rotation.y = -Math.PI / 2;
     } else if (keyCode == 68) {
       if (!isJumping) {
         isJumping = true;
         jump();
+        galinha.rotation.y = Math.PI / 2;
+        novaPosicaoX += xSpeed;
       }
-      novaPosicaoX += xSpeed;
-      galinha.rotation.y = Math.PI / 2;
     } else if (keyCode == 32) {
       // Tecla de salto (espaço)
       if (!isJumping) {
@@ -574,42 +710,33 @@ function Start() {
     }
 
     var colisaoDetectada = false;
+    var colisaoMuro = false;
+    var colisaoCarro = false;
 
     // Verifique colisões antes de atualizar a posição
     for (var i = 0; i < arvores.length; i++) {
       var arvore = arvores[i];
-      if (detectCollision(galinha, arvore)) {
+      if (
+        detectCollision(galinha, arvore) ||
+        detectCollision(galinha, muro) ||
+        detectCollision(galinha, muro_baixo) ||
+        detectCollision(galinha, muro_cima) ||
+        detectCollision(galinha, muro_dir)
+      ) {
         colisaoDetectada = true;
+        colisaoMuro = true;
+
+        break;
+      }
+      if (detectCollision(galinha, carro)) {
+        console.log("Colisao so com o carro!");
+        colisaoCarro = true;
+
         break;
       }
     }
 
-    if (!colisaoDetectada) {
-      // Atualize a posição da galinha com as novas posições se não houver colisão
-      galinha.position.x = novaPosicaoX;
-      galinha.position.z = novaPosicaoZ;
-
-      // Atualize as variáveis de posição
-      galinhaX = novaPosicaoX;
-      galinhaZ = novaPosicaoZ;
-    } else {
-      // Restaure as posições para a posição original antes do movimento
-      galinha.position.x = galinhaX;
-      galinha.position.z = galinhaZ;
-    }
-
-    var colisaoDetectada = false;
-
-    // Verifique colisões antes de atualizar a posição
-    for (var i = 0; i < arvores.length; i++) {
-      var arvore = arvores[i];
-      if (detectCollision(galinha, arvore)) {
-        colisaoDetectada = true;
-        break;
-      }
-    }
-
-    if (!colisaoDetectada) {
+    if (!colisaoMuro && !colisaoDetectada && !colisaoCarro) {
       // Atualize a posição da galinha com as novas posições se não houver colisão
       galinha.position.x = novaPosicaoX;
       galinha.position.z = novaPosicaoZ;
@@ -689,13 +816,28 @@ function Start() {
   cena.add(axesHelper);
 
   // cria a luz
-  var luz = new THREE.DirectionalLight(0xffffff, 1);
-  luz.position.set(-6, 4, 2);
+  var luzAmbiente = new THREE.AmbientLight(0xffffff, 0.1); // Cor: branco, Intensidade: 0.5
+  cena.add(luzAmbiente);
+
+  luz = new THREE.DirectionalLight(0xffffff, 0.4);
+  luz.position.set(-20, 25, 0);
   luz.castShadow = true;
   luz.shadow.mapSize.width = 1024; // Resolução horizontal da sombra
   luz.shadow.mapSize.height = 1024; // Resolução vertical da sombra
   luz.shadow.camera.near = 0.5; // Distância mínima da câmera para a luz
   luz.shadow.camera.far = 200; // Distância máxima da câmera para a luz
+  luz.rotation.y = Math.PI / 2;
+
+  var shadowCamera = new THREE.OrthographicCamera(
+    -100,
+    100,
+    100,
+    -100,
+    0.1,
+    200
+  ); // Ajuste os limites da câmera de sombra conforme necessário
+  luz.shadow.camera = shadowCamera;
+
   cena.add(luz);
 
   // cria o helper da luz
@@ -709,7 +851,10 @@ function Start() {
 function loop() {
   renderCameras();
 
+  luz.position.copy(galinha.position);
   requestAnimationFrame(loop);
+  luz.position.y = 50;
+  luz.position.x = -40;
 
   checkCollisions();
 }
