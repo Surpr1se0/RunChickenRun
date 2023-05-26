@@ -41,7 +41,6 @@ var far = 100; // Distância máxima de renderização
 var camera2 = new THREE.PerspectiveCamera(fov, aspect, near, far);
 camera2.position.set(0, 7, 0);
 
-
 // Definir a terceira câmera
 var fov = 30; // Campo de visão em graus
 var aspect = window.innerWidth / window.innerHeight;
@@ -360,8 +359,6 @@ function renderCameras() {
   // Renderizar a cena com a câmera ativa
 
   var toggleButton = document.getElementById("toggleButton");
-  
-
 
   if (isCamera1Active) {
     camera1.position.x = galinha.position.x + 10;
@@ -375,14 +372,12 @@ function renderCameras() {
     camera1.lookAt(galinha.position);
     renderer.render(cena, camera1);
 
-
-    toggleButton.addEventListener("click", function() {
+    toggleButton.addEventListener("click", function () {
       isCamera1Active = false;
       isCamera2Active = true;
       isCamera3Active = false;
     });
-
-  } else if(isCamera2Active) {
+  } else if (isCamera2Active) {
     camera1.position.x = galinha.position.x + 7;
     camera1.position.y = galinha.position.y + 7;
     camera1.position.z = galinha.position.z + 7;
@@ -393,26 +388,23 @@ function renderCameras() {
     camera2.lookAt(galinha.position);
     renderer.render(cena, camera2);
 
-    toggleButton.addEventListener("click", function() {
+    toggleButton.addEventListener("click", function () {
       isCamera1Active = false;
       isCamera2Active = false;
       isCamera3Active = true;
     });
-
-  } else if(isCamera3Active)
-  {
+  } else if (isCamera3Active) {
     camera3.position.x = galinha.position.x + 0;
     camera3.position.y = galinha.position.y + 20;
     camera3.position.z = galinha.position.z + 0;
     camera3.lookAt(galinha.position);
     renderer.render(cena, camera3);
-    
-    toggleButton.addEventListener("click", function() {
+
+    toggleButton.addEventListener("click", function () {
       isCamera1Active = true;
       isCamera2Active = false;
       isCamera3Active = false;
     });
-
   }
 }
 
@@ -639,10 +631,10 @@ function checkCollisions() {
       console.log("Colisao so com o carro!");
       var retryButton = document.getElementById("retryButton");
       var endGameElement = document.getElementById("endGame");
-      
+
       endGameElement.style.visibility = "visible";
 
-      retryButton.addEventListener("click", function() {
+      retryButton.addEventListener("click", function () {
         // Recarregar a página
         contador = 0;
         location.href = location.href;
@@ -680,10 +672,10 @@ function Start() {
 
         novaPosicaoZ -= zSpeed;
         galinha.rotation.y = Math.PI;
-        
+
         contador++;
         var contagemElemento = document.getElementById("contagem");
-        contagemElemento.textContent = contador/2;
+        contagemElemento.textContent = contador / 2;
       }
     } else if (keyCode == 83) {
       if (!isJumping) {
@@ -744,47 +736,7 @@ function Start() {
       }
     }
 
-    if (!colisaoMuro || !colisaoDetectada || !colisaoCarro) {
-      // Atualize a posição da galinha com as novas posições se não houver colisão
-      galinha.position.x = novaPosicaoX;
-      galinha.position.z = novaPosicaoZ;
-
-      // Atualize as variáveis de posição
-      galinhaX = novaPosicaoX;
-      galinhaZ = novaPosicaoZ;
-    } else {
-      // Restaure as posições para a posição original antes do movimento
-      galinha.position.x = galinhaX;
-      galinha.position.z = galinhaZ;
-    }
-
-    var colisaoDetectada = false;
-    var colisaoMuro = false;
-    var colisaoCarro = false;
-
-    // Verifique colisões antes de atualizar a posição
-    for (var i = 0; i < arvores.length; i++) {
-      var arvore = arvores[i];
-      if (
-        detectCollision(galinha, arvore) ||
-        detectCollision(galinha, muro) ||
-        detectCollision(galinha, muro_baixo) ||
-        detectCollision(galinha, muro_cima) ||
-        detectCollision(galinha, muro_dir)
-      ) {
-        colisaoDetectada = true;
-        colisaoMuro = true;
-        break;
-      }
-      if (detectCollision(galinha, carro)) {
-        console.log("Colisao so com o carro!");
-        colisaoCarro = true;
-
-        break;
-      }
-    }
-
-    if (!colisaoDetectada || !colisaoMuro || !colisaoCarro) {
+    if (!colisaoMuro && !colisaoDetectada && !colisaoCarro) {
       // Atualize a posição da galinha com as novas posições se não houver colisão
       galinha.position.x = novaPosicaoX;
       galinha.position.z = novaPosicaoZ;
