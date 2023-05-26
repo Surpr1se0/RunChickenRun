@@ -330,7 +330,7 @@ function renderizarMuro() {
   );
   var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
   muroEsquerdo.boundingBox = boundingBox;
-  muroEsquerdo.position.set(31, 0, 5);
+  muroEsquerdo.position.set(16, 0, 5);
 
   return muroEsquerdo;
 }
@@ -345,7 +345,7 @@ function renderizarMuroDireito() {
   );
   var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
   muroEsquerdo.boundingBox = boundingBox;
-  muroEsquerdo.position.set(-25, 0, 5);
+  muroEsquerdo.position.set(-16, 0, 5);
 
   return muroEsquerdo;
 }
