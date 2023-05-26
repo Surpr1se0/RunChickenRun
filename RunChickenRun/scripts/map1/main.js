@@ -198,7 +198,7 @@ function Rodas() {
   return roda;
 }
 
-function Carro() {
+function Carro(color) {
   var carro = new THREE.Group();
 
   var rodastraseiras = Rodas();
@@ -213,7 +213,7 @@ function Carro() {
 
   var chasi = new THREE.Mesh(
     new THREE.BoxGeometry(60, 15, 30),
-    new THREE.MeshLambertMaterial({ color: 0x78b14b })
+    new THREE.MeshLambertMaterial({ color: color })
   );
   chasi.position.y = 12;
   chasi.castShadow = true;
@@ -613,10 +613,23 @@ cena.add(muro_baixo);
 cena.add(muro_cima);
 
 //Definições iniciais Carro
+
 var carro = new Carro(0x78b14b);
 carro.scale.set(0.03, 0.03, 0.03);
 carro.position.set(-30, 0.15, -0.2);
 cena.add(carro);
+
+var carro1 = new Carro(0x063970);
+carro1.scale.set(0.03, 0.03, 0.03);
+carro1.position.set(-30, 0.15, -2);
+cena.add(carro1);
+
+var carro2 = new Carro(0xd45b45);
+carro2.scale.set(0.03, 0.03, 0.03);
+carro2.position.set(-30, 0.15, -5);
+cena.add(carro2);
+
+
 
 function detectCollision(obj1, obj2) {
   var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
@@ -801,18 +814,24 @@ function Start() {
     updateJump();
   }
 
-  // a
+
   function animatecar() {
-    var velocidadeX = 1;
+    var velocidadeX = 0.2;
     var limiteX = 30;
     var posicaoInicialX = -30;
 
-    carro.position.x += velocidadeX; // Movimenta carro no eixo x
-    //object.position.x += velocidadeX; // Movimenta carro importado no eixo x
+    carro.position.x += velocidadeX; //velocidade 
+    carro1.position.x += 0.4;
+    carro2.position.x += 0.3;
+
 
     // Verifica se o carro ultrapassou o limite do mapa
-    if (carro.position.x >= limiteX) {
-      carro.position.x = posicaoInicialX; // Volta o carro para a posição inicial
+    if (carro.position.x >= limiteX
+      && carro1.position.x >= limiteX 
+      && carro2.position.x >= limiteX) {
+      carro.position.x = posicaoInicialX;
+      carro1.position.x = posicaoInicialX;
+      carro2.position.x = posicaoInicialX; //posição inicial
     }
 
     requestAnimationFrame(animatecar);
@@ -821,7 +840,7 @@ function Start() {
   //de modo a começar só passado os segundos que quisermos
   setTimeout(function () {
     animatecar();
-  }, 5000);
+  }, 1000);
 
   cena.add(controls);
 
