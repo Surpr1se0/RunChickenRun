@@ -377,9 +377,9 @@ function renderCameras() {
     } else {
       // A câmera fica presa na última posição antes de ultrapassar maxX
       camera1.position.x = lastPositionX + 10;
-      camera1.position.y = lastPositionY + 10;
-      camera1.position.z = lastPositionZ + 10;
-      camera1.lookAt(lastPositionX, lastPositionY, lastPositionZ);
+      camera1.position.y = galinha.position.y + 10;
+      camera1.position.z = galinha.position.z + 10;
+      camera1.lookAt(lastPositionX, lastPositionY, camera1.position.z -10);
     }
   
     renderer.render(cena, camera1);
