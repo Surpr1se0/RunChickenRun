@@ -134,150 +134,102 @@ function Lake(
 
 function GenerateMap() {
   var roads = [
-    { lanes: 4, width: 1.5, x: -27, y: 0, z: 30 },
-    { lanes: 4, width: 1.5, x: -21, y: 0, z: 30 },
-    { lanes: 4, width: 1.5, x: -18, y: 0, z: 30 },
+
     { lanes: 4, width: 1.5, x: -12, y: 0, z: 30 },
     { lanes: 4, width: 1.5, x: -6, y: 0, z: 30 },
     { lanes: 4, width: 1.5, x: 0, y: 0, z: 30 },
     { lanes: 4, width: 1.5, x: 6, y: 0, z: 30 },
     { lanes: 4, width: 1.5, x: 12, y: 0, z: 30 },
-    { lanes: 4, width: 1.5, x: 18, y: 0, z: 30 },
-    { lanes: 4, width: 1.5, x: 21, y: 0, z: 30 },
-    { lanes: 4, width: 1.5, x: 27, y: 0, z: 30 },
 
-    { lanes: 1, width: 1.5, x: -27, y: 0, z: 27 },
-    { lanes: 1, width: 1.5, x: -21, y: 0, z: 27 },
-    { lanes: 1, width: 1.5, x: -18, y: 0, z: 27 },
+
+
     { lanes: 1, width: 1.5, x: -12, y: 0, z: 27 },
     { lanes: 1, width: 1.5, x: -6, y: 0, z: 27 },
     { lanes: 1, width: 1.5, x: 0, y: 0, z: 27 },
     { lanes: 1, width: 1.5, x: 6, y: 0, z: 27 },
     { lanes: 1, width: 1.5, x: 12, y: 0, z: 27 },
-    { lanes: 1, width: 1.5, x: 18, y: 0, z: 27 },
-    { lanes: 1, width: 1.5, x: 21, y: 0, z: 27 },
-    { lanes: 1, width: 1.5, x: 27, y: 0, z: 27 },
+
 
     // Primeira estrada
-    { lanes: 2, width: 1.5, x: -27, y: 0, z: 5 },
-    { lanes: 2, width: 1.5, x: -21, y: 0, z: 5 },
-    { lanes: 2, width: 1.5, x: -18, y: 0, z: 5 },
+
     { lanes: 2, width: 1.5, x: -12, y: 0, z: 5 },
     { lanes: 2, width: 1.5, x: -6, y: 0, z: 5 },
     { lanes: 2, width: 1.5, x: 0, y: 0, z: 5 },
     { lanes: 2, width: 1.5, x: 6, y: 0, z: 5 },
     { lanes: 2, width: 1.5, x: 12, y: 0, z: 5 },
-    { lanes: 2, width: 1.5, x: 18, y: 0, z: 5 },
-    { lanes: 2, width: 1.5, x: 21, y: 0, z: 5 },
-    { lanes: 2, width: 1.5, x: 27, y: 0, z: 5 },
 
-    { lanes: 3, width: 1.5, x: 27, y: 0, z: -1 },
-    { lanes: 3, width: 1.5, x: 21, y: 0, z: -1 },
-    { lanes: 3, width: 1.5, x: 18, y: 0, z: -1 },
+
+
     { lanes: 3, width: 1.5, x: 12, y: 0, z: -1 },
     { lanes: 3, width: 1.5, x: 0, y: 0, z: -1 },
     { lanes: 3, width: 1.5, x: 6, y: 0, z: -1 },
     { lanes: 3, width: 1.5, x: -6, y: 0, z: -1 },
     { lanes: 3, width: 1.5, x: -12, y: 0, z: -1 },
-    { lanes: 3, width: 1.5, x: -18, y: 0, z: -1 },
-    { lanes: 3, width: 1.5, x: -21, y: 0, z: -1 },
-    { lanes: 3, width: 1.5, x: -27, y: 0, z: -1 },
 
-    { lanes: 1, width: 1.5, x: -27, y: 0, z: -4.5 },
-    { lanes: 1, width: 1.5, x: -21, y: 0, z: -4.5 },
-    { lanes: 1, width: 1.5, x: -18, y: 0, z: -4.5 },
+
+
     { lanes: 1, width: 1.5, x: -12, y: 0, z: -4.5 },
     { lanes: 1, width: 1.5, x: -6, y: 0, z: -4.5 },
     { lanes: 1, width: 1.5, x: 0, y: 0, z: -4.5 },
     { lanes: 1, width: 1.5, x: 6, y: 0, z: -4.5 },
     { lanes: 1, width: 1.5, x: 12, y: 0, z: -4.5 },
-    { lanes: 1, width: 1.5, x: 18, y: 0, z: -4.5 },
-    { lanes: 1, width: 1.5, x: 21, y: 0, z: -4.5 },
-    { lanes: 1, width: 1.5, x: 27, y: 0, z: -4.5 },
 
-    { lanes: 4, width: 1.5, x: -27, y: 0, z: 10 },
-    { lanes: 4, width: 1.5, x: -21, y: 0, z: 10 },
-    { lanes: 4, width: 1.5, x: -18, y: 0, z: 10 },
+
+
     { lanes: 4, width: 1.5, x: -12, y: 0, z: 10 },
     { lanes: 4, width: 1.5, x: -6, y: 0, z: 10 },
     { lanes: 4, width: 1.5, x: 0, y: 0, z: 10 },
     { lanes: 4, width: 1.5, x: 6, y: 0, z: 10 },
     { lanes: 4, width: 1.5, x: 12, y: 0, z: 10 },
-    { lanes: 4, width: 1.5, x: 18, y: 0, z: 10 },
-    { lanes: 4, width: 1.5, x: 21, y: 0, z: 10 },
-    { lanes: 4, width: 1.5, x: 27, y: 0, z: 10 },
 
-    { lanes: 3, width: 1.5, x: 27, y: 0, z: 21 },
-    { lanes: 3, width: 1.5, x: 21, y: 0, z: 21 },
-    { lanes: 3, width: 1.5, x: 18, y: 0, z: 21 },
+
+
     { lanes: 3, width: 1.5, x: 12, y: 0, z: 21 },
     { lanes: 3, width: 1.5, x: 0, y: 0, z: 21 },
     { lanes: 3, width: 1.5, x: 6, y: 0, z: 21 },
     { lanes: 3, width: 1.5, x: -6, y: 0, z: 21 },
     { lanes: 3, width: 1.5, x: -12, y: 0, z: 21 },
-    { lanes: 3, width: 1.5, x: -18, y: 0, z: 21 },
-    { lanes: 3, width: 1.5, x: -21, y: 0, z: 21 },
-    { lanes: 3, width: 1.5, x: -27, y: 0, z: 21 },
 
-    { lanes: 1, width: 1.5, x: -27, y: 0, z: -10 },
-    { lanes: 1, width: 1.5, x: -21, y: 0, z: -10 },
-    { lanes: 1, width: 1.5, x: -18, y: 0, z: -10 },
+
+
     { lanes: 1, width: 1.5, x: -12, y: 0, z: -10 },
     { lanes: 1, width: 1.5, x: -6, y: 0, z: -10 },
     { lanes: 1, width: 1.5, x: 0, y: 0, z: -10 },
     { lanes: 1, width: 1.5, x: 6, y: 0, z: -10 },
     { lanes: 1, width: 1.5, x: 12, y: 0, z: -10 },
-    { lanes: 1, width: 1.5, x: 18, y: 0, z: -10 },
-    { lanes: 1, width: 1.5, x: 21, y: 0, z: -10 },
-    { lanes: 1, width: 1.5, x: 27, y: 0, z: -10 },
 
-    { lanes: 4, width: 1.5, x: -27, y: 0, z: -17 },
-    { lanes: 4, width: 1.5, x: -21, y: 0, z: -17 },
-    { lanes: 4, width: 1.5, x: -18, y: 0, z: -17 },
+
+
     { lanes: 4, width: 1.5, x: -12, y: 0, z: -17 },
     { lanes: 4, width: 1.5, x: -6, y: 0, z: -17 },
     { lanes: 4, width: 1.5, x: 0, y: 0, z: -17 },
     { lanes: 4, width: 1.5, x: 6, y: 0, z: -17 },
     { lanes: 4, width: 1.5, x: 12, y: 0, z: -17 },
-    { lanes: 4, width: 1.5, x: 18, y: 0, z: -17 },
-    { lanes: 4, width: 1.5, x: 21, y: 0, z: -17 },
-    { lanes: 4, width: 1.5, x: 27, y: 0, z: -17 },
 
-    { lanes: 3, width: 1.5, x: 27, y: 0, z: -23 },
-    { lanes: 3, width: 1.5, x: 21, y: 0, z: -23 },
-    { lanes: 3, width: 1.5, x: 18, y: 0, z: -23 },
+
+
     { lanes: 3, width: 1.5, x: 12, y: 0, z: -23 },
     { lanes: 3, width: 1.5, x: 0, y: 0, z: -23 },
     { lanes: 3, width: 1.5, x: 6, y: 0, z: -23 },
     { lanes: 3, width: 1.5, x: -6, y: 0, z: -23 },
     { lanes: 3, width: 1.5, x: -12, y: 0, z: -23 },
-    { lanes: 3, width: 1.5, x: -18, y: 0, z: -23 },
-    { lanes: 3, width: 1.5, x: -21, y: 0, z: -23 },
-    { lanes: 3, width: 1.5, x: -27, y: 0, z: -23 },
 
-    { lanes: 3, width: 1.5, x: 27, y: 0, z: -32 },
-    { lanes: 3, width: 1.5, x: 21, y: 0, z: -32 },
-    { lanes: 3, width: 1.5, x: 18, y: 0, z: -32 },
+
+
     { lanes: 3, width: 1.5, x: 12, y: 0, z: -32 },
     { lanes: 3, width: 1.5, x: 0, y: 0, z: -32 },
     { lanes: 3, width: 1.5, x: 6, y: 0, z: -32 },
     { lanes: 3, width: 1.5, x: -6, y: 0, z: -32 },
     { lanes: 3, width: 1.5, x: -12, y: 0, z: -32 },
-    { lanes: 3, width: 1.5, x: -18, y: 0, z: -32 },
-    { lanes: 3, width: 1.5, x: -21, y: 0, z: -32 },
-    { lanes: 3, width: 1.5, x: -27, y: 0, z: -32 },
 
-    { lanes: 1, width: 1.5, x: -27, y: 0, z: -35 },
-    { lanes: 1, width: 1.5, x: -21, y: 0, z: -35 },
-    { lanes: 1, width: 1.5, x: -18, y: 0, z: -35 },
+
+
     { lanes: 1, width: 1.5, x: -12, y: 0, z: -35 },
     { lanes: 1, width: 1.5, x: -6, y: 0, z: -35 },
     { lanes: 1, width: 1.5, x: 0, y: 0, z: -35 },
     { lanes: 1, width: 1.5, x: 6, y: 0, z: -35 },
     { lanes: 1, width: 1.5, x: 12, y: 0, z: -35 },
-    { lanes: 1, width: 1.5, x: 18, y: 0, z: -35 },
-    { lanes: 1, width: 1.5, x: 21, y: 0, z: -35 },
-    { lanes: 1, width: 1.5, x: 27, y: 0, z: -35 },
+
   ];
 
   for (var i = 0; i < roads.length; i++) {
@@ -295,41 +247,29 @@ function GenerateMap() {
   }
 
   var lakes = [
-    { x: -27, y: 0, z: -7 },
-    { x: -21, y: 0, z: -7 },
-    { x: -18, y: 0, z: -7 },
+
     { x: -12, y: 0, z: -7 },
     { x: -6, y: 0, z: -7 },
     { x: 0, y: 0, z: -7 },
     { x: 6, y: 0, z: -7 },
     { x: 12, y: 0, z: -7 },
-    { x: 18, y: 0, z: -7 },
-    { x: 21, y: 0, z: -7 },
-    { x: 27, y: 0, z: -7 },
 
-    { x: -27, y: 0, z: 18 },
-    { x: -21, y: 0, z: 18 },
-    { x: -18, y: 0, z: 18 },
+
+
     { x: -12, y: 0, z: 18 },
     { x: -6, y: 0, z: 18 },
     { x: 0, y: 0, z: 18 },
     { x: 6, y: 0, z: 18 },
     { x: 12, y: 0, z: 18 },
-    { x: 18, y: 0, z: 18 },
-    { x: 21, y: 0, z: 18 },
-    { x: 27, y: 0, z: 18 },
 
-    { x: -27, y: 0, z: -26 },
-    { x: -21, y: 0, z: -26 },
-    { x: -18, y: 0, z: -26 },
+
+
     { x: -12, y: 0, z: -26 },
     { x: -6, y: 0, z: -26 },
     { x: 0, y: 0, z: -26 },
     { x: 6, y: 0, z: -26 },
     { x: 12, y: 0, z: -26 },
-    { x: 18, y: 0, z: -26 },
-    { x: 21, y: 0, z: -26 },
-    { x: 27, y: 0, z: -26 },
+
   ];
 
   for (var i = 0; i < lakes.length; i++) {

@@ -357,19 +357,31 @@ function renderizarMuroBaixo() {
 
 function renderCameras() {
   // Renderizar a cena com a câmera ativa
+  var maxX = 3;
+  var minY = -3;
 
   var toggleButton = document.getElementById("toggleButton");
 
   if (isCamera1Active) {
-    camera1.position.x = galinha.position.x + 10;
-    camera1.position.y = galinha.position.y + 10;
-    camera1.position.z = galinha.position.z + 10;
+    if (minY <= galinha.position.x && galinha.position.x <= maxX) {
+      // A câmera segue a galinha
+      camera1.position.x = galinha.position.x + 10;
+      camera1.position.y = galinha.position.y + 10;
+      camera1.position.z = galinha.position.z + 10;
+  
+      lastPositionX = galinha.position.x; 
+      lastPositionY = galinha.position.y;
+      lastPositionZ = galinha.position.z;
+      camera1.lookAt(galinha.position);
 
-    camera2.position.x = galinha.position.x + 0;
-    camera2.position.y = galinha.position.y + 3;
-    camera2.position.z = galinha.position.z + 6;
-
-    camera1.lookAt(galinha.position);
+    } else {
+      // A câmera fica presa na última posição antes de ultrapassar maxX
+      camera1.position.x = lastPositionX + 10;
+      camera1.position.y = lastPositionY + 10;
+      camera1.position.z = lastPositionZ + 10;
+      camera1.lookAt(lastPositionX, lastPositionY, lastPositionZ);
+    }
+  
     renderer.render(cena, camera1);
 
     toggleButton.addEventListener("click", function () {

@@ -13,7 +13,7 @@ var isCamera2Active = false;
 var iscamera3Active = false;
 
 // Definir a primeira câmera
-var zoomFactor = 55; // Fator de zoom, 2 para dobrar o tamanho visível
+var zoomFactor = 60; // Fator de zoom, 2 para dobrar o tamanho visível
 var width = window.innerWidth;
 var height = window.innerHeight;
 
@@ -243,18 +243,17 @@ function Carro() {
   farolFrontalDireito.angle = Math.PI / 3; // Ângulo de abertura do farol
   farolFrontalDireito.penumbra = 0.2; // Suavidade das bordas do feixe de luz
   farolFrontalDireito.distance = 150; // Alcance do farol
-  
+
   carro.add(farolFrontalEsquerdo);
   carro.add(farolFrontalEsquerdo.target);
   carro.add(farolFrontalDireito);
   carro.add(farolFrontalDireito.target);
-  
+
   // Farol traseiro vermelho
   var farolTraseiro = new THREE.SpotLight(0xff0000, 0.2); // Cor vermelha
   farolTraseiro.position.set(-30, 0, -5); // Posição relativa ao carro
   farolTraseiro.target.position.set(-100, 0, 0); // Alvo para a luz (apontando para a frente)
 
-  
   carro.add(farolTraseiro);
   carro.add(farolTraseiro.target);
 
@@ -385,19 +384,30 @@ function renderizarMuroBaixo() {
 
 function renderCameras() {
   // Renderizar a cena com a câmera ativa
+  var maxX = 3;
+  var minY = -3;
 
   var toggleButton = document.getElementById("toggleButton");
 
   if (isCamera1Active) {
-    camera1.position.x = galinha.position.x + 10;
-    camera1.position.y = galinha.position.y + 10;
-    camera1.position.z = galinha.position.z + 10;
+    if (minY <= galinha.position.x && galinha.position.x <= maxX) {
+      // A câmera segue a galinha
+      camera1.position.x = galinha.position.x + 10;
+      camera1.position.y = galinha.position.y + 10;
+      camera1.position.z = galinha.position.z + 10;
 
-    camera2.position.x = galinha.position.x + 0;
-    camera2.position.y = galinha.position.y + 3;
-    camera2.position.z = galinha.position.z + 6;
+      lastPositionX = galinha.position.x;
+      lastPositionY = galinha.position.y;
+      lastPositionZ = galinha.position.z;
+      camera1.lookAt(galinha.position);
+    } else {
+      // A câmera fica presa na última posição antes de ultrapassar maxX
+      camera1.position.x = lastPositionX + 10;
+      camera1.position.y = lastPositionY + 10;
+      camera1.position.z = lastPositionZ + 10;
+      camera1.lookAt(lastPositionX, lastPositionY, lastPositionZ);
+    }
 
-    camera1.lookAt(galinha.position);
     renderer.render(cena, camera1);
 
     toggleButton.addEventListener("click", function () {
@@ -434,6 +444,44 @@ function renderCameras() {
       isCamera3Active = false;
     });
   }
+}
+
+function Lamp() {
+  var lamp = new THREE.Group();
+
+  var bottom = new THREE.Mesh(
+    new THREE.BoxGeometry(0.1, 4, 0.1),
+    new THREE.MeshStandardMaterial({ color: 0x000000 })
+  );
+
+  bottom.castShadow = true;
+  bottom.position.set(0, 0, 0);
+  lamp.add(bottom);
+
+  var top = new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 0.1, 0.1),
+    new THREE.MeshStandardMaterial({ color: 0x000000 })
+  );
+
+  var PointLight = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(0.1, 0),
+    new THREE.MeshStandardMaterial({ color: 0xffff00 })
+  );
+  top.position.set(0.2, 2, 0);
+  top.castShadow = true;
+  PointLight.position.set(0.25, -0.1, 0);
+  top.add(PointLight);
+  lamp.add(top);
+
+  // Adicionar foco de luz
+  var spotLight = new THREE.SpotLight(0xffffff, 1, 10, Math.PI / 3, 0.5);
+  spotLight.position.set(0, 3, 0);
+  spotLight.target.position.set(0, 0, 0);
+  lamp.add(spotLight);
+  lamp.add(spotLight.target);
+
+  lamp.rotation.y = Math.PI / 2;
+  return lamp;
 }
 
 var importer = new THREE.FBXLoader();
@@ -618,6 +666,32 @@ for (var i = 0; i < objetos.length; i++) {
   cena.add(arvore);
 }
 
+// Definir as posições das lâmpadas
+var lampPositions = [
+  { x: 10, y: 0, z: -3 },
+  { x: 0, y: 0, z: -3 },
+  { x: -10, y: 0, z: -3 },
+
+  { x: 10, y: 0, z: 3 },
+  { x: 0, y: 0, z: 3 },
+  { x: -10, y: 0, z: 3 },
+
+  { x: 13, y: 0, z: 8 },
+  { x: 3, y: 0, z: 8 },
+  { x: -13, y: 0, z: 8 },
+
+  { x: 13, y: 0, z: 16 },
+  { x: 3, y: 0, z: 16 },
+  { x: -13, y: 0, z: 16 },
+];
+
+// Criar e adicionar as lâmpadas à cena
+lampPositions.forEach(function (position) {
+  var lamp = new Lamp();
+  lamp.position.set(position.x, position.y, position.z);
+  cena.add(lamp);
+});
+
 var muro = new renderizarMuro();
 var muro_dir = new renderizarMuroDireito();
 var muro_cima = new renderizarMuroCima();
@@ -670,47 +744,6 @@ function checkCollisions() {
     }
   }
 }
-
-function Lamp() {
-  var lamp = new THREE.Group();
-
-  var bottom = new THREE.Mesh(
-    new THREE.BoxGeometry(0.1, 4, 0.1),
-    new THREE.MeshStandardMaterial({ color: 0x000000 })
-  );
-
-  bottom.castShadow = true;
-  bottom.position.set(0, 0, 0);
-  lamp.add(bottom);
-
-  var top = new THREE.Mesh(
-    new THREE.BoxGeometry(0.5, 0.1, 0.1),
-    new THREE.MeshStandardMaterial({ color: 0x000000 })
-  );
-
-  var PointLight = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(0.1, 0),
-    new THREE.MeshStandardMaterial({ color: 0xffff00 })
-  );
-  top.position.set(0.2, 2, 0);
-  top.castShadow = true;
-  PointLight.position.set(0.25, -0.1, 0);
-  top.add(PointLight);
-  lamp.add(top);
-
-  // Adicionar foco de luz
-  var spotLight = new THREE.SpotLight(0xffffff, 1, 10, Math.PI / 3, 0.5);
-  spotLight.position.set(0, 3, 0);
-  spotLight.target.position.set(0, 0, 0);
-  lamp.add(spotLight);
-  lamp.add(spotLight.target);
-
-  lamp.rotation.y = Math.PI / 2;
-  return lamp;
-}
-
-var lamp = Lamp();
-cena.add(lamp);
 
 function Start() {
   GenerateMap();
@@ -877,12 +910,6 @@ function Start() {
   setTimeout(function () {
     animatecar();
   }, 5000);
-
-  cena.add(controls);
-
-  // criar os axis
-  const axesHelper = new THREE.AxesHelper(10);
-  cena.add(axesHelper);
 
   cena.add(new THREE.AmbientLight(0x333333, 0.2));
   luz = new THREE.DirectionalLight(0x6699ff, 0.05);
