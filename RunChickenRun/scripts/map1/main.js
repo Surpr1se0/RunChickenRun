@@ -643,6 +643,8 @@ function checkCollisions() {
   }
 }
 
+
+
 function Start() {
   GenerateMap();
 

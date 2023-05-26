@@ -230,6 +230,34 @@ function Carro() {
   var boundingBox = new THREE.Box3().setFromObject(carro);
   carro.boundingBox = boundingBox;
 
+  var farolFrontalEsquerdo = new THREE.SpotLight(0xffffff, 1); // Cor branca
+  farolFrontalEsquerdo.position.set(27, 5, -2); // Posição relativa ao carro
+  farolFrontalEsquerdo.target.position.set(100, 0, 0); // Alvo para a luz (apontando para a frente)
+  farolFrontalEsquerdo.angle = Math.PI / 3; // Ângulo de abertura do farol
+  farolFrontalEsquerdo.penumbra = 0.2; // Suavidade das bordas do feixe de luz
+  farolFrontalEsquerdo.distance = 150; // Alcance do farol
+
+  var farolFrontalDireito = new THREE.SpotLight(0xffffff, 1); // Cor branca
+  farolFrontalDireito.position.set(27, 5, -20); // Posição relativa ao carro
+  farolFrontalDireito.target.position.set(100, 0, 0); // Alvo para a luz (apontando para a frente)
+  farolFrontalDireito.angle = Math.PI / 3; // Ângulo de abertura do farol
+  farolFrontalDireito.penumbra = 0.2; // Suavidade das bordas do feixe de luz
+  farolFrontalDireito.distance = 150; // Alcance do farol
+  
+  carro.add(farolFrontalEsquerdo);
+  carro.add(farolFrontalEsquerdo.target);
+  carro.add(farolFrontalDireito);
+  carro.add(farolFrontalDireito.target);
+  
+  // Farol traseiro vermelho
+  var farolTraseiro = new THREE.SpotLight(0xff0000, 0.2); // Cor vermelha
+  farolTraseiro.position.set(-30, 0, -5); // Posição relativa ao carro
+  farolTraseiro.target.position.set(-100, 0, 0); // Alvo para a luz (apontando para a frente)
+
+  
+  carro.add(farolTraseiro);
+  carro.add(farolTraseiro.target);
+
   return carro;
 }
 
@@ -643,6 +671,47 @@ function checkCollisions() {
   }
 }
 
+function Lamp() {
+  var lamp = new THREE.Group();
+
+  var bottom = new THREE.Mesh(
+    new THREE.BoxGeometry(0.1, 4, 0.1),
+    new THREE.MeshStandardMaterial({ color: 0x000000 })
+  );
+
+  bottom.castShadow = true;
+  bottom.position.set(0, 0, 0);
+  lamp.add(bottom);
+
+  var top = new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 0.1, 0.1),
+    new THREE.MeshStandardMaterial({ color: 0x000000 })
+  );
+
+  var PointLight = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(0.1, 0),
+    new THREE.MeshStandardMaterial({ color: 0xffff00 })
+  );
+  top.position.set(0.2, 2, 0);
+  top.castShadow = true;
+  PointLight.position.set(0.25, -0.1, 0);
+  top.add(PointLight);
+  lamp.add(top);
+
+  // Adicionar foco de luz
+  var spotLight = new THREE.SpotLight(0xffffff, 1, 10, Math.PI / 3, 0.5);
+  spotLight.position.set(0, 3, 0);
+  spotLight.target.position.set(0, 0, 0);
+  lamp.add(spotLight);
+  lamp.add(spotLight.target);
+
+  lamp.rotation.y = Math.PI / 2;
+  return lamp;
+}
+
+var lamp = Lamp();
+cena.add(lamp);
+
 function Start() {
   GenerateMap();
 
@@ -815,11 +884,8 @@ function Start() {
   const axesHelper = new THREE.AxesHelper(10);
   cena.add(axesHelper);
 
-  // cria a luz
-  var luzAmbiente = new THREE.AmbientLight(0xffffff, 0.1); // Cor: branco, Intensidade: 0.5
-  cena.add(luzAmbiente);
-
-  luz = new THREE.DirectionalLight(0xffffff, 0.4);
+  cena.add(new THREE.AmbientLight(0x333333, 0.2));
+  luz = new THREE.DirectionalLight(0x6699ff, 0.05);
   luz.position.set(-20, 25, 0);
   luz.castShadow = true;
   luz.shadow.mapSize.width = 1024; // Resolução horizontal da sombra
