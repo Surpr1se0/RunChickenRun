@@ -70,9 +70,7 @@ function toggleCamera() {
   renderCameras();
 }
 
-
 //Skybox
-
 var textura_direita = new THREE.TextureLoader().load(
   "./Images/skybox_dia/negx.jpg"
 );
@@ -497,7 +495,7 @@ document.body.appendChild(renderer.domElement);
 var galinha = new Galinha();
 cena.add(galinha);
 galinha.scale.set(0.05, 0.05, 0.05);
-galinha.position.set(-3, 0.3, 35.5); // posição inicial da galinha
+galinha.position.set(-3, 0.3, -23); // posição inicial da galinha
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
@@ -749,8 +747,7 @@ function checkCollisions() {
       detectCollision(galinha, arvore) ||
       detectCollision(galinha, muro) ||
       detectCollision(galinha, muro_dir) ||
-      detectCollision(galinha, muro_baixo) ||
-      detectCollision(galinha, muro_cima)
+      detectCollision(galinha, muro_baixo)
     ) {
       // Colisão detectada entre a galinha e a árvore
       console.log("Colisão detectada!");
@@ -773,6 +770,22 @@ function checkCollisions() {
         galinha.position.set(0, 0.3, 0); // Redefinir posição da galinha
 
         var endGameElement = document.getElementById("endGame");
+        endGameElement.style.visibility = "hidden";
+      });
+    }
+    if(detectCollision(galinha, muro_cima))
+    {
+      var retryButton = document.getElementById("retryButton");
+      var endGameElement = document.getElementById("finished");
+
+      endGameElement.style.visibility = "visible";
+
+      retryButton.addEventListener("click", function () {
+        // Recarregar a página
+        contador = 0;
+        galinha.position.set(0, 0.3, 0); // Redefinir posição da galinha
+
+        var endGameElement = document.getElementById("finished");
         endGameElement.style.visibility = "hidden";
       });
     }

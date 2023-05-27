@@ -81,6 +81,13 @@ svg {
   height: 100vh;
 }
 
+#finished {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
 #retryButton {
   background-color: transparent;
   border: 2px solid #1a1a1a;
@@ -151,6 +158,15 @@ svg {
 }
 
 #endGame {
+  position: absolute;
+  visibility: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+#finished {
   position: absolute;
   visibility: hidden;
   top: 50%;
