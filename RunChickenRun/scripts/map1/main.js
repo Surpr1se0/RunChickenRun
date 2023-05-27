@@ -70,23 +70,26 @@ function toggleCamera() {
   renderCameras();
 }
 
+
+//Skybox
+
 var textura_direita = new THREE.TextureLoader().load(
-  "./Images/skybox_dia/right.jpg"
+  "./Images/skybox_dia/negx.jpg"
 );
 var textura_esquerda = new THREE.TextureLoader().load(
-  "./Images/skybox_dia/left.jpg"
+  "./Images/skybox_dia/negy.jpg"
 );
 var textura_cima = new THREE.TextureLoader().load(
-  "./Images/skybox_dia/top.jpg"
+  "./Images/skybox_dia/negz.jpg"
 );
 var textura_baixo = new THREE.TextureLoader().load(
-  "./Images/skybox_dia/bottom.jpg"
+  "./Images/skybox_dia/posx.jpg"
 );
 var textura_tras = new THREE.TextureLoader().load(
-  "./Images/skybox_dia/back.jpg"
+  "./Images/skybox_dia/posy.jpg"
 );
 var textura_frente = new THREE.TextureLoader().load(
-  "./Images/skybox_dia/front.jpg"
+  "./Images/skybox_dia/posz.jpg"
 );
 
 var materialArray = [];
@@ -105,6 +108,8 @@ var skyboxGeo = new THREE.BoxGeometry(50, 50, 50); // alterar conforme o tamanho
 var skybox = new THREE.Mesh(skyboxGeo, materialArray);
 
 cena.add(skybox);
+
+//Skybox
 
 function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
   var tree = new THREE.Group();
