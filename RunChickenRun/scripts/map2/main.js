@@ -1011,7 +1011,7 @@ function Start() {
   }, 5000);
 
   cena.add(new THREE.AmbientLight(0x333333, 0.2));
-  luz = new THREE.DirectionalLight(0x6699ff, 0.05);
+  luz = new THREE.DirectionalLight(0x6699ff, 0.25);
   luz.position.set(-20, 25, 0);
   luz.castShadow = true;
   luz.shadow.mapSize.width = 1024; // Resolução horizontal da sombra
