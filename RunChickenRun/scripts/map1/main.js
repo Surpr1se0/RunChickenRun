@@ -13,7 +13,7 @@ var isCamera2Active = false;
 var iscamera3Active = false;
 
 // Definir a primeira câmera
-var zoomFactor = 55; // Fator de zoom, 2 para dobrar o tamanho visível
+var zoomFactor = 60; // Fator de zoom, 2 para dobrar o tamanho visível
 var width = window.innerWidth;
 var height = window.innerHeight;
 
@@ -233,7 +233,62 @@ function Carro(color) {
   return carro;
 }
 
-// Centro de rotação da galinha errado tentar corrigir
+function Truck(color1, color2) {
+  var truck = new THREE.Group();
+
+  var rodastraseiras = Rodas();
+  rodastraseiras.position.y = 5;
+  rodastraseiras.position.x = -7;
+  truck.add(rodastraseiras);
+
+  var rodastraseiras1 = Rodas();
+  rodastraseiras1.position.y = 10;
+  rodastraseiras1.position.x = -130;
+  rodastraseiras1.position.z = 7;
+
+  truck.add(rodastraseiras1);
+
+  var rodasfrente1 = Rodas();
+  rodasfrente1.position.y = 10;
+  rodasfrente1.position.x = -50;
+  rodasfrente1.position.z = 7;
+  truck.add(rodasfrente1);
+
+  var cabine = new THREE.Mesh(
+    new THREE.BoxGeometry(40, 50, 40),
+    new THREE.MeshLambertMaterial({ color: color1 })
+  );
+  cabine.position.y = 35;
+  cabine.position.x = -8;
+  cabine.position.z = -7;
+
+  truck.add(cabine);
+
+  var cabine1 = new THREE.Mesh(
+    new THREE.BoxGeometry(20, 15, 45),
+    new THREE.MeshLambertMaterial({ color: 0x4f4e4e })
+  );
+  cabine1.position.y = 40;
+  cabine1.position.x = 4;
+  cabine1.position.z = -8;
+  truck.add(cabine1);
+
+  var galera = new THREE.Mesh(
+    new THREE.BoxGeometry(120, 70, 50),
+    new THREE.MeshLambertMaterial({ color: color2 })
+  );
+  galera.position.x = -90;
+  galera.position.y = 45;
+  galera.position.z = -5;
+
+  truck.add(galera);
+
+  var boundingBox = new THREE.Box3().setFromObject(truck);
+  truck.boundingBox = boundingBox;
+
+  return truck;
+}
+
 function Galinha() {
   var galinha = new THREE.Group();
 
@@ -624,11 +679,10 @@ carro1.scale.set(0.03, 0.03, 0.03);
 carro1.position.set(-30, 0.15, -2);
 cena.add(carro1);
 
-var carro2 = new Carro(0xd45b45);
-carro2.scale.set(0.03, 0.03, 0.03);
-carro2.position.set(-30, 0.15, -5);
-cena.add(carro2);
-
+var truck = new Truck(0xd45b45);
+truck.scale.set(-0.03, 0.03, 0.03);
+truck.position.set(0, 0.15, -5);
+cena.add(truck);
 
 
 function detectCollision(obj1, obj2) {
@@ -667,8 +721,6 @@ function checkCollisions() {
     }
   }
 }
-
-
 
 function Start() {
   GenerateMap();
@@ -818,20 +870,21 @@ function Start() {
   function animatecar() {
     var velocidadeX = 0.2;
     var limiteX = 30;
+    var limiteXInverso = -30;
     var posicaoInicialX = -30;
+    var posicaoInicialXInverso = 30;
 
     carro.position.x += velocidadeX; //velocidade 
     carro1.position.x += 0.4;
-    carro2.position.x += 0.3;
-
+    truck.position.x -= 0.1;
 
     // Verifica se o carro ultrapassou o limite do mapa
     if (carro.position.x >= limiteX
       && carro1.position.x >= limiteX 
-      && carro2.position.x >= limiteX) {
+      && truck.position.x <= limiteXInverso) {
       carro.position.x = posicaoInicialX;
       carro1.position.x = posicaoInicialX;
-      carro2.position.x = posicaoInicialX; //posição inicial
+      truck.position.x = posicaoInicialXInverso; //posição inicial
     }
 
     requestAnimationFrame(animatecar);
