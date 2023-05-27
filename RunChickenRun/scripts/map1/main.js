@@ -725,7 +725,10 @@ function checkCollisions() {
       retryButton.addEventListener("click", function () {
         // Recarregar a página
         contador = 0;
-        location.href = location.href;
+        galinha.position.set(0, 0.3, 0); // Redefinir posição da galinha
+
+        var endGameElement = document.getElementById("endGame");
+        endGameElement.style.visibility = "hidden"; 
       });
     }
   }
