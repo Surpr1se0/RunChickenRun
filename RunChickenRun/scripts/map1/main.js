@@ -13,7 +13,7 @@ var isCamera2Active = false;
 var iscamera3Active = false;
 
 // Definir a primeira câmera
-var zoomFactor = 60; // Fator de zoom, 2 para dobrar o tamanho visível
+var zoomFactor = 65; // Fator de zoom, 2 para dobrar o tamanho visível
 var width = window.innerWidth;
 var height = window.innerHeight;
 
@@ -676,12 +676,12 @@ cena.add(carro);
 
 var carro1 = new Carro(0x063970);
 carro1.scale.set(0.03, 0.03, 0.03);
-carro1.position.set(-30, 0.15, -2);
+carro1.position.set(-30, 0.15, 1.4);
 cena.add(carro1);
 
 var truck = new Truck(0xd45b45);
 truck.scale.set(-0.03, 0.03, 0.03);
-truck.position.set(0, 0.15, -5);
+truck.position.set(0, 0.15, -4.5);
 cena.add(truck);
 
 
