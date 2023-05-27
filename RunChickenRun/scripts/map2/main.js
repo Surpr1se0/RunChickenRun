@@ -250,7 +250,7 @@ function Carro() {
   carro.add(farolFrontalDireito.target);
 
   // Farol traseiro vermelho
-  var farolTraseiro = new THREE.SpotLight(0xff0000, 0.2); // Cor vermelha
+  var farolTraseiro = new THREE.SpotLight(0xff0000, 0.1); // Cor vermelha
   farolTraseiro.position.set(-30, 0, -5); // Posição relativa ao carro
   farolTraseiro.target.position.set(-100, 0, 0); // Alvo para a luz (apontando para a frente)
 
@@ -258,6 +258,88 @@ function Carro() {
   carro.add(farolTraseiro.target);
 
   return carro;
+}
+
+function Truck(color1, color2) {
+  var truck = new THREE.Group();
+
+  var rodastraseiras = Rodas();
+  rodastraseiras.position.y = 5;
+  rodastraseiras.position.x = -7;
+  truck.add(rodastraseiras);
+
+  var rodastraseiras1 = Rodas();
+  rodastraseiras1.position.y = 10;
+  rodastraseiras1.position.x = -130;
+  rodastraseiras1.position.z = 7;
+
+  truck.add(rodastraseiras1);
+
+  var rodasfrente1 = Rodas();
+  rodasfrente1.position.y = 10;
+  rodasfrente1.position.x = -50;
+  rodasfrente1.position.z = 7;
+  truck.add(rodasfrente1);
+
+  var cabine = new THREE.Mesh(
+    new THREE.BoxGeometry(40, 50, 40),
+    new THREE.MeshLambertMaterial({ color: color1 })
+  );
+  cabine.position.y = 35;
+  cabine.position.x = -8;
+  cabine.position.z = -7;
+
+  truck.add(cabine);
+
+  var cabine1 = new THREE.Mesh(
+    new THREE.BoxGeometry(20, 15, 45),
+    new THREE.MeshLambertMaterial({ color: 0x4f4e4e })
+  );
+  cabine1.position.y = 40;
+  cabine1.position.x = 4;
+  cabine1.position.z = -8;
+  truck.add(cabine1);
+
+  var galera = new THREE.Mesh(
+    new THREE.BoxGeometry(120, 70, 50),
+    new THREE.MeshLambertMaterial({ color: color2 })
+  );
+  galera.position.x = -90;
+  galera.position.y = 45;
+  galera.position.z = -5;
+
+  truck.add(galera);
+
+  var farolFrontalEsquerdo = new THREE.SpotLight(0xffffff, 1); // Cor branca
+  farolFrontalEsquerdo.position.set(27, 5, -2); // Posição relativa ao carro
+  farolFrontalEsquerdo.target.position.set(100, 0, 0); // Alvo para a luz (apontando para a frente)
+  farolFrontalEsquerdo.angle = Math.PI / 3; // Ângulo de abertura do farol
+  farolFrontalEsquerdo.penumbra = 0.2; // Suavidade das bordas do feixe de luz
+  farolFrontalEsquerdo.distance = 150; // Alcance do farol
+
+  var farolFrontalDireito = new THREE.SpotLight(0xffffff, 1); // Cor branca
+  farolFrontalDireito.position.set(27, 5, -20); // Posição relativa ao carro
+  farolFrontalDireito.target.position.set(100, 0, 0); // Alvo para a luz (apontando para a frente)
+  farolFrontalDireito.angle = Math.PI / 3; // Ângulo de abertura do farol
+  farolFrontalDireito.penumbra = 0.2; // Suavidade das bordas do feixe de luz
+  farolFrontalDireito.distance = 150; // Alcance do farol
+
+  truck.add(farolFrontalEsquerdo);
+  truck.add(farolFrontalEsquerdo.target);
+  truck.add(farolFrontalDireito);
+  truck.add(farolFrontalDireito.target);
+
+  // Farol traseiro vermelho
+  var farolTraseiro = new THREE.SpotLight(0xff0000, 0.1); // Cor vermelha
+  farolTraseiro.position.set(-30, 0, -5); // Posição relativa ao carro
+  farolTraseiro.target.position.set(-100, 0, 0); // Alvo para a luz (apontando para a frente)
+  truck.add(farolTraseiro);
+  truck.add(farolTraseiro.target);
+
+  var boundingBox = new THREE.Box3().setFromObject(truck);
+  truck.boundingBox = boundingBox;
+
+  return truck;
 }
 
 // Centro de rotação da galinha errado tentar corrigir
@@ -709,6 +791,16 @@ carro.scale.set(0.03, 0.03, 0.03);
 carro.position.set(-30, 0.15, -0.2);
 cena.add(carro);
 
+var carro1 = new Carro(0x063970);
+carro1.scale.set(0.03, 0.03, 0.03);
+carro1.position.set(-30, 0.15, 1.4);
+cena.add(carro1);
+
+var truck = new Truck(0xd45b45);
+truck.scale.set(-0.03, 0.03, 0.03);
+truck.position.set(0, 0.15, -4.5);
+cena.add(truck);
+
 function detectCollision(obj1, obj2) {
   var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
   var box2 = obj2.boundingBox.clone().applyMatrix4(obj2.matrixWorld);
@@ -890,18 +982,24 @@ function Start() {
     updateJump();
   }
 
-  // a
   function animatecar() {
-    var velocidadeX = 1;
+    var velocidadeX = 0.2;
     var limiteX = 30;
+    var limiteXInverso = -30;
     var posicaoInicialX = -30;
+    var posicaoInicialXInverso = 30;
 
-    carro.position.x += velocidadeX; // Movimenta carro no eixo x
-    //object.position.x += velocidadeX; // Movimenta carro importado no eixo x
+    carro.position.x += velocidadeX; //velocidade 
+    carro1.position.x += 0.4;
+    truck.position.x -= 0.1;
 
     // Verifica se o carro ultrapassou o limite do mapa
-    if (carro.position.x >= limiteX) {
-      carro.position.x = posicaoInicialX; // Volta o carro para a posição inicial
+    if (carro.position.x >= limiteX
+      && carro1.position.x >= limiteX 
+      && truck.position.x <= limiteXInverso) {
+      carro.position.x = posicaoInicialX;
+      carro1.position.x = posicaoInicialX;
+      truck.position.x = posicaoInicialXInverso; //posição inicial
     }
 
     requestAnimationFrame(animatecar);

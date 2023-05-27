@@ -673,7 +673,6 @@ var carro = new Carro(0x78b14b);
 carro.scale.set(0.03, 0.03, 0.03);
 carro.position.set(-30, 0.15, -0.2);
 cena.add(carro);
-
 var carro1 = new Carro(0x063970);
 carro1.scale.set(0.03, 0.03, 0.03);
 carro1.position.set(-30, 0.15, 1.4);
@@ -684,6 +683,14 @@ truck.scale.set(-0.03, 0.03, 0.03);
 truck.position.set(0, 0.15, -4.5);
 cena.add(truck);
 
+var carro2 = new Carro(0xe0e003);
+carro.scale.set(0.03, 0.03, 0.03);
+carro.position.set(-30, 0.15, -7);
+cena.add(carro);
+var carro3 = new Carro(0x8725f2);
+carro1.scale.set(0.03, 0.03, 0.03);
+carro1.position.set(-30, 0.15, 8);
+cena.add(carro1);
 
 function detectCollision(obj1, obj2) {
   var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
@@ -706,7 +713,9 @@ function checkCollisions() {
       console.log("Colisão detectada!");
       // Faça aqui o que deseja fazer em caso de colisão
     }
-    if (detectCollision(galinha, carro)) {
+    if (detectCollision(galinha, carro)
+      || detectCollision(galinha, carro1)
+      || detectCollision(galinha, truck)) {
       console.log("Colisao so com o carro!");
       var retryButton = document.getElementById("retryButton");
       var endGameElement = document.getElementById("endGame");
@@ -807,7 +816,9 @@ function Start() {
 
         break;
       }
-      if (detectCollision(galinha, carro)) {
+      if (detectCollision(galinha, carro) 
+      || detectCollision(galinha, carro1)
+      || detectCollision(galinha, truck)) {
         console.log("Colisao so com o carro!");
         colisaoCarro = true;
 
@@ -877,14 +888,19 @@ function Start() {
     carro.position.x += velocidadeX; //velocidade 
     carro1.position.x += 0.4;
     truck.position.x -= 0.1;
+    carro2.position.x -= 0.3;
+    carro3.position.x += 0.2;
 
     // Verifica se o carro ultrapassou o limite do mapa
     if (carro.position.x >= limiteX
       && carro1.position.x >= limiteX 
-      && truck.position.x <= limiteXInverso) {
+      && truck.position.x <= limiteXInverso
+      && carro2.position.x <= limiteXInverso) {
       carro.position.x = posicaoInicialX;
       carro1.position.x = posicaoInicialX;
-      truck.position.x = posicaoInicialXInverso; //posição inicial
+      truck.position.x = posicaoInicialXInverso;
+      carro2.position.x = posicaoInicialXInverso;
+      carro3.position.x = posicaoInicialX; //posição inicial
     }
 
     requestAnimationFrame(animatecar);
