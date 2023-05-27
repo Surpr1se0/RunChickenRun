@@ -130,6 +130,7 @@ function Tree(tronco_x, tronco_y, tronco_z, brush_x, brush_y, brush_z) {
 
   return tree;
 }
+
 function AddPasseio(x, y, z) {
   var geometriaPasseio = new THREE.BoxGeometry(0.1, 0.1, 7);
 
@@ -474,16 +475,7 @@ function renderCameras() {
   }
 }
 
-var importer = new THREE.FBXLoader();
 
-importer.load("./Javascript/objects/sketchfab.fbx", function (object) {
-  cena.add(object);
-
-  object.rotateY(Math.PI / 2);
-
-  object.position.set(5, 1, 1.7);
-  object.scale.set(0.5, 0.5, 0.5);
-});
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -504,6 +496,48 @@ galinha.position.set(0, 0.3, -5.0);
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
+
+var loader = new THREE.FBXLoader();
+loader.load("./Javascript/objects/Muscle.fbx", function (object) {
+  // Manipule o objeto carregado aqui
+
+  object.scale.set(0.005, 0.005, 0.005);
+  object.position.set(0, 0.15, 2.9);
+  object.rotation.y = Math.PI / 2;
+  object.castShadow = true;
+  cena.add(object);
+});
+
+var loader1 = new THREE.FBXLoader();
+
+loader1.load("./Javascript/objects/PoliceSedan.fbx", function (object) {
+  // Manipule o objeto carregado aqui
+
+  object.scale.set(0.005, 0.005, 0.005);
+  object.position.set(-4, 0.15, 2.9);
+  object.rotation.y = Math.PI / 2;
+  object.castShadow = true;
+  cena.add(object);
+
+  var luzVermelha1 = new THREE.PointLight(0x0079ff, 1, 6);
+  luzVermelha1.position.set(-6, 2, 4);
+  cena.add(luzVermelha1);
+
+  var luzVermelha2 = new THREE.PointLight(0xff0000, 1, 6);
+  luzVermelha2.position.set(-3, 2, 1);
+  cena.add(luzVermelha2);
+});
+
+var loader2 = new THREE.FBXLoader();
+
+loader2.load("./Javascript/objects/cone.fbx", function (object) {
+  // Manipule o objeto carregado aqui
+
+  object.scale.set(0.2, 0.2, 0.2);
+  object.position.set(-7, 0.15, 2);
+  cena.add(object);
+});
+
 
 var woods = [
   { x: -3, y: 0.05, z: -7, lenght: 2 },
@@ -902,24 +936,19 @@ function Start() {
     carro3.position.x += 0.2;
 
     // Verifica se o carro ultrapassou o limite do mapa
-    if (carro.position.x >= limiteX) 
-    {
+    if (carro.position.x >= limiteX) {
       carro.position.x = posicaoInicialX;
     }
-    if(carro1.position.x >= limiteX)
-    {
+    if (carro1.position.x >= limiteX) {
       carro1.position.x = posicaoInicialX;
     }
-    if(carro2.position.x <= limiteXInverso)
-    {
+    if (carro2.position.x <= limiteXInverso) {
       carro2.position.x = posicaoInicialXInverso;
     }
-    if(truck.position.x <= limiteXInverso)
-    {
-      truck.position.x = posicaoInicialXInverso;  
+    if (truck.position.x <= limiteXInverso) {
+      truck.position.x = posicaoInicialXInverso;
     }
-    if(carro3.position.x >= limiteX)
-    {
+    if (carro3.position.x >= limiteX) {
       carro3.position.x = posicaoInicialX; //posição inicial
     }
 

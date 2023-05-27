@@ -557,7 +557,7 @@ function Lamp() {
   lamp.add(top);
 
   // Adicionar foco de luz
-  var spotLight = new THREE.SpotLight(0xffffff, 1, 10, Math.PI / 3, 0.5);
+  var spotLight = new THREE.SpotLight(0xfaf386, 1, 10, Math.PI / 3, 0.5);
   spotLight.position.set(0, 3, 0);
   spotLight.target.position.set(0, 0, 0);
   lamp.add(spotLight);
