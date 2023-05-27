@@ -87,6 +87,28 @@ function Road(
   return road;
 }
 
+function Start(
+  lane_width,
+  x,
+  y,
+  z,
+) {
+  var road = new THREE.Group();
+
+  // Criar patch de relva inicial
+  var grass_inicial = new THREE.Mesh(
+    new THREE.BoxGeometry(7, 0.2, 1),
+    new THREE.MeshStandardMaterial({ color: 0xccff5e })
+  );
+
+  grass_inicial.position.set(x, y + 0.001, z - lane_width + 0.2);
+  grass_inicial.receiveShadow = true; // Permite que o objeto receba sombras
+
+  road.add(grass_inicial);
+
+  return road;
+}
+
 function Lake(
   num_lanes, //retirar
   lane_width,
@@ -133,6 +155,32 @@ function Lake(
 }
 
 function GenerateMap() {
+  var starts = [
+    {lanes: 2, x: -12, y:0, z: 38},
+    {lanes: 2, x: -6, y:0, z: 38},
+    {lanes: 2, x: -0, y:0, z: 38},
+    {lanes: 2, x: 6, y:0, z: 38},
+    {lanes: 2, x: 12, y:0, z: 38},
+
+    {lanes: 2, x: -12, y:0, z: 39},
+    {lanes: 2, x: -6, y:0, z: 39},
+    {lanes: 2, x: -0, y:0, z: 39},
+    {lanes: 2, x: 6, y:0, z: 39},
+    {lanes: 2, x: 12, y:0, z: 39},
+  ];
+
+  for (var i = 0; i < starts.length; i++) {
+    var start = new Start(
+      (starts[i].width = 1.5),
+      starts[i].x,
+      (starts[i].y = 0),
+      starts[i].z,
+    );
+    start.castShadow = true; // Permite que o objeto receba sombras
+    cena.add(start);
+  }
+
+
   var roads = [
 
     { lanes: 4, width: 1.5, x: -12, y: 0, z: 30 },

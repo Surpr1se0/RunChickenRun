@@ -407,7 +407,7 @@ function renderizarMuro() {
 
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
-    new THREE.BoxGeometry(0.5, 1, 62),
+    new THREE.BoxGeometry(0.5, 1, 66),
     muroMaterial
   );
   var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
@@ -422,7 +422,7 @@ function renderizarMuroDireito() {
 
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 62),
+    new THREE.BoxGeometry(1, 1, 66),
     muroMaterial
   );
   var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
@@ -458,7 +458,7 @@ function renderizarMuroBaixo() {
   );
   var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
   muroEsquerdo.boundingBox = boundingBox;
-  muroEsquerdo.position.set(0, 0, 36);
+  muroEsquerdo.position.set(0, 0, 39);
   muroEsquerdo.rotation.y = Math.PI / 2;
 
   return muroEsquerdo;

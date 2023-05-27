@@ -13,7 +13,7 @@ var isCamera2Active = false;
 var iscamera3Active = false;
 
 // Definir a primeira câmera
-var zoomFactor = 65; // Fator de zoom, 2 para dobrar o tamanho visível
+var zoomFactor = 55; // Fator de zoom, 2 para dobrar o tamanho visível
 var width = window.innerWidth;
 var height = window.innerHeight;
 
@@ -353,7 +353,7 @@ function renderizarMuro() {
 
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
-    new THREE.BoxGeometry(0.5, 1, 62),
+    new THREE.BoxGeometry(0.5, 1, 66),
     muroMaterial
   );
   var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
@@ -368,7 +368,7 @@ function renderizarMuroDireito() {
 
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 62),
+    new THREE.BoxGeometry(1, 1, 66),
     muroMaterial
   );
   var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
@@ -404,7 +404,7 @@ function renderizarMuroBaixo() {
   );
   var boundingBox = new THREE.Box3().setFromObject(muroEsquerdo);
   muroEsquerdo.boundingBox = boundingBox;
-  muroEsquerdo.position.set(0, 0, 36);
+  muroEsquerdo.position.set(0, 0, 39);
   muroEsquerdo.rotation.y = Math.PI / 2;
 
   return muroEsquerdo;
@@ -423,20 +423,19 @@ function renderCameras() {
       camera1.position.x = galinha.position.x + 10;
       camera1.position.y = galinha.position.y + 10;
       camera1.position.z = galinha.position.z + 10;
-  
-      lastPositionX = galinha.position.x; 
+
+      lastPositionX = galinha.position.x;
       lastPositionY = galinha.position.y;
       lastPositionZ = galinha.position.z;
       camera1.lookAt(galinha.position);
-
     } else {
       // A câmera fica presa na última posição antes de ultrapassar maxX
       camera1.position.x = lastPositionX + 10;
       camera1.position.y = galinha.position.y + 10;
       camera1.position.z = galinha.position.z + 10;
-      camera1.lookAt(lastPositionX, lastPositionY, camera1.position.z -10);
+      camera1.lookAt(lastPositionX, lastPositionY, camera1.position.z - 10);
     }
-  
+
     renderer.render(cena, camera1);
 
     toggleButton.addEventListener("click", function () {
@@ -669,28 +668,33 @@ cena.add(muro_cima);
 
 //Definições iniciais Carro
 
+//Default
 var carro = new Carro(0x78b14b);
 carro.scale.set(0.03, 0.03, 0.03);
-carro.position.set(-30, 0.15, -0.2);
+carro.position.set(-29, 0.15, -0.2);
 cena.add(carro);
+
+//default
 var carro1 = new Carro(0x063970);
 carro1.scale.set(0.03, 0.03, 0.03);
-carro1.position.set(-30, 0.15, 1.4);
+carro1.position.set(-29, 0.15, 1.4);
 cena.add(carro1);
 
+// inverso
 var truck = new Truck(0xd45b45);
 truck.scale.set(-0.03, 0.03, 0.03);
-truck.position.set(0, 0.15, -4.5);
+truck.position.set(30, 0.15, -4.5);
 cena.add(truck);
 
 var carro2 = new Carro(0xe0e003);
-carro.scale.set(0.03, 0.03, 0.03);
-carro.position.set(-30, 0.15, -7);
-cena.add(carro);
+carro2.scale.set(-0.03, 0.03, 0.03);
+carro2.position.set(30, 0.15, -10);
+cena.add(carro2);
+
 var carro3 = new Carro(0x8725f2);
-carro1.scale.set(0.03, 0.03, 0.03);
-carro1.position.set(-30, 0.15, 8);
-cena.add(carro1);
+carro3.scale.set(0.03, 0.03, 0.03);
+carro3.position.set(-30, 0.15, -13.2);
+cena.add(carro3);
 
 function detectCollision(obj1, obj2) {
   var box1 = obj1.boundingBox.clone().applyMatrix4(obj1.matrixWorld);
@@ -713,9 +717,11 @@ function checkCollisions() {
       console.log("Colisão detectada!");
       // Faça aqui o que deseja fazer em caso de colisão
     }
-    if (detectCollision(galinha, carro)
-      || detectCollision(galinha, carro1)
-      || detectCollision(galinha, truck)) {
+    if (
+      detectCollision(galinha, carro) ||
+      detectCollision(galinha, carro1) ||
+      detectCollision(galinha, truck)
+    ) {
       console.log("Colisao so com o carro!");
       var retryButton = document.getElementById("retryButton");
       var endGameElement = document.getElementById("endGame");
@@ -728,7 +734,7 @@ function checkCollisions() {
         galinha.position.set(0, 0.3, 0); // Redefinir posição da galinha
 
         var endGameElement = document.getElementById("endGame");
-        endGameElement.style.visibility = "hidden"; 
+        endGameElement.style.visibility = "hidden";
       });
     }
   }
@@ -819,9 +825,11 @@ function Start() {
 
         break;
       }
-      if (detectCollision(galinha, carro) 
-      || detectCollision(galinha, carro1)
-      || detectCollision(galinha, truck)) {
+      if (
+        detectCollision(galinha, carro) ||
+        detectCollision(galinha, carro1) ||
+        detectCollision(galinha, truck)
+      ) {
         console.log("Colisao so com o carro!");
         colisaoCarro = true;
 
@@ -880,29 +888,38 @@ function Start() {
     updateJump();
   }
 
-
   function animatecar() {
     var velocidadeX = 0.2;
-    var limiteX = 30;
-    var limiteXInverso = -30;
-    var posicaoInicialX = -30;
-    var posicaoInicialXInverso = 30;
+    var limiteX = 20;
+    var limiteXInverso = -20;
+    var posicaoInicialX = -20;
+    var posicaoInicialXInverso = 20;
 
-    carro.position.x += velocidadeX; //velocidade 
-    carro1.position.x += 0.4;
+    carro.position.x += velocidadeX; //velocidade
+    carro1.position.x += 0.3;
     truck.position.x -= 0.1;
     carro2.position.x -= 0.3;
     carro3.position.x += 0.2;
 
     // Verifica se o carro ultrapassou o limite do mapa
-    if (carro.position.x >= limiteX
-      && carro1.position.x >= limiteX 
-      && truck.position.x <= limiteXInverso
-      && carro2.position.x <= limiteXInverso) {
+    if (carro.position.x >= limiteX) 
+    {
       carro.position.x = posicaoInicialX;
+    }
+    if(carro1.position.x >= limiteX)
+    {
       carro1.position.x = posicaoInicialX;
-      truck.position.x = posicaoInicialXInverso;
+    }
+    if(carro2.position.x <= limiteXInverso)
+    {
       carro2.position.x = posicaoInicialXInverso;
+    }
+    if(truck.position.x <= limiteXInverso)
+    {
+      truck.position.x = posicaoInicialXInverso;  
+    }
+    if(carro3.position.x >= limiteX)
+    {
       carro3.position.x = posicaoInicialX; //posição inicial
     }
 
@@ -912,7 +929,7 @@ function Start() {
   //de modo a começar só passado os segundos que quisermos
   setTimeout(function () {
     animatecar();
-  }, 1000);
+  }, 100);
 
   cena.add(controls);
 
@@ -921,10 +938,10 @@ function Start() {
   cena.add(axesHelper);
 
   // cria a luz
-  var luzAmbiente = new THREE.AmbientLight(0xffffff, 0.1); // Cor: branco, Intensidade: 0.5
+  var luzAmbiente = new THREE.AmbientLight(0xffffff, 0.3); // Cor: branco, Intensidade: 0.5
   cena.add(luzAmbiente);
 
-  luz = new THREE.DirectionalLight(0xffffff, 0.4);
+  luz = new THREE.DirectionalLight(0xffffff, 0.9);
   luz.position.set(-20, 25, 0);
   luz.castShadow = true;
   luz.shadow.mapSize.width = 1024; // Resolução horizontal da sombra
