@@ -824,11 +824,11 @@ function checkCollisions() {
     ) {
       // Colisão detectada entre a galinha e a árvore
       console.log("Colisão detectada!");
-      galinha.position.y = 0.1;
       // Faça aqui o que deseja fazer em caso de colisão
     }
     if (detectCollision(galinha, carro)) {
       console.log("Colisao so com o carro!");
+      galinha.position.y = 0.1;
       var retryButton = document.getElementById("retryButton");
       var endGameElement = document.getElementById("endGame");
 
