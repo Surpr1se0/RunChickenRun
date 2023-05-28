@@ -824,6 +824,7 @@ function checkCollisions() {
     ) {
       // Colisão detectada entre a galinha e a árvore
       console.log("Colisão detectada!");
+      galinha.position.y = 0.1;
       // Faça aqui o que deseja fazer em caso de colisão
     }
     if (detectCollision(galinha, carro)) {
@@ -836,6 +837,8 @@ function checkCollisions() {
       retryButton.addEventListener("click", function () {
         // Recarregar a página
         contador = 0;
+        galinha.position.set(-3, 0.3, 36.5); // Redefinir posição da galinha
+        galinha.scale.set(0.05, 0.05, 0.05);
         location.href = location.href;
       });
     }
