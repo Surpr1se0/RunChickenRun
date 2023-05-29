@@ -598,6 +598,47 @@ galinha.position.set(-3, 0.3, 35.5);
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
 
+var loader = new THREE.FBXLoader();
+loader.load("./Javascript/objects/Muscle.fbx", function (object) {
+  // Manipule o objeto carregado aqui
+
+  object.scale.set(0.005, 0.005, 0.005);
+  object.position.set(0, 0.15, 2.9);
+  object.rotation.y = Math.PI / 2;
+  object.castShadow = true;
+  cena.add(object);
+});
+
+var loader1 = new THREE.FBXLoader();
+
+loader1.load("./Javascript/objects/PoliceSedan.fbx", function (object) {
+  // Manipule o objeto carregado aqui
+
+  object.scale.set(0.005, 0.005, 0.005);
+  object.position.set(-4, 0.15, 2.9);
+  object.rotation.y = Math.PI / 2;
+  object.castShadow = true;
+  cena.add(object);
+
+  var luzVermelha1 = new THREE.PointLight(0x0079ff, 1, 6);
+  luzVermelha1.position.set(-6, 2, 4);
+  cena.add(luzVermelha1);
+
+  var luzVermelha2 = new THREE.PointLight(0xff0000, 1, 6);
+  luzVermelha2.position.set(-3, 2, 1);
+  cena.add(luzVermelha2);
+});
+
+var loader2 = new THREE.FBXLoader();
+
+loader2.load("./Javascript/objects/cone.fbx", function (object) {
+  // Manipule o objeto carregado aqui
+
+  object.scale.set(0.2, 0.2, 0.2);
+  object.position.set(-7, 0.15, 2);
+  cena.add(object);
+});
+
 var woods = [
   { x: -3, y: 0.05, z: -7, lenght: 2 },
   { x: 3, y: 0.05, z: -7, lenght: 2 },
@@ -756,7 +797,7 @@ var lampPositions = [
   { x: -10, y: 0, z: -3 },
 
   { x: 10, y: 0, z: 3 },
-  { x: 0, y: 0, z: 3 },
+  { x: -2, y: 0, z: 3 },
   { x: -10, y: 0, z: 3 },
 
   { x: 13, y: 0, z: 8 },
@@ -833,7 +874,7 @@ function checkCollisions() {
       retryButton.addEventListener("click", function () {
         // Recarregar a página
         contador = 0;
-        galinha.position.set(-3, 0.3, 36.5); // Redefinir posição da galinha
+        galinha.position.set(1, 0.3, 36); // posição inicial da galinha
         galinha.scale.set(0.05, 0.05, 0.05);
         location.href = location.href;
       });
@@ -849,7 +890,7 @@ function checkCollisions() {
       retryButton1.addEventListener("click", function () {
         // Recarregar a página
         contador = 0;
-        galinha.position.set(0, 0.3, 0); // Redefinir posição da galinha
+        galinha.position.set(1, 0.3, 36); // posição inicial da galinha
 
         var finished = document.getElementById("finished");
         finished.style.visibility = "hidden";
@@ -890,11 +931,12 @@ function Start() {
 
         contador++;
         var contagemElemento = document.getElementById("contagem");
-        contagemElemento.textContent = contador / 2;
+        contagemElemento.textContent = contador ;
       }
     } else if (keyCode == 83) {
       if (!isJumping) {
         isJumping = true;
+        contador--;
         jump();
 
         novaPosicaoZ += zSpeed;

@@ -492,7 +492,7 @@ document.body.appendChild(renderer.domElement);
 var galinha = new Galinha();
 cena.add(galinha);
 galinha.scale.set(0.05, 0.05, 0.05);
-galinha.position.set(-3, 0.3, -23); // posição inicial da galinha
+galinha.position.set(1, 0.3, 36); // posição inicial da galinha
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
@@ -766,7 +766,7 @@ function checkCollisions() {
       retryButton.addEventListener("click", function () {
         // Recarregar a página
         contador = 0;
-        galinha.position.set(-3, 0.3, 36.5); // Redefinir posição da galinha
+        galinha.position.set(1, 0.3, 36); // posição inicial da galinha
         galinha.scale.set(0.05, 0.05, 0.05);
         
         var endGameElement = document.getElementById("endGame");
@@ -784,7 +784,7 @@ function checkCollisions() {
       retryButton1.addEventListener("click", function () {
         // Recarregar a página
         contador = 0;
-        galinha.position.set(0, 0.3, 0); // Redefinir posição da galinha
+        galinha.position.set(1, 0.3, 36); // posição inicial da galinha
 
         var finished = document.getElementById("finished");
         finished.style.visibility = "hidden";
@@ -825,12 +825,13 @@ function Start() {
 
         contador++;
         var contagemElemento = document.getElementById("contagem");
-        contagemElemento.textContent = contador / 2;
+        contagemElemento.textContent = contador;
       }
     } else if (keyCode == 83) {
       if (!isJumping) {
         isJumping = true;
         jump();
+        contador--;
 
         novaPosicaoZ += zSpeed;
         galinha.rotation.y = 2 * Math.PI;
