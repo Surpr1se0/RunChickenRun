@@ -75,13 +75,13 @@ var textura_direita = new THREE.TextureLoader().load(
   "./Images/skybox_dia/negx.jpg"
 );
 var textura_esquerda = new THREE.TextureLoader().load(
-  "./Images/skybox_dia/negy.jpg"
+  "./Images/skybox_dia/posx.jpg"
 );
 var textura_cima = new THREE.TextureLoader().load(
   "./Images/skybox_dia/negz.jpg"
 );
 var textura_baixo = new THREE.TextureLoader().load(
-  "./Images/skybox_dia/posx.jpg"
+  "./Images/skybox_dia/negy.jpg"
 );
 var textura_tras = new THREE.TextureLoader().load(
   "./Images/skybox_dia/posy.jpg"
