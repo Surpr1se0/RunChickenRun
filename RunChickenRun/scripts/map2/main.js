@@ -842,6 +842,23 @@ function checkCollisions() {
         location.href = location.href;
       });
     }
+    if(detectCollision(galinha, muro_cima))
+    {
+      console.log("Chegou à meta");
+      var retryButton1 = document.getElementById("retryButton1");
+      var finished = document.getElementById("finished");
+
+      finished.style.visibility = "visible";
+
+      retryButton1.addEventListener("click", function () {
+        // Recarregar a página
+        contador = 0;
+        galinha.position.set(0, 0.3, 0); // Redefinir posição da galinha
+
+        var finished = document.getElementById("finished");
+        finished.style.visibility = "hidden";
+      });
+    }
   }
 }
 
