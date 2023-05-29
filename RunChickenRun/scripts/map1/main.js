@@ -353,7 +353,7 @@ function Galinha() {
 }
 
 function renderizarMuro() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
 
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
@@ -368,8 +368,7 @@ function renderizarMuro() {
 }
 
 function renderizarMuroDireito() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
-
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 66),
@@ -383,8 +382,7 @@ function renderizarMuroDireito() {
 }
 
 function renderizarMuroCima() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
-
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 62),
@@ -399,8 +397,7 @@ function renderizarMuroCima() {
 }
 
 function renderizarMuroBaixo() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080 });
-
+  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 62),
