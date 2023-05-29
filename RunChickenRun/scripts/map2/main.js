@@ -828,6 +828,7 @@ function checkCollisions() {
     }
     if (detectCollision(galinha, carro)) {
       console.log("Colisao so com o carro!");
+      galinha.position.y = 0.1;
       var retryButton = document.getElementById("retryButton");
       var endGameElement = document.getElementById("endGame");
 
@@ -836,6 +837,8 @@ function checkCollisions() {
       retryButton.addEventListener("click", function () {
         // Recarregar a página
         contador = 0;
+        galinha.position.set(-3, 0.3, 36.5); // Redefinir posição da galinha
+        galinha.scale.set(0.05, 0.05, 0.05);
         location.href = location.href;
       });
     }
