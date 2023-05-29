@@ -775,18 +775,19 @@ function checkCollisions() {
     }
     if(detectCollision(galinha, muro_cima))
     {
-      var retryButton = document.getElementById("retryButton");
-      var endGameElement = document.getElementById("finished");
+      console.log("Chegou à meta");
+      var retryButton1 = document.getElementById("retryButton1");
+      var finished = document.getElementById("finished");
 
-      endGameElement.style.visibility = "visible";
+      finished.style.visibility = "visible";
 
-      retryButton.addEventListener("click", function () {
+      retryButton1.addEventListener("click", function () {
         // Recarregar a página
         contador = 0;
         galinha.position.set(0, 0.3, 0); // Redefinir posição da galinha
 
-        var endGameElement = document.getElementById("finished");
-        endGameElement.style.visibility = "hidden";
+        var finished = document.getElementById("finished");
+        finished.style.visibility = "hidden";
       });
     }
   }
