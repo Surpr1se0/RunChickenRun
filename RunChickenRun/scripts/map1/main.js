@@ -75,13 +75,13 @@ var textura_direita = new THREE.TextureLoader().load(
   "./Images/skybox_dia/negx.jpg"
 );
 var textura_esquerda = new THREE.TextureLoader().load(
-  "./Images/skybox_dia/negy.jpg"
+  "./Images/skybox_dia/posx.jpg"
 );
 var textura_cima = new THREE.TextureLoader().load(
   "./Images/skybox_dia/negz.jpg"
 );
 var textura_baixo = new THREE.TextureLoader().load(
-  "./Images/skybox_dia/posx.jpg"
+  "./Images/skybox_dia/negy.jpg"
 );
 var textura_tras = new THREE.TextureLoader().load(
   "./Images/skybox_dia/posy.jpg"
@@ -352,6 +352,39 @@ function Galinha() {
   return galinha;
 }
 
+function Bandeira() {
+  var bandeira = new THREE.Group();
+
+  var textureLoader = new THREE.TextureLoader();
+  var textura_bandeira = textureLoader.load("./Images/bandeira_corrida.jpg");
+
+  var material_bandeira = new THREE.MeshBasicMaterial({ map: textura_bandeira, side: THREE.DoubleSide });
+
+  // Crie a geometria da bandeira (por exemplo, um plano retangular)
+  var larguraBandeira = 2;
+  var alturaBandeira = 1;
+  var bandeiraGeometry = new THREE.PlaneGeometry(larguraBandeira, alturaBandeira);
+
+  // Crie a malha da bandeira usando a geometria e o material
+  var bandeiraMesh = new THREE.Mesh(bandeiraGeometry, material_bandeira);
+
+  // Defina a posição da bandeira
+  bandeiraMesh.position.set(0, 2, 0);
+
+  // Adicione a malha da bandeira ao grupo "bandeira"
+  bandeira.add(bandeiraMesh);
+
+  var pole = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.1,0.1,5,16,1),
+    new THREE.MeshPhongMaterial({color:"#ffcc99", specular: "#999999", shininess: 30})
+  );
+  bandeira.add(pole);
+
+  return bandeira;
+}
+
+
+
 function renderizarMuro() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
@@ -503,6 +536,9 @@ controls.update();
 
 document.body.appendChild(renderer.domElement);
 
+var bandeira = new Bandeira();
+cena.add(bandeira);
+
 var galinha = new Galinha();
 cena.add(galinha);
 galinha.scale.set(0.05, 0.05, 0.05);
@@ -525,7 +561,6 @@ loader.load("./Javascript/objects/Muscle.fbx", function (object) {
 var loader1 = new THREE.FBXLoader();
 
 loader1.load("./Javascript/objects/PoliceSedan.fbx", function (object) {
-  // Manipule o objeto carregado aqui
 
   object.scale.set(0.005, 0.005, 0.005);
   object.position.set(-4, 0.15, 2.9);
@@ -545,7 +580,6 @@ loader1.load("./Javascript/objects/PoliceSedan.fbx", function (object) {
 var loader2 = new THREE.FBXLoader();
 
 loader2.load("./Javascript/objects/cone.fbx", function (object) {
-  // Manipule o objeto carregado aqui
 
   object.scale.set(0.2, 0.2, 0.2);
   object.position.set(-7, 0.15, 2);
@@ -809,8 +843,6 @@ function checkCollisions() {
 
 function Start() {
   GenerateMap();
-
-  cena.add(galinha);
 
   var xSpeed = 0.5;
   var zSpeed = 0.5;

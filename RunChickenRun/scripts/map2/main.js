@@ -611,7 +611,7 @@ document.body.appendChild(renderer.domElement);
 var galinha = new Galinha();
 cena.add(galinha);
 galinha.scale.set(0.05, 0.05, 0.05);
-galinha.position.set(-3, 0.3, 0);
+galinha.position.set(-3, 0.3, 35.5);
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
@@ -632,7 +632,6 @@ var loader1 = new THREE.FBXLoader();
 var luzVermelha1;
 var luzVermelha2;
 loader1.load("./Javascript/objects/PoliceSedan.fbx", function (object) {
-  // Manipule o objeto carregado aqui
 
   object.scale.set(0.005, 0.005, 0.005);
   object.position.set(-4, 0.15, 2.9);
@@ -652,8 +651,7 @@ loader1.load("./Javascript/objects/PoliceSedan.fbx", function (object) {
 var loader2 = new THREE.FBXLoader();
 
 loader2.load("./Javascript/objects/cone.fbx", function (object) {
-  // Manipule o objeto carregado aqui
-
+  
   object.scale.set(0.2, 0.2, 0.2);
   object.position.set(-7, 0.15, 2);
   cena.add(object);
