@@ -202,6 +202,8 @@ function Rodas() {
   return roda;
 }
 
+var farois_Truck = []; // Lista de faróis
+
 function Carro() {
   var carro = new THREE.Group();
 
@@ -240,6 +242,7 @@ function Carro() {
   farolFrontalEsquerdo.angle = Math.PI / 3; // Ângulo de abertura do farol
   farolFrontalEsquerdo.penumbra = 0.2; // Suavidade das bordas do feixe de luz
   farolFrontalEsquerdo.distance = 150; // Alcance do farol
+  farois_Truck.push(farolFrontalEsquerdo);
 
   var farolFrontalDireito = new THREE.SpotLight(0xffffff, 1); // Cor branca
   farolFrontalDireito.position.set(27, 5, -20); // Posição relativa ao carro
@@ -247,6 +250,7 @@ function Carro() {
   farolFrontalDireito.angle = Math.PI / 3; // Ângulo de abertura do farol
   farolFrontalDireito.penumbra = 0.2; // Suavidade das bordas do feixe de luz
   farolFrontalDireito.distance = 150; // Alcance do farol
+  farois_Truck.push(farolFrontalDireito);
 
   carro.add(farolFrontalEsquerdo);
   carro.add(farolFrontalEsquerdo.target);
@@ -257,6 +261,7 @@ function Carro() {
   var farolTraseiro = new THREE.SpotLight(0xff0000, 0.1); // Cor vermelha
   farolTraseiro.position.set(-30, 0, -5); // Posição relativa ao carro
   farolTraseiro.target.position.set(-100, 0, 0); // Alvo para a luz (apontando para a frente)
+  farois_Truck.push(farolTraseiro);
 
   carro.add(farolTraseiro);
   carro.add(farolTraseiro.target);
@@ -320,6 +325,7 @@ function Truck(color1, color2) {
   farolFrontalEsquerdo.angle = Math.PI / 3; // Ângulo de abertura do farol
   farolFrontalEsquerdo.penumbra = 0.2; // Suavidade das bordas do feixe de luz
   farolFrontalEsquerdo.distance = 150; // Alcance do farol
+  farois_Truck.push(farolFrontalEsquerdo); // Adicionar farol à lista
 
   var farolFrontalDireito = new THREE.SpotLight(0xffffff, 1); // Cor branca
   farolFrontalDireito.position.set(27, 5, -20); // Posição relativa ao carro
@@ -327,6 +333,7 @@ function Truck(color1, color2) {
   farolFrontalDireito.angle = Math.PI / 3; // Ângulo de abertura do farol
   farolFrontalDireito.penumbra = 0.2; // Suavidade das bordas do feixe de luz
   farolFrontalDireito.distance = 150; // Alcance do farol
+  farois_Truck.push(farolFrontalDireito); // Adicionar farol à lista
 
   truck.add(farolFrontalEsquerdo);
   truck.add(farolFrontalEsquerdo.target);
@@ -339,6 +346,7 @@ function Truck(color1, color2) {
   farolTraseiro.target.position.set(-100, 0, 0); // Alvo para a luz (apontando para a frente)
   truck.add(farolTraseiro);
   truck.add(farolTraseiro.target);
+  farois_Truck.push(farolTraseiro); // Adicionar farol à lista
 
   var boundingBox = new THREE.Box3().setFromObject(truck);
   truck.boundingBox = boundingBox;
@@ -407,7 +415,11 @@ function Galinha() {
 }
 
 function renderizarMuro() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
+  var muroMaterial = new THREE.MeshBasicMaterial({
+    color: 0x808080,
+    transparent: true,
+    opacity: 0.5,
+  });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
     new THREE.BoxGeometry(0.5, 1, 66),
@@ -421,7 +433,11 @@ function renderizarMuro() {
 }
 
 function renderizarMuroDireito() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
+  var muroMaterial = new THREE.MeshBasicMaterial({
+    color: 0x808080,
+    transparent: true,
+    opacity: 0.5,
+  });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 66),
@@ -435,7 +451,11 @@ function renderizarMuroDireito() {
 }
 
 function renderizarMuroCima() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
+  var muroMaterial = new THREE.MeshBasicMaterial({
+    color: 0x808080,
+    transparent: true,
+    opacity: 0.5,
+  });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 62),
@@ -450,7 +470,11 @@ function renderizarMuroCima() {
 }
 
 function renderizarMuroBaixo() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
+  var muroMaterial = new THREE.MeshBasicMaterial({
+    color: 0x808080,
+    transparent: true,
+    opacity: 0.5,
+  });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 62),
@@ -477,20 +501,19 @@ function renderCameras() {
       camera1.position.x = galinha.position.x + 10;
       camera1.position.y = galinha.position.y + 10;
       camera1.position.z = galinha.position.z + 10;
-  
-      lastPositionX = galinha.position.x; 
+
+      lastPositionX = galinha.position.x;
       lastPositionY = galinha.position.y;
       lastPositionZ = galinha.position.z;
       camera1.lookAt(galinha.position);
-
     } else {
       // A câmera fica presa na última posição antes de ultrapassar maxX
       camera1.position.x = lastPositionX + 10;
       camera1.position.y = galinha.position.y + 10;
       camera1.position.z = galinha.position.z + 10;
-      camera1.lookAt(lastPositionX, lastPositionY, camera1.position.z -10);
+      camera1.lookAt(lastPositionX, lastPositionY, camera1.position.z - 10);
     }
-  
+
     renderer.render(cena, camera1);
 
     toggleButton.addEventListener("click", function () {
@@ -529,6 +552,7 @@ function renderCameras() {
   }
 }
 
+var spotLight_lamp_array = [];
 function Lamp() {
   var lamp = new THREE.Group();
 
@@ -557,26 +581,20 @@ function Lamp() {
   lamp.add(top);
 
   // Adicionar foco de luz
-  var spotLight = new THREE.SpotLight(0xfaf386, 1, 10, Math.PI / 3, 0.5);
-  spotLight.position.set(0, 3, 0);
-  spotLight.target.position.set(0, 0, 0);
-  lamp.add(spotLight);
-  lamp.add(spotLight.target);
+  spotLight_lamp = new THREE.SpotLight(0xfaf386, 1, 10, Math.PI / 3, 0.5);
+  spotLight_lamp.position.set(0, 3, 0);
+  spotLight_lamp.target.position.set(0, 0, 0);
+  lamp.add(spotLight_lamp);
+  lamp.add(spotLight_lamp.target);
+
+  spotLight_lamp_array.push(spotLight_lamp); // Adicionar a luz ao array
 
   lamp.rotation.y = Math.PI / 2;
+
   return lamp;
 }
 
 var importer = new THREE.FBXLoader();
-
-importer.load("./Javascript/objects/sketchfab.fbx", function (object) {
-  cena.add(object);
-
-  object.rotateY(Math.PI / 2);
-
-  object.position.set(5, 1, 1.7);
-  object.scale.set(0.5, 0.5, 0.5);
-});
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -593,7 +611,7 @@ document.body.appendChild(renderer.domElement);
 var galinha = new Galinha();
 cena.add(galinha);
 galinha.scale.set(0.05, 0.05, 0.05);
-galinha.position.set(-3, 0.3, 35.5);
+galinha.position.set(-3, 0.3, 0);
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
@@ -611,6 +629,8 @@ loader.load("./Javascript/objects/Muscle.fbx", function (object) {
 
 var loader1 = new THREE.FBXLoader();
 
+var luzVermelha1;
+var luzVermelha2;
 loader1.load("./Javascript/objects/PoliceSedan.fbx", function (object) {
   // Manipule o objeto carregado aqui
 
@@ -620,11 +640,11 @@ loader1.load("./Javascript/objects/PoliceSedan.fbx", function (object) {
   object.castShadow = true;
   cena.add(object);
 
-  var luzVermelha1 = new THREE.PointLight(0x0079ff, 1, 6);
+  luzVermelha1 = new THREE.PointLight(0x0079ff, 1, 6);
   luzVermelha1.position.set(-6, 2, 4);
   cena.add(luzVermelha1);
 
-  var luzVermelha2 = new THREE.PointLight(0xff0000, 1, 6);
+  luzVermelha2 = new THREE.PointLight(0xff0000, 1, 6);
   luzVermelha2.position.set(-3, 2, 1);
   cena.add(luzVermelha2);
 });
@@ -879,8 +899,7 @@ function checkCollisions() {
         location.href = location.href;
       });
     }
-    if(detectCollision(galinha, muro_cima))
-    {
+    if (detectCollision(galinha, muro_cima)) {
       console.log("Chegou à meta");
       var retryButton1 = document.getElementById("retryButton1");
       var finished = document.getElementById("finished");
@@ -898,6 +917,8 @@ function checkCollisions() {
     }
   }
 }
+
+var luz;
 
 function Start() {
   GenerateMap();
@@ -917,6 +938,8 @@ function Start() {
   var galinhaZ = galinha.position.z;
 
   function onDocumentKeyDown(event) {
+    var key = event.key;
+
     var keyCode = event.which;
     var novaPosicaoX = galinha.position.x;
     var novaPosicaoZ = galinha.position.z;
@@ -931,7 +954,7 @@ function Start() {
 
         contador++;
         var contagemElemento = document.getElementById("contagem");
-        contagemElemento.textContent = contador ;
+        contagemElemento.textContent = contador;
       }
     } else if (keyCode == 83) {
       if (!isJumping) {
@@ -964,6 +987,23 @@ function Start() {
         isJumping = true;
         jump();
       }
+    }
+    if (key == "k") {
+      farois_Truck.forEach(function (spotLight_lamp) {
+        spotLight_lamp.visible = !spotLight_lamp.visible; // Alterna a visibilidade
+      });
+    }
+    if (key == "l") {
+      spotLight_lamp_array.forEach(function (spotLight_lamp) {
+        spotLight_lamp.visible = !spotLight_lamp.visible; // Alterna a visibilidade
+      });
+    }
+    if (key == "ç") {
+      luz.visible = !luz.visible;
+    }
+    if (key == "º") {
+      luzVermelha1.visible = !luzVermelha1.visible;
+      luzVermelha2.visible = !luzVermelha2.visible;
     }
 
     var colisaoDetectada = false;
@@ -1040,6 +1080,8 @@ function Start() {
       }
     }
 
+    
+
     // Inicia o salto
     updateJump();
   }
@@ -1051,14 +1093,16 @@ function Start() {
     var posicaoInicialX = -30;
     var posicaoInicialXInverso = 30;
 
-    carro.position.x += velocidadeX; //velocidade 
+    carro.position.x += velocidadeX; //velocidade
     carro1.position.x += 0.4;
     truck.position.x -= 0.1;
 
     // Verifica se o carro ultrapassou o limite do mapa
-    if (carro.position.x >= limiteX
-      && carro1.position.x >= limiteX 
-      && truck.position.x <= limiteXInverso) {
+    if (
+      carro.position.x >= limiteX &&
+      carro1.position.x >= limiteX &&
+      truck.position.x <= limiteXInverso
+    ) {
       carro.position.x = posicaoInicialX;
       carro1.position.x = posicaoInicialX;
       truck.position.x = posicaoInicialXInverso; //posição inicial

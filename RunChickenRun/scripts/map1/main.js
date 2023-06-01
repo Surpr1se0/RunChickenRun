@@ -13,7 +13,7 @@ var isCamera2Active = false;
 var iscamera3Active = false;
 
 // Definir a primeira câmera
-var zoomFactor = 55; // Fator de zoom, 2 para dobrar o tamanho visível
+var zoomFactor = 60; // Fator de zoom, 2 para dobrar o tamanho visível
 var width = window.innerWidth;
 var height = window.innerHeight;
 
@@ -353,7 +353,11 @@ function Galinha() {
 }
 
 function renderizarMuro() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
+  var muroMaterial = new THREE.MeshBasicMaterial({
+    color: 0x808080,
+    transparent: true,
+    opacity: 0.5,
+  });
 
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
@@ -368,7 +372,11 @@ function renderizarMuro() {
 }
 
 function renderizarMuroDireito() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
+  var muroMaterial = new THREE.MeshBasicMaterial({
+    color: 0x808080,
+    transparent: true,
+    opacity: 0.5,
+  });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 66),
@@ -382,7 +390,11 @@ function renderizarMuroDireito() {
 }
 
 function renderizarMuroCima() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
+  var muroMaterial = new THREE.MeshBasicMaterial({
+    color: 0x808080,
+    transparent: true,
+    opacity: 0.5,
+  });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 62),
@@ -397,7 +409,11 @@ function renderizarMuroCima() {
 }
 
 function renderizarMuroBaixo() {
-  var muroMaterial = new THREE.MeshBasicMaterial({ color: 0x808080, transparent: true, opacity: 0.5 });
+  var muroMaterial = new THREE.MeshBasicMaterial({
+    color: 0x808080,
+    transparent: true,
+    opacity: 0.5,
+  });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 62),
@@ -475,8 +491,6 @@ function renderCameras() {
   }
 }
 
-
-
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0xaaaaaa);
@@ -492,7 +506,7 @@ document.body.appendChild(renderer.domElement);
 var galinha = new Galinha();
 cena.add(galinha);
 galinha.scale.set(0.05, 0.05, 0.05);
-galinha.position.set(1, 0.3, 36); // posição inicial da galinha
+galinha.position.set(1, 0.3, -20); // posição inicial da galinha
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
@@ -537,7 +551,6 @@ loader2.load("./Javascript/objects/cone.fbx", function (object) {
   object.position.set(-7, 0.15, 2);
   cena.add(object);
 });
-
 
 var woods = [
   { x: -3, y: 0.05, z: -7, lenght: 2 },
@@ -768,13 +781,14 @@ function checkCollisions() {
         contador = 0;
         galinha.position.set(1, 0.3, 36); // posição inicial da galinha
         galinha.scale.set(0.05, 0.05, 0.05);
-        
+
         var endGameElement = document.getElementById("endGame");
         endGameElement.style.visibility = "hidden";
       });
     }
-    if(detectCollision(galinha, muro_cima))
-    {
+    if (detectCollision(galinha, muro_cima)) {
+      riseAnimation();
+
       console.log("Chegou à meta");
       var retryButton1 = document.getElementById("retryButton1");
       var finished = document.getElementById("finished");
@@ -980,14 +994,8 @@ function Start() {
     animatecar();
   }, 100);
 
-  cena.add(controls);
-
-  // criar os axis
-  const axesHelper = new THREE.AxesHelper(10);
-  cena.add(axesHelper);
-
   // cria a luz
-  var luzAmbiente = new THREE.AmbientLight(0xffffff, 0.3); // Cor: branco, Intensidade: 0.5
+  var luzAmbiente = new THREE.AmbientLight(0xffffff, 0.1); // Cor: branco, Intensidade: 0.5
   cena.add(luzAmbiente);
 
   luz = new THREE.DirectionalLight(0xffffff, 0.9);
