@@ -378,6 +378,7 @@ function Bandeira() {
     new THREE.CylinderGeometry(0.1,0.1,5,16,1),
     new THREE.MeshPhongMaterial({color:"#ffcc99", specular: "#999999", shininess: 30})
   );
+  pole.position.set(-0.9,0,0)
   bandeira.add(pole);
 
   return bandeira;
@@ -542,7 +543,7 @@ cena.add(bandeira);
 var galinha = new Galinha();
 cena.add(galinha);
 galinha.scale.set(0.05, 0.05, 0.05);
-galinha.position.set(1, 0.3, -20); // posição inicial da galinha
+galinha.position.set(1, 0.3, 6); // posição inicial da galinha
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
@@ -1026,6 +1027,27 @@ function Start() {
     animatecar();
   }, 100);
 
+
+      // Variáveis para controlar a animação
+      var amplitude = 0.2; // Amplitude do movimento
+      var velocidade = 0.05; // Velocidade do movimento
+      var angulo = 0;
+    
+      // Função de atualização da animação
+      function atualizarAnimacao() {
+        angulo += velocidade;
+        var offsetX = amplitude * Math.sin(angulo);
+        bandeira.position.x = offsetX;
+      }
+    
+      // Função de animação
+      function animar() {
+        requestAnimationFrame(animar);
+        atualizarAnimacao();
+      }
+    
+      // Inicie a animação
+      animar();
   // cria a luz
   var luzAmbiente = new THREE.AmbientLight(0xffffff, 0.1); // Cor: branco, Intensidade: 0.5
   cena.add(luzAmbiente);
