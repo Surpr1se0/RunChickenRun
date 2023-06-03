@@ -5,6 +5,18 @@
     <title>Run Chicken Run</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="./fonts/8-BIT WONDER.TTF">
+    <style>
+      #Informacoes {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        color: white;
+        font-family: '8-BIT WONDER';
+        font-size: 20px;
+        width: 300px;
+        text-align: right;
+      }
+    </style>
   </head>
 
   <body onload="Start()">
@@ -23,6 +35,12 @@
 
     <div>
       <button id="contagem">0</button>
+    </div>
+
+    <div id="Informacoes">
+      <p>K- Luzes carros</p>
+      <p>L- Luzes candeiros</p>
+      <p>Ç- Luz ambiente</p>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>

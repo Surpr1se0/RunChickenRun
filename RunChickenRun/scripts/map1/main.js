@@ -351,7 +351,7 @@ function Galinha() {
 
   return galinha;
 }
-
+//bandeira terá que ser um objeto separado entre o pole e a bandeira de maneira a fazer a animação
 function Bandeira() {
   var bandeira = new THREE.Group();
 
@@ -368,22 +368,39 @@ function Bandeira() {
   // Crie a malha da bandeira usando a geometria e o material
   var bandeiraMesh = new THREE.Mesh(bandeiraGeometry, material_bandeira);
 
-  // Defina a posição da bandeira
-  bandeiraMesh.position.set(0, 2, 0);
+  // Defina a posição inicial da bandeira
+  bandeiraMesh.position.set(0, 2, -0.1);
 
   // Adicione a malha da bandeira ao grupo "bandeira"
   bandeira.add(bandeiraMesh);
 
   var pole = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.1,0.1,5,16,1),
-    new THREE.MeshPhongMaterial({color:"#ffcc99", specular: "#999999", shininess: 30})
+    new THREE.CylinderGeometry(0.1, 0.1, 5.2, 16, 1),
+    new THREE.MeshPhongMaterial({ color: "#ffcc99", specular: "#999999", shininess: 30 })
   );
-  pole.position.set(-0.9,0,0)
+  pole.position.set(-0.9, 0, 0)
   bandeira.add(pole);
+
+  // Animação de balanço da bandeira
+  var clock = new THREE.Clock();
+  var amplitude = 0.1; // Amplitude do balanço
+  var frequencia = 2; // Frequência do balanço (em segundos)
+
+  function animateBandeira() {
+    var deltaTime = clock.getDelta();
+    var angle = Math.sin(clock.elapsedTime * Math.PI *2 / frequencia) * amplitude;
+
+    // Modifique a rotação da bandeira
+    bandeiraMesh.rotation.y = angle;
+    //bandeiraMesh.rotation.z=angle;
+
+    requestAnimationFrame(animateBandeira);
+  }
+
+  animateBandeira();
 
   return bandeira;
 }
-
 
 
 function renderizarMuro() {
@@ -539,6 +556,7 @@ document.body.appendChild(renderer.domElement);
 
 var bandeira = new Bandeira();
 cena.add(bandeira);
+bandeira.position.set(2,0,-24)
 
 var galinha = new Galinha();
 cena.add(galinha);
@@ -1026,28 +1044,7 @@ function Start() {
   setTimeout(function () {
     animatecar();
   }, 100);
-
-
-      // Variáveis para controlar a animação
-      var amplitude = 0.2; // Amplitude do movimento
-      var velocidade = 0.05; // Velocidade do movimento
-      var angulo = 0;
-    
-      // Função de atualização da animação
-      function atualizarAnimacao() {
-        angulo += velocidade;
-        var offsetX = amplitude * Math.sin(angulo);
-        bandeira.position.x = offsetX;
-      }
-    
-      // Função de animação
-      function animar() {
-        requestAnimationFrame(animar);
-        atualizarAnimacao();
-      }
-    
-      // Inicie a animação
-      animar();
+ 
   // cria a luz
   var luzAmbiente = new THREE.AmbientLight(0xffffff, 0.1); // Cor: branco, Intensidade: 0.5
   cena.add(luzAmbiente);

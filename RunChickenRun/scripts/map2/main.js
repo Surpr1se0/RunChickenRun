@@ -414,6 +414,57 @@ function Galinha() {
   return galinha;
 }
 
+//bandeira terá que ser um objeto separado entre o pole e a bandeira de maneira a fazer a animação
+function Bandeira() {
+  var bandeira = new THREE.Group();
+
+  var textureLoader = new THREE.TextureLoader();
+  var textura_bandeira = textureLoader.load("./Images/bandeira_corrida.jpg");
+
+  var material_bandeira = new THREE.MeshBasicMaterial({ map: textura_bandeira, side: THREE.DoubleSide });
+
+  // Crie a geometria da bandeira (por exemplo, um plano retangular)
+  var larguraBandeira = 2;
+  var alturaBandeira = 1;
+  var bandeiraGeometry = new THREE.PlaneGeometry(larguraBandeira, alturaBandeira);
+
+  // Crie a malha da bandeira usando a geometria e o material
+  var bandeiraMesh = new THREE.Mesh(bandeiraGeometry, material_bandeira);
+
+  // Defina a posição inicial da bandeira
+  bandeiraMesh.position.set(0, 2, -0.1);
+
+  // Adicione a malha da bandeira ao grupo "bandeira"
+  bandeira.add(bandeiraMesh);
+
+  var pole = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.1, 0.1, 5.2, 16, 1),
+    new THREE.MeshPhongMaterial({ color: "#ffcc99", specular: "#999999", shininess: 30 })
+  );
+  pole.position.set(-0.9, 0, 0)
+  bandeira.add(pole);
+
+  // Animação de balanço da bandeira
+  var clock = new THREE.Clock();
+  var amplitude = 0.1; // Amplitude do balanço
+  var frequencia = 2; // Frequência do balanço (em segundos)
+
+  function animateBandeira() {
+    var deltaTime = clock.getDelta();
+    var angle = Math.sin(clock.elapsedTime * Math.PI *2 / frequencia) * amplitude;
+
+    // Modifique a rotação da bandeira
+    bandeiraMesh.rotation.y = angle;
+    //bandeiraMesh.rotation.z=angle;
+
+    requestAnimationFrame(animateBandeira);
+  }
+
+  animateBandeira();
+
+  return bandeira;
+}
+
 function renderizarMuro() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
@@ -608,10 +659,14 @@ controls.update();
 
 document.body.appendChild(renderer.domElement);
 
+var bandeira = new Bandeira();
+cena.add(bandeira);
+bandeira.position.set(2,0,-24)
+
 var galinha = new Galinha();
 cena.add(galinha);
 galinha.scale.set(0.05, 0.05, 0.05);
-galinha.position.set(-3, 0.3, 35.5);
+galinha.position.set(3, 0.3, 5);
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
@@ -921,7 +976,7 @@ var luz;
 function Start() {
   GenerateMap();
 
-  cena.add(galinha);
+  
 
   var xSpeed = 0.5;
   var zSpeed = 0.5;
