@@ -279,23 +279,41 @@ function Carro(color) {
 function Truck(color1, color2) {
   var truck = new THREE.Group();
 
-  var rodastraseiras = Rodas();
-  rodastraseiras.position.y = 5;
-  rodastraseiras.position.x = -7;
-  truck.add(rodastraseiras);
+  var rodasfrentesquerda = Rodas();
+  rodasfrentesquerda.position.y = 10;
+  rodasfrentesquerda.position.x = -7;
+  rodasfrentesquerda.position.z = -26;
+  truck.add(rodasfrentesquerda);
 
-  var rodastraseiras1 = Rodas();
-  rodastraseiras1.position.y = 10;
-  rodastraseiras1.position.x = -130;
-  rodastraseiras1.position.z = 7;
+  var rodasfrentedireita = Rodas();
+  rodasfrentedireita.position.y = 10;
+  rodasfrentedireita.position.x = -7;
+  rodasfrentedireita.position.z = 13;
+  truck.add(rodasfrentedireita);
 
-  truck.add(rodastraseiras1);
+  var rodastraseirasesquerda1 = Rodas();
+  rodastraseirasesquerda1.position.y = 10;
+  rodastraseirasesquerda1.position.x = -130;
+  rodastraseirasesquerda1.position.z = -30;
+  truck.add(rodastraseirasesquerda1);
 
-  var rodasfrente1 = Rodas();
-  rodasfrente1.position.y = 10;
-  rodasfrente1.position.x = -50;
-  rodasfrente1.position.z = 7;
-  truck.add(rodasfrente1);
+  var rodastraseirasdireita1 = Rodas();
+  rodastraseirasdireita1.position.y = 10;
+  rodastraseirasdireita1.position.x = -130;
+  rodastraseirasdireita1.position.z = 20;
+  truck.add(rodastraseirasdireita1);
+
+  var rodasmeioesquerda = Rodas();
+  rodasmeioesquerda.position.y = 10;
+  rodasmeioesquerda.position.x = -50;
+  rodasmeioesquerda.position.z = -30;
+  truck.add(rodasmeioesquerda);
+
+  var rodasmeiodireita = Rodas();
+  rodasmeiodireita.position.y = 10;
+  rodasmeiodireita.position.x = -50;
+  rodasmeiodireita.position.z = 20;
+  truck.add(rodasmeiodireita);
 
   var cabine = new THREE.Mesh(
     new THREE.BoxGeometry(40, 50, 40),
@@ -431,7 +449,7 @@ function Bandeira() {
 
     // Modifique a rotação da bandeira
     bandeiraMesh.rotation.y = angle;
-    //bandeiraMesh.rotation.z=angle;
+    bandeiraMesh.rotation.z=angle;
 
     requestAnimationFrame(animateBandeira);
   }
@@ -633,6 +651,33 @@ loader1.load("./Javascript/objects/PoliceSedan.fbx", function (object) {
   var luzVermelha2 = new THREE.PointLight(0xff0000, 1, 6);
   luzVermelha2.position.set(-3, 2, 1);
   cena.add(luzVermelha2);
+
+  //intensidade inicial e final das luzes
+var intensidadeInicial = 1;
+var intensidadeFinal = 0;
+
+//temo de piscar
+var tempoPisca = 500;
+
+// Variável para controlar o estado atual da piscada
+var estadoPisca = false;
+
+// Função para alternar a intensidade das luzes
+function alternarIntensidadeLuzes() {
+  if (estadoPisca) {
+    luzVermelha1.intensity = intensidadeInicial;
+    luzVermelha2.intensity = intensidadeFinal;
+  } else {
+    luzVermelha1.intensity = intensidadeFinal;
+    luzVermelha2.intensity = intensidadeInicial;
+  }
+  estadoPisca = !estadoPisca;
+
+  // Chama a função novamente apos piscar uma
+  setTimeout(alternarIntensidadeLuzes, tempoPisca);
+}
+
+alternarIntensidadeLuzes();
 });
 
 var loader2 = new THREE.FBXLoader();

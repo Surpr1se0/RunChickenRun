@@ -314,37 +314,37 @@ function Truck(color1, color2) {
   var rodasfrentesquerda = Rodas();
   rodasfrentesquerda.position.y = 10;
   rodasfrentesquerda.position.x = -7;
-  rodasfrentesquerda.position.z = -28;
+  rodasfrentesquerda.position.z = -26;
   truck.add(rodasfrentesquerda);
 
   var rodasfrentedireita = Rodas();
   rodasfrentedireita.position.y = 10;
   rodasfrentedireita.position.x = -7;
-  rodasfrentedireita.position.z = 15;
+  rodasfrentedireita.position.z = 13;
   truck.add(rodasfrentedireita);
 
   var rodastraseirasesquerda1 = Rodas();
   rodastraseirasesquerda1.position.y = 10;
   rodastraseirasesquerda1.position.x = -130;
-  rodastraseirasesquerda1.position.z = -32;
+  rodastraseirasesquerda1.position.z = -30;
   truck.add(rodastraseirasesquerda1);
 
   var rodastraseirasdireita1 = Rodas();
   rodastraseirasdireita1.position.y = 10;
   rodastraseirasdireita1.position.x = -130;
-  rodastraseirasdireita1.position.z = 22;
+  rodastraseirasdireita1.position.z = 20;
   truck.add(rodastraseirasdireita1);
 
   var rodasmeioesquerda = Rodas();
   rodasmeioesquerda.position.y = 10;
   rodasmeioesquerda.position.x = -50;
-  rodasmeioesquerda.position.z = -32;
+  rodasmeioesquerda.position.z = -30;
   truck.add(rodasmeioesquerda);
 
   var rodasmeiodireita = Rodas();
   rodasmeiodireita.position.y = 10;
   rodasmeiodireita.position.x = -50;
-  rodasmeiodireita.position.z = 22;
+  rodasmeiodireita.position.z = 20;
   truck.add(rodasmeiodireita);
 
   var cabine = new THREE.Mesh(
