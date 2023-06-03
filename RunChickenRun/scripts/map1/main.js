@@ -193,7 +193,7 @@ function Oak(x, y, z, dim) {
 }
 
 function Rodas() {
-  var geometry = new THREE.CylinderGeometry(9, 9, 31);
+  var geometry = new THREE.CylinderGeometry(9, 9, 5);
   var material = new THREE.MeshLambertMaterial({ color: 0x333333 });
   var roda = new THREE.Mesh(geometry, material);
 
@@ -202,18 +202,57 @@ function Rodas() {
   return roda;
 }
 
+function Jantes() {
+  var geometry2 = new THREE.CylinderGeometry(4, 4, 31);
+  var material2 = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+  var jante = new THREE.Mesh(geometry2, material2);
+  jante.rotation.x = Math.PI / 2;
+  return jante;
+}
+
 function Carro(color) {
   var carro = new THREE.Group();
 
-  var rodastraseiras = Rodas();
-  rodastraseiras.position.y = 6;
-  rodastraseiras.position.x = -18;
-  carro.add(rodastraseiras);
+  var rodatraseiradireita = Rodas();
+  rodatraseiradireita.position.y = 6;
+  rodatraseiradireita.position.x = -20;
+  rodatraseiradireita.position.z = 13;
+  carro.add(rodatraseiradireita);
 
-  var rodasfrente = Rodas();
-  rodasfrente.position.y = 6;
-  rodasfrente.position.x = 18;
-  carro.add(rodasfrente);
+  var rodatraseiraesquerda = Rodas();
+  rodatraseiraesquerda.position.y = 6;  
+  rodatraseiraesquerda.position.x = -20;
+  rodatraseiraesquerda.position.z = -13;
+
+  carro.add(rodatraseiraesquerda);
+
+  var rodadianteiradireira = Rodas();
+  rodadianteiradireira.position.y = 6;  
+  rodadianteiradireira.position.x = 20;
+  rodadianteiradireira.position.z = 13;
+
+  carro.add(rodadianteiradireira);
+
+  var rodadianteiraesquerda = Rodas();
+  rodadianteiraesquerda.position.y = 6;  
+  rodadianteiraesquerda.position.x = 20;
+  rodadianteiraesquerda.position.z = -13;
+
+  carro.add(rodadianteiraesquerda);
+
+  var jantestraseiras = Jantes();
+  jantestraseiras.position.y = 6;
+  jantestraseiras.position.x = -21;
+  jantestraseiras.position.z = 0.1;
+
+  carro.add(jantestraseiras);
+
+  var jantesfrente = Jantes();
+  jantesfrente.position.y = 6;
+  jantesfrente.position.x = 20;
+  jantesfrente.position.z = 0.1;
+
+  carro.add(jantesfrente);
 
   var chasi = new THREE.Mesh(
     new THREE.BoxGeometry(60, 15, 30),
