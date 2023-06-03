@@ -1032,7 +1032,7 @@ function checkCollisions() {
       retryButton.addEventListener("click", function () {
         // Recarregar a página
         contador = 0;
-        galinha.position.set(1, 0.3, 36); // posição inicial da galinha
+        galinha.position.set(3, 0.3, 5); // posição inicial da galinha
         galinha.scale.set(0.05, 0.05, 0.05);
         location.href = location.href;
       });
@@ -1047,7 +1047,7 @@ function checkCollisions() {
       retryButton1.addEventListener("click", function () {
         // Recarregar a página
         contador = 0;
-        galinha.position.set(1, 0.3, 36); // posição inicial da galinha
+        galinha.position.set(3, 0.3, 5); // posição inicial da galinha
 
         var finished = document.getElementById("finished");
         finished.style.visibility = "hidden";
