@@ -193,7 +193,7 @@ function Oak(x, y, z, dim) {
 }
 
 function Rodas() {
-  var geometry = new THREE.CylinderGeometry(9, 9, 31);
+  var geometry = new THREE.CylinderGeometry(9, 9, 5);
   var material = new THREE.MeshLambertMaterial({ color: 0x333333 });
   var roda = new THREE.Mesh(geometry, material);
 
@@ -202,18 +202,57 @@ function Rodas() {
   return roda;
 }
 
+function Jantes() {
+  var geometry2 = new THREE.CylinderGeometry(4, 4, 31);
+  var material2 = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+  var jante = new THREE.Mesh(geometry2, material2);
+  jante.rotation.x = Math.PI / 2;
+  return jante;
+}
+
 function Carro(color) {
   var carro = new THREE.Group();
 
-  var rodastraseiras = Rodas();
-  rodastraseiras.position.y = 6;
-  rodastraseiras.position.x = -18;
-  carro.add(rodastraseiras);
+  var rodatraseiradireita = Rodas();
+  rodatraseiradireita.position.y = 6;
+  rodatraseiradireita.position.x = -20;
+  rodatraseiradireita.position.z = 13;
+  carro.add(rodatraseiradireita);
 
-  var rodasfrente = Rodas();
-  rodasfrente.position.y = 6;
-  rodasfrente.position.x = 18;
-  carro.add(rodasfrente);
+  var rodatraseiraesquerda = Rodas();
+  rodatraseiraesquerda.position.y = 6;  
+  rodatraseiraesquerda.position.x = -20;
+  rodatraseiraesquerda.position.z = -13;
+
+  carro.add(rodatraseiraesquerda);
+
+  var rodadianteiradireira = Rodas();
+  rodadianteiradireira.position.y = 6;  
+  rodadianteiradireira.position.x = 20;
+  rodadianteiradireira.position.z = 13;
+
+  carro.add(rodadianteiradireira);
+
+  var rodadianteiraesquerda = Rodas();
+  rodadianteiraesquerda.position.y = 6;  
+  rodadianteiraesquerda.position.x = 20;
+  rodadianteiraesquerda.position.z = -13;
+
+  carro.add(rodadianteiraesquerda);
+
+  var jantestraseiras = Jantes();
+  jantestraseiras.position.y = 6;
+  jantestraseiras.position.x = -21;
+  jantestraseiras.position.z = 0.1;
+
+  carro.add(jantestraseiras);
+
+  var jantesfrente = Jantes();
+  jantesfrente.position.y = 6;
+  jantesfrente.position.x = 20;
+  jantesfrente.position.z = 0.1;
+
+  carro.add(jantesfrente);
 
   var chasi = new THREE.Mesh(
     new THREE.BoxGeometry(60, 15, 30),
@@ -240,23 +279,41 @@ function Carro(color) {
 function Truck(color1, color2) {
   var truck = new THREE.Group();
 
-  var rodastraseiras = Rodas();
-  rodastraseiras.position.y = 5;
-  rodastraseiras.position.x = -7;
-  truck.add(rodastraseiras);
+  var rodasfrentesquerda = Rodas();
+  rodasfrentesquerda.position.y = 10;
+  rodasfrentesquerda.position.x = -7;
+  rodasfrentesquerda.position.z = -26;
+  truck.add(rodasfrentesquerda);
 
-  var rodastraseiras1 = Rodas();
-  rodastraseiras1.position.y = 10;
-  rodastraseiras1.position.x = -130;
-  rodastraseiras1.position.z = 7;
+  var rodasfrentedireita = Rodas();
+  rodasfrentedireita.position.y = 10;
+  rodasfrentedireita.position.x = -7;
+  rodasfrentedireita.position.z = 13;
+  truck.add(rodasfrentedireita);
 
-  truck.add(rodastraseiras1);
+  var rodastraseirasesquerda1 = Rodas();
+  rodastraseirasesquerda1.position.y = 10;
+  rodastraseirasesquerda1.position.x = -130;
+  rodastraseirasesquerda1.position.z = -30;
+  truck.add(rodastraseirasesquerda1);
 
-  var rodasfrente1 = Rodas();
-  rodasfrente1.position.y = 10;
-  rodasfrente1.position.x = -50;
-  rodasfrente1.position.z = 7;
-  truck.add(rodasfrente1);
+  var rodastraseirasdireita1 = Rodas();
+  rodastraseirasdireita1.position.y = 10;
+  rodastraseirasdireita1.position.x = -130;
+  rodastraseirasdireita1.position.z = 20;
+  truck.add(rodastraseirasdireita1);
+
+  var rodasmeioesquerda = Rodas();
+  rodasmeioesquerda.position.y = 10;
+  rodasmeioesquerda.position.x = -50;
+  rodasmeioesquerda.position.z = -30;
+  truck.add(rodasmeioesquerda);
+
+  var rodasmeiodireita = Rodas();
+  rodasmeiodireita.position.y = 10;
+  rodasmeiodireita.position.x = -50;
+  rodasmeiodireita.position.z = 20;
+  truck.add(rodasmeiodireita);
 
   var cabine = new THREE.Mesh(
     new THREE.BoxGeometry(40, 50, 40),
@@ -351,7 +408,7 @@ function Galinha() {
 
   return galinha;
 }
-
+//bandeira terá que ser um objeto separado entre o pole e a bandeira de maneira a fazer a animação
 function Bandeira() {
   var bandeira = new THREE.Group();
 
@@ -368,21 +425,39 @@ function Bandeira() {
   // Crie a malha da bandeira usando a geometria e o material
   var bandeiraMesh = new THREE.Mesh(bandeiraGeometry, material_bandeira);
 
-  // Defina a posição da bandeira
-  bandeiraMesh.position.set(0, 2, 0);
+  // Defina a posição inicial da bandeira
+  bandeiraMesh.position.set(0, 2, -0.1);
 
   // Adicione a malha da bandeira ao grupo "bandeira"
   bandeira.add(bandeiraMesh);
 
   var pole = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.1,0.1,5,16,1),
-    new THREE.MeshPhongMaterial({color:"#ffcc99", specular: "#999999", shininess: 30})
+    new THREE.CylinderGeometry(0.1, 0.1, 5.2, 16, 1),
+    new THREE.MeshPhongMaterial({ color: "#ffcc99", specular: "#999999", shininess: 30 })
   );
+  pole.position.set(-0.9, 0, 0)
   bandeira.add(pole);
+
+  // Animação de balanço da bandeira
+  var clock = new THREE.Clock();
+  var amplitude = 0.1; // Amplitude do balanço
+  var frequencia = 2; // Frequência do balanço (em segundos)
+
+  function animateBandeira() {
+    var deltaTime = clock.getDelta();
+    var angle = Math.sin(clock.elapsedTime * Math.PI *2 / frequencia) * amplitude;
+
+    // Modifique a rotação da bandeira
+    bandeiraMesh.rotation.y = angle;
+    bandeiraMesh.rotation.z=angle;
+
+    requestAnimationFrame(animateBandeira);
+  }
+
+  animateBandeira();
 
   return bandeira;
 }
-
 
 
 function renderizarMuro() {
@@ -538,11 +613,12 @@ document.body.appendChild(renderer.domElement);
 
 var bandeira = new Bandeira();
 cena.add(bandeira);
+bandeira.position.set(2,0,-24)
 
 var galinha = new Galinha();
 cena.add(galinha);
 galinha.scale.set(0.05, 0.05, 0.05);
-galinha.position.set(1, 0.3, -20); // posição inicial da galinha
+galinha.position.set(1, 0.3, 6); // posição inicial da galinha
 
 var velocidadeX = 1.5; // Exemplo de velocidade de movimento no eixo X
 var velocidadeY = 1.5; // Exemplo de velocidade de movimento no eixo Y
@@ -575,6 +651,33 @@ loader1.load("./Javascript/objects/PoliceSedan.fbx", function (object) {
   var luzVermelha2 = new THREE.PointLight(0xff0000, 1, 6);
   luzVermelha2.position.set(-3, 2, 1);
   cena.add(luzVermelha2);
+
+  //intensidade inicial e final das luzes
+var intensidadeInicial = 1;
+var intensidadeFinal = 0;
+
+//temo de piscar
+var tempoPisca = 500;
+
+// Variável para controlar o estado atual da piscada
+var estadoPisca = false;
+
+// Função para alternar a intensidade das luzes
+function alternarIntensidadeLuzes() {
+  if (estadoPisca) {
+    luzVermelha1.intensity = intensidadeInicial;
+    luzVermelha2.intensity = intensidadeFinal;
+  } else {
+    luzVermelha1.intensity = intensidadeFinal;
+    luzVermelha2.intensity = intensidadeInicial;
+  }
+  estadoPisca = !estadoPisca;
+
+  // Chama a função novamente apos piscar uma
+  setTimeout(alternarIntensidadeLuzes, tempoPisca);
+}
+
+alternarIntensidadeLuzes();
 });
 
 var loader2 = new THREE.FBXLoader();
@@ -1025,7 +1128,7 @@ function Start() {
   setTimeout(function () {
     animatecar();
   }, 100);
-
+ 
   // cria a luz
   var luzAmbiente = new THREE.AmbientLight(0xffffff, 0.1); // Cor: branco, Intensidade: 0.5
   cena.add(luzAmbiente);
