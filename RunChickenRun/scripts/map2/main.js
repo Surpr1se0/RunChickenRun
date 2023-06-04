@@ -418,7 +418,7 @@ function renderizarMuro() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 0.5,
+    opacity: 1,
   });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
@@ -436,7 +436,7 @@ function renderizarMuroDireito() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 0.5,
+    opacity: 1,
   });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
@@ -454,7 +454,7 @@ function renderizarMuroCima() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 0.5,
+    opacity: 1,
   });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
@@ -473,7 +473,7 @@ function renderizarMuroBaixo() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 0.5,
+    opacity: 1,
   });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
@@ -884,6 +884,7 @@ function checkCollisions() {
     if (detectCollision(galinha, carro)) {
       console.log("Colisao so com o carro!");
       galinha.position.y = 0.1;
+
       var retryButton = document.getElementById("retryButton");
       var endGameElement = document.getElementById("endGame");
 
@@ -894,10 +895,14 @@ function checkCollisions() {
         contador = 0;
         galinha.position.set(1, 0.3, 36); // posição inicial da galinha
         galinha.scale.set(0.05, 0.05, 0.05);
-        location.href = location.href;
+
+        var endGameElement = document.getElementById("endGame");
+        endGameElement.style.visibility = "hidden";
       });
     }
     if (detectCollision(galinha, muro_cima)) {
+      riseAnimation();
+
       console.log("Chegou à meta");
       var retryButton1 = document.getElementById("retryButton1");
       var finished = document.getElementById("finished");
