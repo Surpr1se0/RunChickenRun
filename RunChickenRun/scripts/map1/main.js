@@ -415,7 +415,7 @@ function Bandeira() {
   var textureLoader = new THREE.TextureLoader();
   var textura_bandeira = textureLoader.load("./Images/bandeira_corrida.jpg", function (textura) {
     // Defina as novas dimensões da textura
-    var novaLarguraTextura = 2;
+    var novaLarguraTextura = 1;
     var novaAlturaTextura = 1;
   
     // Redimensiona a textura
