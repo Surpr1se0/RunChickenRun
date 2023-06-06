@@ -473,7 +473,7 @@ function renderizarMuro() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 0.5,
+    opacity: 0,
   });
 
   // Muro esquerdo
@@ -492,7 +492,7 @@ function renderizarMuroDireito() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 0.5,
+    opacity: 0,
   });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
@@ -510,7 +510,7 @@ function renderizarMuroCima() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 0.5,
+    opacity: 0,
   });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
@@ -529,7 +529,7 @@ function renderizarMuroBaixo() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 0.5,
+    opacity: 0,
   });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(

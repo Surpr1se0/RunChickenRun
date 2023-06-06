@@ -476,7 +476,16 @@ function Bandeira() {
   var bandeira = new THREE.Group();
 
   var textureLoader = new THREE.TextureLoader();
-  var textura_bandeira = textureLoader.load("./Images/bandeira_corrida.jpg");
+  var textura_bandeira = textureLoader.load("./Images/bandeira_corrida.jpg",function (textura) {
+    // Defina as novas dimensões da textura
+    var novaLarguraTextura = 2;
+    var novaAlturaTextura = 1;
+  
+    // Redimensiona a textura
+    textura.repeat.set(novaLarguraTextura, novaAlturaTextura);
+    textura.wrapS = THREE.RepeatWrapping;
+    textura.wrapT = THREE.RepeatWrapping;
+  });
 
   var material_bandeira = new THREE.MeshBasicMaterial({ map: textura_bandeira, side: THREE.DoubleSide });
 
@@ -526,7 +535,7 @@ function renderizarMuro() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 1,
+    opacity: 0,
   });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
@@ -544,7 +553,7 @@ function renderizarMuroDireito() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 1,
+    opacity: 0,
   });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
@@ -562,7 +571,7 @@ function renderizarMuroCima() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 1,
+    opacity: 0,
   });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
@@ -581,7 +590,7 @@ function renderizarMuroBaixo() {
   var muroMaterial = new THREE.MeshBasicMaterial({
     color: 0x808080,
     transparent: true,
-    opacity: 1,
+    opacity: 0,
   });
   // Muro esquerdo
   var muroEsquerdo = new THREE.Mesh(
