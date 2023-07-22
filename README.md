@@ -7,8 +7,6 @@ Daniel Oliveira al74575
 
 Francisco Gouveia al74044
 
-Carlos Rocha al73943
-
 Proposta de trabalho:
 A nossa proposta consiste em desenvolver um "mini-jogo" onde o jogador controla uma galinha de modo a atravessar um estrada evitando os objetos, como carros, camiões entre outros. O objetivo do jogador é "bater" o seu melhor recorde para tal o mapa será infinito.
 
