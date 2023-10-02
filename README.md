@@ -1,41 +1,46 @@
-# RunChickenRun
-A CrossyRoads project for a Graphic Computation Project
 
-Constituição do grupo:
+# Run Chicken Run 
 
-Daniel Oliveira al74575
+![Main Page](https://github.com/Surpr1se0/RunChickenRun/assets/86316775/43284309-e879-41e7-ab95-baf74f540ead "Main Page")
 
-Francisco Gouveia al74044
+### A CrossyRoads type game for a Graphic Computation Project.
 
-Proposta de trabalho:
-A nossa proposta consiste em desenvolver um "mini-jogo" onde o jogador controla uma galinha de modo a atravessar um estrada evitando os objetos, como carros, camiões entre outros. O objetivo do jogador é "bater" o seu melhor recorde para tal o mapa será infinito.
+Our game gives the player a small minigame that focus on key but simple elements of Three.js. The user must cross the road avoiding certain objects that appear such as cars, trucks, and others. 
 
-Exemplos de Aplicações relacionadas:
+---
+## Prerequisites (H2 header)
 
-O nosso jogo será baseado no seguinte jogo, Crossy Road.
+Before you begin this guide you'll need the following:
 
-Exemplos de movimento:
-
--Salto: https://threejs.org/examples/#webgl_animation_skinning_morph
-
-Moldes:
-
--Objetos a evitar: 
-https://threejs.org/examples/#webgl_loader_3mf_materials
-https://free3d.com/pt/3d-model/cartoon-vehicles-low-poly-cars-free-874937.html
-
--Árvores: https://free3d.com/pt/3d-model/low-poly-tree-449895.html
+- Familiarity with [Three.js](https://threejs.org/)
 
 
-Proposta de calendarizção:
+## Concepts
+These were the concepts aproached while making this game: 
 
-21 de abril - 4 de maio -> Construir o ambiente virtual
+- Basic Movement (ASWD)
+- Camera (POV, 3r Person, ...)
+- Lighting 
+- Collision Detection
 
-5 de maio - 12 de maio -> Luzes configuradas
+## Examples
+![Day Scene](https://github.com/Surpr1se0/RunChickenRun/assets/86316775/805b38a5-bffe-4cf7-b679-e1d429ff78a4 "Day Scene")
 
-13 de maio - 20 de maio -> Animações
+![Night Scene](https://github.com/Surpr1se0/RunChickenRun/assets/86316775/de5af6fd-a3e9-4597-b0bc-b6630a63084e "Night Scene")
 
-21 de maio - 28 de maio -> Interações funcionais
+### Credits
+This project was made by: 
+@[**df01mo**](https://github.com/df01mo)
+& @[**Surpr1se0**](https://github.com/Surpr1se0)
 
-29 de maio - 31 de maio/6 de junho -> Pormenores finais
+### Contributing
 
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+<p align="right">(<a href="#top">back to top</a>)</p>
