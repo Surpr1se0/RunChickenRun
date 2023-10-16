@@ -8,7 +8,7 @@
 Our game gives the player a small minigame that focus on key but simple elements of Three.js. The user must cross the road avoiding certain objects that appear such as cars, trucks, and others. 
 
 ---
-## Prerequisites (H2 header)
+## Prerequisites
 
 Before you begin this guide you'll need the following:
 
